@@ -4,6 +4,10 @@ Obstacle::Obstacle(Scene *s, double x, double y, double r): object_radius(r)
 {
 	this->scene = s;
 	this->object_position = glm::vec2(x, y);
+	object_scale = glm::vec2(0.03f, 0.03f);
+	model_matrix = glm::mat4(1.0f);
+	model_matrix = glm::scale(model_matrix, glm::vec3(object_scale, 1.0f));
+	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
 }
 
 Obstacle::~Obstacle(void)
@@ -18,12 +22,11 @@ void Obstacle::Update(double delta_time)
 
 void Obstacle::Draw()
 {
-	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-
 	float a, b;
 	glPushMatrix();
-	glTranslatef(object_position.x, object_position.x, 0.0);
+	GLfloat Matrix[16];
+	MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
+	glLoadMatrixf(Matrix);
 	glBegin(GL_TRIANGLE_FAN);
 	glColor3f(0.3f, 0.1f, 0.0f);
 
@@ -39,8 +42,6 @@ void Obstacle::Draw()
 
 	glEnd();
 	glPopMatrix();
-
-	glDisable(GL_LINE_SMOOTH);
 }
 
 ostream& operator<<(ostream &o, const Obstacle &ob)
