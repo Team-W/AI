@@ -1,13 +1,11 @@
 #include "Headers.h"
 #include "Scene.h"
 
-bool KeyStates[256];
 Scene scene;
 
 void Init()
 {
 	srand((unsigned int)time(NULL));
-	memset(&KeyStates, 0, sizeof(KeyStates));
 }
 
 void RenderScene(void)
@@ -36,14 +34,38 @@ void Idle()
 
 void KeyPressed(unsigned char key, int x, int y)
 {
-	KeyStates[key] = true;
-
+	scene.KeyState(key,true);
 	scene.Key(key);
 }
 
 void KeyUp(unsigned char key, int x, int y)
 {
-	KeyStates[key] = false;
+	scene.KeyState(key,false);
+}
+
+void MouseCoords(int x, int y)
+{ 
+	float a, b;
+	a =(float) (33.33*(x - 350) / 350);
+	b = (float)(33.33*(-y + 350) / 350);
+	scene.PlayerRotate(glm::vec2(a, b));
+	//cout << a << ", " << b <<"\n";
+}
+
+void MouseClick(int button, int state, int x, int y) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+		float a, b;
+		a = (float)(33.33*(x - 350) / 350);
+		b = (float)(33.33*(-y + 350) / 350);
+		scene.PlayerShoot(glm::vec2(a, b));
+	}
+}
+
+void MouseClicked(int x, int y) {
+		float a, b;
+		a = (float)(33.33*(x - 350) / 350);
+		b = (float)(33.33*(-y + 350) / 350);
+		scene.PlayerRotate(glm::vec2(a, b));
 }
 
 int main(int argc, char **argv)
@@ -61,7 +83,9 @@ int main(int argc, char **argv)
 	glutIdleFunc(Idle);
 	glutKeyboardFunc(KeyPressed);
 	glutKeyboardUpFunc(KeyUp);
-
+	glutPassiveMotionFunc(MouseCoords);
+	glutMotionFunc(MouseClicked);
+	glutMouseFunc(MouseClick);
 	glutMainLoop();
 
 	return 0;

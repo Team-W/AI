@@ -85,11 +85,12 @@ void Zombie::Draw()
 			}
 		glEnd();
 	glPopMatrix();
+	glDisable(GL_LINE_SMOOTH);
 
 	heading_vector.DrawLine();
 	target_point.DrawPoint();
 
-	glDisable(GL_LINE_SMOOTH);
+	
 }
 
 ostream& operator<<(ostream &o, const Zombie &z)

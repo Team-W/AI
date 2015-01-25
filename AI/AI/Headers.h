@@ -7,6 +7,7 @@
 
 #define ZOMBIE_MAX_SPEED 100.0f
 #define ZOMBIE_TURNING_MAX_SPEED 3.0f
+#define PLAYER_SPEED 100.0f
 
 // Standard Libraries
 #include <iostream>
