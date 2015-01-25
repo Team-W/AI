@@ -26,6 +26,10 @@ void Scene::Update(double delta_time)
 	{
 		objects[i]->Update(delta_time);
 	}
+	if (KeyStates['w']) player->Move(glm::vec2(0, 0.3), delta_time);
+	if (KeyStates['s']) player->Move(glm::vec2(0, -0.3), delta_time);
+	if (KeyStates['a']) player->Move(glm::vec2(-0.3, 0), delta_time);
+	if (KeyStates['d']) player->Move(glm::vec2(0.3, 0), delta_time);
 	player->Update(delta_time);
 }
 
