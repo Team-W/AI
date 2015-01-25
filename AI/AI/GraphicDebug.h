@@ -15,8 +15,10 @@ class GraphicDebug
 		void UpdateLine(glm::vec2 begin, glm::vec2 end, glm::vec3 color);
 		void DrawPoint();
 		void DrawLine();
+		void Hide();
 
 	private:
+		bool hidden;
 		double radius;
 		glm::vec3 color;
 		glm::vec2 scale;

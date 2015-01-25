@@ -6,6 +6,7 @@ GraphicDebug::GraphicDebug(): radius(0)
 	end = glm::vec2(0, 0);
 	color = glm::vec3(0, 0, 0);
 	scale = glm::vec2(0.03f, 0.03f);
+	hidden = false;
 };
 
 GraphicDebug::~GraphicDebug(void)
@@ -28,16 +29,26 @@ void GraphicDebug::InitLine(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
 }
 
 void GraphicDebug::UpdatePoint(glm::vec2 begin, glm::vec3 color)
-{
-	this->begin = begin;
-	this->color = color;
+{	
+	if (!this->hidden){
+		this->begin = begin;
+		this->color = color;
+	}
+	else{
+		this->begin = glm::vec2(100, 100);
+	}
 }
 
 void GraphicDebug::UpdateLine(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
 {
-	this->begin = begin;
-	this->end = end;
-	this->color = color;
+	if (!this->hidden){
+		this->begin = begin;
+		this->end = end;
+		this->color = color;
+	}else{
+		this->begin = glm::vec2(100, 100);
+		this->end = glm::vec2(100, 100);
+	}
 };
 
 void GraphicDebug::DrawPoint()
@@ -74,4 +85,8 @@ void GraphicDebug::DrawLine()
 	glVertex2f(end.x, end.y);
 	glEnd();
 	glPopMatrix();
+}
+
+void GraphicDebug::Hide(){
+	this->hidden = !this->hidden;
 }
