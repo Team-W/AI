@@ -3,10 +3,10 @@
 Scene::Scene(void)
 {
 	view_matrix = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
-
+	memset(&KeyStates, 0, sizeof(KeyStates));
 	// Init Test Objects
 	test_zombie = new Zombie(this, 0.0f, 0.0f);
-
+	player = new Player(this, 20.0f, 20.0f);
 	// Init Objects
 	AddObject(test_zombie);
 	AddObject(new Obstacle(this, 15.0, 15.0, 7.00));
@@ -26,6 +26,7 @@ void Scene::Update(double delta_time)
 	{
 		objects[i]->Update(delta_time);
 	}
+	player->Update(delta_time);
 }
 
 void Scene::Draw(void)
@@ -34,22 +35,27 @@ void Scene::Draw(void)
 	{
 		objects[i]->Draw();
 	}
+	player->Draw();
+}
+
+void Scene::PlayerRotate(glm::vec2 heading)
+{
+	player->Rotate(heading);
+}
+
+void Scene::PlayerShoot(glm::vec2 aim)
+{
+	player->Shoot(aim);
 }
 
 void Scene::Key(unsigned char key)
 {
-	switch(key)
-	{
-		case 'r':
-		{
-			test_zombie->RandomPoint();
-			break;
-		}
-		default:
-		{
+	if (KeyStates['r']) test_zombie->RandomPoint();
+}
 
-		}
-	}
+void Scene::KeyState(unsigned char key, bool tf)
+{
+	KeyStates[key] = tf;
 }
 
 void Scene::AddObject(GameEntity *entity)
