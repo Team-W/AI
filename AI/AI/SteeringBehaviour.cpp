@@ -1,7 +1,7 @@
 #include "SteeringBehaviour.h"
 
 SteeringBehaviour::SteeringBehaviour(Zombie *z): owner(z),
-	wander_on(0), seek_on(0), flee_on(0), arrive_on(0)
+wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 {
 	steering_force = glm::vec2(0.0f, 0.0f);
 
@@ -9,7 +9,7 @@ SteeringBehaviour::SteeringBehaviour(Zombie *z): owner(z),
 	wander_radius	= 2.0f;
 	wander_distance = 5.0f;
 	wander_jitter	= 0.8f;
-	float alpha = (float)(rand()%360) * PI/180.0f;
+	float alpha = (float)(rand()%360) * (float)(PI/180.0f);
 	wander_target = glm::vec2(wander_radius*cos(alpha), wander_radius*sin(alpha));
 	wander_target_point.InitPoint(wander_target, 0.2, glm::vec3(0, 0, 1));
 }
@@ -67,3 +67,8 @@ glm::vec2 SteeringBehaviour::CalculateArrive(void)
 	return glm::vec2(0, 0);
 }
 
+glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
+{
+
+	return glm::vec2(0, 0);
+}

@@ -22,6 +22,7 @@ class SteeringBehaviour
 		void ToggleSeek(void);
 		void ToggleFlee(void);
 		void ToggleArrive(void);
+		void ToggleObstacleAvoidance(void);
 
 	private:
 		Zombie *owner;
@@ -32,6 +33,7 @@ class SteeringBehaviour
 		float wander_jitter;
 		glm::vec2 wander_target;
 		GraphicDebug wander_target_point;
+		// ----------------------------------- //
 
 		glm::vec2 steering_force;
 
@@ -39,12 +41,14 @@ class SteeringBehaviour
 		bool seek_on;
 		bool flee_on;
 		bool arrive_on;
+		bool obstacle_avoidance_on;
 
 		glm::vec2 CalculateSteeringForce(void);
 		glm::vec2 CalculateWander(void);
 		glm::vec2 CalculateSeek(const glm::vec2 &target);
 		glm::vec2 CalculateFlee(void);
 		glm::vec2 CalculateArrive(void);
+		glm::vec2 CalculateObstacleAvoidance(void);
 
 		friend class Zombie;
 		friend ostream& operator<<(ostream &o, const SteeringBehaviour &sb);
@@ -75,6 +79,11 @@ inline void SteeringBehaviour::ToggleFlee(void)
 inline void SteeringBehaviour::ToggleArrive(void)
 {
 	arrive_on = !arrive_on;
+}
+
+inline void SteeringBehaviour::ToggleObstacleAvoidance(void)
+{
+	obstacle_avoidance_on = !obstacle_avoidance_on;
 }
 
 #endif

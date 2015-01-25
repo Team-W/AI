@@ -42,6 +42,7 @@ class Scene
 
 		vector<GameEntity*> objects;
 
+		friend class SteeringBehaviour;
 		friend ostream& operator<<(ostream &o, const Scene &scene);
 };
 
