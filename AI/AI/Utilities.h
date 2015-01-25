@@ -60,8 +60,12 @@ inline float DegreesToRadians(float degrees)
 inline void Normalize(glm::vec2 &vector)
 {
 	float l = GetLength(vector);
-	vector.x /= l;
-	vector.y /= l;
+
+	if(l > 0.00000001)
+	{
+		vector.x /= l;
+		vector.y /= l;
+	}
 }
 
 inline void SetLength(glm::vec2 &vector, float d)
@@ -69,6 +73,12 @@ inline void SetLength(glm::vec2 &vector, float d)
 	Normalize(vector);
 	vector.x *= d;
 	vector.y *= d;
+}
+
+inline void Truncate(glm::vec2 &vector, float f)
+{
+	if(GetLength(vector) > f)
+		SetLength(vector, f);
 }
 
 inline glm::vec2 GetReversed(glm::vec2 &vector)

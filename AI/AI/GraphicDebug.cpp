@@ -30,22 +30,26 @@ void GraphicDebug::InitLine(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
 
 void GraphicDebug::UpdatePoint(glm::vec2 begin, glm::vec3 color)
 {	
-	if (!this->hidden){
+	if(!this->hidden)
+	{
 		this->begin = begin;
 		this->color = color;
 	}
-	else{
+	else
+	{
 		this->begin = glm::vec2(100, 100);
 	}
 }
 
 void GraphicDebug::UpdateLine(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
 {
-	if (!this->hidden){
+	if(!this->hidden)
+	{
 		this->begin = begin;
 		this->end = end;
 		this->color = color;
-	}else{
+	}else
+	{
 		this->begin = glm::vec2(100, 100);
 		this->end = glm::vec2(100, 100);
 	}
@@ -87,6 +91,7 @@ void GraphicDebug::DrawLine()
 	glPopMatrix();
 }
 
-void GraphicDebug::Hide(){
+void GraphicDebug::Hide()
+{
 	this->hidden = !this->hidden;
 }

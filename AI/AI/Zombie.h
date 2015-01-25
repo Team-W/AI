@@ -30,6 +30,7 @@ class Zombie: public GameEntity
 		GraphicDebug heading_vector;
 		GraphicDebug target_point;
 
+		friend class SteeringBehaviour;
         friend ostream& operator<<(ostream &o, const Zombie &z);
 };
 

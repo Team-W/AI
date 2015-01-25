@@ -25,24 +25,19 @@ void Zombie::Update(double delta_time)
 	heading_vector.UpdateLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
 	target_point.UpdatePoint(target_position, glm::vec3(1, 0, 0));
 
-	glm::vec2 steering_force = target_position - object_position;
-
-	object_velocity = steering_force;
-	SetLength(object_velocity, ZOMBIE_MAX_SPEED);
+	//object_velocity += steering_behaviour->CalculateSeek(target_position)*glm::vec2(delta_time, delta_time);
+	object_velocity += steering_behaviour->CalculateWander() + steering_behaviour->CalculateSeek(target_position);
+	//SetLength(object_velocity, ZOMBIE_MAX_SPEED);
+	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
 
 	object_position += object_velocity * glm::vec2(delta_time, delta_time);
+	object_heading = object_velocity;
+	Normalize(object_heading);
+	object_side = GetPerpendicular(object_heading);
 
 	model_matrix = glm::mat4(1.0f);
 	model_matrix = glm::scale(model_matrix, glm::vec3(object_scale, 1.0f));
 	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
-
-	if(GetLength(object_velocity) > 0.00000001)
-	{
-		object_heading = object_velocity;
-		Normalize(object_heading);
-		object_side = GetPerpendicular(object_heading);
-	}
-
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
 }
 
@@ -85,11 +80,11 @@ void Zombie::Draw()
 			}
 		glEnd();
 	glPopMatrix();
+	glDisable(GL_LINE_SMOOTH);
 
 	heading_vector.DrawLine();
 	target_point.DrawPoint();
-
-	glDisable(GL_LINE_SMOOTH);
+	steering_behaviour->Draw();
 }
 
 ostream& operator<<(ostream &o, const Zombie &z)
