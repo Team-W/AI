@@ -1,29 +1,16 @@
 #include "Headers.h"
 #include "Scene.h"
-#include "Obstacle.h"
-#include "Zombie.h"
 
-bool* keyStates = new bool[256];
+bool KeyStates[256];
 Scene scene;
-Zombie *z = new Zombie(&scene, 0.0, 0.0);
-bool step = false;
 
-void init()
+void Init()
 {
 	srand((unsigned int)time(NULL));
-	unsigned char i = 'a';
-	do{
-		keyStates[i] = false;
-		i++;
-	} while (i != 'a');
-	scene.AddObject(z);
-	/*scene.AddObject(new Obstacle(15.0, 15.0, 7.00));
-	scene.AddObject(new Obstacle(-12.0, -17.0, 9.00));
-	scene.AddObject(new Obstacle(12.0, -6.0, 5.00));
-	scene.AddObject(new Obstacle(-16.0, 15.0, 6.00));*/
+	memset(&KeyStates, 0, sizeof(KeyStates));
 }
 
-void renderScene(void)
+void RenderScene(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
@@ -35,7 +22,7 @@ void renderScene(void)
 	glutSwapBuffers();
 }
 
-void idle()
+void Idle()
 {
 	static long long int old_time = 0;
 
@@ -47,47 +34,35 @@ void idle()
 	glutPostRedisplay();
 }
 
-void keyPressed(unsigned char key, int x, int y)
+void KeyPressed(unsigned char key, int x, int y)
 {
-	keyStates[key] = true;
+	KeyStates[key] = true;
 
-	if(key == 'r')
-	{
-		z->RandomPoint();
-	}
+	scene.Key(key);
 }
 
-void keyUp(unsigned char key, int x, int y)
+void KeyUp(unsigned char key, int x, int y)
 {
-	keyStates[key] = false;
+	KeyStates[key] = false;
 }
 
 int main(int argc, char **argv)
 {
-
-	// init GLUT and create Window
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(700, 700);
-	//gluPerspective(60, 1, 1, 300);
-	//gluLookAt(0, 0, 0, 0, 0, -1, 0, 1, 0);
 	glMatrixMode(GL_MODELVIEW);
 	glutCreateWindow("Basic AI");
 
-	//Initial implementation of objects
-	init();
+	Init();
 
-	// register callbacks
-	glutDisplayFunc(renderScene);
-	glutIdleFunc(idle);
+	glutDisplayFunc(RenderScene);
+	glutIdleFunc(Idle);
+	glutKeyboardFunc(KeyPressed);
+	glutKeyboardUpFunc(KeyUp);
 
-	//Keyboard input
-	glutKeyboardFunc(keyPressed);
-	glutKeyboardUpFunc(keyUp);
-
-	// enter GLUT event processing cycle
 	glutMainLoop();
 
-	return 1;
+	return 0;
 }

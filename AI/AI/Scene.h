@@ -3,27 +3,36 @@
 
 #include "Headers.h"
 #include "GameEntity.h"
+#include "Zombie.h"
+#include "Obstacle.h"
 
 class GameEntity;
+class Zombie;
 
 class Scene
 {
-public:
-	Scene(void);
-	~Scene(void);
+	public:
+		Scene(void);
+		~Scene(void);
 
-	void Update(double delta_time);
-	void Draw(void);
-	void AddObject(GameEntity *entity);
-	void RemoveObject(GameEntity *entity);
+		void Update(double delta_time);
+		void Draw(void);
+		void Key(unsigned char key);
+		void AddObject(GameEntity *entity);
+		void RemoveObject(GameEntity *entity);
 
-	const glm::mat4& GetViewMatrix(void) const;
+		const glm::mat4& GetViewMatrix(void) const;
 
-private:
-	glm::mat4 view_matrix;
+	private:
+		glm::mat4 view_matrix;
 
-	vector<GameEntity*> objects;
-	friend ostream& operator<<(ostream &o, const Scene &scene);
+		// TEST OBJECTS
+		Zombie *test_zombie;
+		// ~TEST OBJECTS
+
+		vector<GameEntity*> objects;
+
+		friend ostream& operator<<(ostream &o, const Scene &scene);
 };
 
 ostream& operator<<(ostream &o, const Scene &scene);

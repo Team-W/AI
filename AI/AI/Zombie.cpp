@@ -28,7 +28,7 @@ void Zombie::Update(double delta_time)
 	glm::vec2 steering_force = target_position - object_position;
 
 	object_velocity = steering_force;
-	SetLength(object_velocity, 100);
+	SetLength(object_velocity, ZOMBIE_MAX_SPEED);
 
 	object_position += object_velocity * glm::vec2(delta_time, delta_time);
 

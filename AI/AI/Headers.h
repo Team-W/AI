@@ -5,8 +5,8 @@
 #define GLM_FORCE_RADIANS
 #define PI 3.14159265358979323846
 
-#define ZOMBIE_MAX_SPEED 5.0
-#define ZOMBIE_TURNING_MAX_SPEED 3.0
+#define ZOMBIE_MAX_SPEED 100.0f
+#define ZOMBIE_TURNING_MAX_SPEED 3.0f
 
 // Standard Libraries
 #include <iostream>

@@ -3,6 +3,16 @@
 Scene::Scene(void)
 {
 	view_matrix = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
+
+	// Init Test Objects
+	test_zombie = new Zombie(this, 0.0f, 0.0f);
+
+	// Init Objects
+	AddObject(test_zombie);
+	AddObject(new Obstacle(this, 15.0, 15.0, 7.00));
+	AddObject(new Obstacle(this, -12.0, -17.0, 9.00));
+	AddObject(new Obstacle(this, 12.0, -6.0, 5.00));
+	AddObject(new Obstacle(this, -16.0, 15.0, 6.00));
 }
 
 Scene::~Scene(void)
@@ -23,6 +33,22 @@ void Scene::Draw(void)
 	for(unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Draw();
+	}
+}
+
+void Scene::Key(unsigned char key)
+{
+	switch(key)
+	{
+		case 'r':
+		{
+			test_zombie->RandomPoint();
+			break;
+		}
+		default:
+		{
+
+		}
 	}
 }
 
