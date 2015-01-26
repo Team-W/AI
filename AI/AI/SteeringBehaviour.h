@@ -35,7 +35,8 @@ class SteeringBehaviour
 		float wander_jitter;
 		glm::vec2 wander_target;
 		GraphicDebug wander_target_point;
-		GraphicDebug obstacle_position;
+		GraphicDebug obstacle_position[20];
+		int obstacle_number;
 		// ----------------------------- //
 
 		glm::vec2 steering_force;

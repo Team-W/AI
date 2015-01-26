@@ -13,7 +13,12 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	wander_target = glm::vec2(wander_radius*cos(alpha), wander_radius*sin(alpha));
 	wander_target_point.InitPoint(wander_target, 0.2, glm::vec3(0, 0, 1));
 
-	obstacle_position.InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(0, 1, 0));
+	obstacle_number = 0;
+	for(int i=0; i<20; ++i)
+	{
+		obstacle_position[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(0, 1, 0));
+		obstacle_position[i].Hide();
+	}	
 }
 
 SteeringBehaviour::~SteeringBehaviour(void)
@@ -29,7 +34,9 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 void SteeringBehaviour::Draw(void)
 {
 	wander_target_point.DrawPoint();
-	obstacle_position.DrawPoint();
+
+	for(int i=0; i<obstacle_number; ++i)
+		obstacle_position[i].DrawPoint();
 }
 
 glm::vec2 SteeringBehaviour::CalculateWander(void)
@@ -77,10 +84,13 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	detection_box_length *=	MIN_DETECTION_BOX_LENGTH;
 	detection_box_length += MIN_DETECTION_BOX_LENGTH;
 	float distance = 0.0f;
-							
+
+	obstacle_number = 0;
+	for(int i=0; i<obstacle_number; ++i)
+		obstacle_position[i].Hide();
+	
 	for(unsigned int i=0; i<owner->scene->objects.size(); ++i)
 	{
-		
 		object = owner->scene->objects[i];
 
 		if(object == owner || object == owner->scene->player)
@@ -89,10 +99,19 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 		//if(GetLength(object->GetObjectPosition() - owner->GetObjectPosition()))
 			//continue;
 
-		glm::mat4 matrix(glm::mat4(1.0f) / object->GetModelMatrix());
-		glm::vec2 local_position(glm::vec4(object->GetObjectPosition(), 0.0f, 0.0f) * matrix);
+		glm::vec2 direction(object->GetObjectPosition() - owner->GetObjectPosition());
+		Normalize(direction);
+		float angle = GetAngle(owner->object_heading, direction);
 
-		obstacle_position.UpdatePoint(object->GetObjectPosition(), glm::vec3(0, 1, 0));
+		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0, 0, 1));
+		glm::vec2 local_position(rot * glm::vec4(object->GetObjectPosition(), 0.0f, 0.0f));
+		local_position -= owner->object_position;
+
+		//glm::mat4 matrix(glm::mat4(1.0f) / object->GetModelMatrix());
+		//glm::vec2 local_position(glm::vec4(object->GetObjectPosition(), 0.0f, 0.0f) * matrix);
+
+		obstacle_position[obstacle_number].UpdatePoint(direction + owner->GetObjectPosition(), glm::vec3(0, 1, 0));
+		obstacle_position[obstacle_number++].Hide();
 	}
 
 	return glm::vec2(0, 0);
