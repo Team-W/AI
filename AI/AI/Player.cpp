@@ -27,15 +27,24 @@ void Player::Move(glm::vec2 move, double delta_time)
 	SetLength(move, PLAYER_SPEED);
 	move *= delta_time;
 	object_position += move;
+	object_heading = mouse->getPosition() -object_position;
+	if (!CDrail){
+		shooting_pos = object_position;
+		shooting_target = object_heading;
+		shooting_target*=10000;
+	}
+	Normalize(object_heading);
+
 }
 
 void Player::Rotate(glm::vec2 heading)
 {
 	object_heading = heading-object_position;
-	SetLength(object_heading, 10000.0);
+	
 	if (!CDrail){
 		shooting_pos = object_position;
 		shooting_target = object_heading;
+		shooting_target *= 10000;
 	}
 	Normalize(object_heading);
 	this->mouse->UpdatePoint(heading, glm::vec3(0.9, 0.9, 0.9));
