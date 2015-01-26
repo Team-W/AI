@@ -68,8 +68,8 @@ void Player::Update(double delta_time)
 	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
 
-	if (color.x - 0.001f > 0.0){
-		color -= 0.001f;
+	if (color.x - 0.016f > 0.0){
+		color -= 0.016f;
 	}
 	else{
 		color *= 0;

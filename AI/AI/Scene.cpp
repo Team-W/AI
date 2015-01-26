@@ -36,11 +36,12 @@ void Scene::Update(double delta_time)
 
 void Scene::Draw(void)
 {
+	player->Draw();
 	for(unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Draw();
 	}
-	player->Draw();
+	
 }
 
 void Scene::PlayerRotate(glm::vec2 heading)
