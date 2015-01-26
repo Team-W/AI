@@ -8,9 +8,12 @@ Player::Player(Scene *s, float x, float y)
 	this->object_scale = glm::vec2(0.03f, 0.03f);
 	this->mouse = new GraphicDebug();
 	this->mouse->InitPoint(glm::vec2(0, 0), 0.8, glm::vec3(0.9, 0.9, 0.9));
+	this->color = glm::vec3(0, 0, 0);
 	this->CDrail = false;
 	this->rail = new GraphicDebug();
-	this->mouse->InitLine(glm::vec2(0, 0), glm::vec2(1,1), glm::vec3(1, 1, 1));
+	this->mouse->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
+	this->shooting_pos = object_position;
+	this->shooting_target = object_position;
 }
 
 
@@ -29,9 +32,11 @@ void Player::Move(glm::vec2 move, double delta_time)
 void Player::Rotate(glm::vec2 heading)
 {
 	object_heading = heading-object_position;
-	SetLength(object_heading, 1000.0);
-	this->rail->UpdateLine(object_position, object_heading, glm::vec3(1, 1, 1));
-
+	SetLength(object_heading, 10000.0);
+	if (!CDrail){
+		shooting_pos = object_position;
+		shooting_target = object_heading;
+	}
 	Normalize(object_heading);
 	this->mouse->UpdatePoint(heading, glm::vec3(0.9, 0.9, 0.9));
 	
@@ -40,6 +45,11 @@ void Player::Rotate(glm::vec2 heading)
 
 void Player::Shoot(glm::vec2 fire)
 {
+	if (!CDrail){
+		color = glm::vec3(1, 1, 1);
+		CDrail = true;
+	}
+	
 }
 
 void Player::Update(double delta_time)
@@ -49,6 +59,15 @@ void Player::Update(double delta_time)
 	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
 
+	if (color.x - 0.001f > 0.0){
+		color -= 0.001f;
+	}
+	else{
+		color *= 0;
+		CDrail = false;
+	}
+
+	this->rail->UpdateLine(shooting_pos, shooting_target, color);
 }
 
 void Player::Draw()

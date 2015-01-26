@@ -21,6 +21,9 @@ public:
 private:
 	GraphicDebug *mouse;
 	GraphicDebug *rail;
+	glm::vec3 color;
+	glm::vec2 shooting_pos;
+	glm::vec2 shooting_target;
 	double speed;
 	bool CDrail;
 };
