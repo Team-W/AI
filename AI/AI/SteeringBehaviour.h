@@ -36,6 +36,8 @@ class SteeringBehaviour
 		glm::vec2 wander_target;
 		GraphicDebug wander_target_point;
 		GraphicDebug obstacle_position[20];
+		GraphicDebug obstacle_x_axis;
+		GraphicDebug obstacle_y_axis;
 		int obstacle_number;
 		// ----------------------------- //
 

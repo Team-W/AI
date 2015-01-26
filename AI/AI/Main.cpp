@@ -81,11 +81,11 @@ int main(int argc, char **argv)
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
-	glutKeyboardFunc(KeyPressed);
-	glutKeyboardUpFunc(KeyUp);
 	glutPassiveMotionFunc(MouseCoords);
 	glutMotionFunc(MouseClicked);
 	glutMouseFunc(MouseClick);
+	glutKeyboardFunc(KeyPressed);
+	glutKeyboardUpFunc(KeyUp);
 	glutMainLoop();
 
 	return 0;

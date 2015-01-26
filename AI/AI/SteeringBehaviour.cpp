@@ -18,7 +18,9 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	{
 		obstacle_position[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(0, 1, 0));
 		obstacle_position[i].Hide();
-	}	
+	}
+	obstacle_x_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
+	obstacle_y_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
 }
 
 SteeringBehaviour::~SteeringBehaviour(void)
@@ -37,6 +39,8 @@ void SteeringBehaviour::Draw(void)
 
 	for(int i=0; i<obstacle_number; ++i)
 		obstacle_position[i].DrawPoint();
+	obstacle_x_axis.DrawLine();
+	obstacle_y_axis.DrawLine();
 }
 
 glm::vec2 SteeringBehaviour::CalculateWander(void)
@@ -89,9 +93,8 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	for(int i=0; i<obstacle_number; ++i)
 		obstacle_position[i].Hide();
 
-	/*glm::vec2 direction(object->GetObjectPosition() - owner->GetObjectPosition());
-	Normalize(direction);
-	float angle = GetAngle(owner->object_heading, direction);*/
+	obstacle_x_axis.UpdateLine(owner->GetObjectPosition() - GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), owner->GetObjectPosition() + GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), glm::vec3(0, 1, 0));
+	obstacle_y_axis.UpdateLine(owner->GetObjectPosition() - owner->GetObjectHeading() * glm::vec2(33, 33), owner->GetObjectPosition() + owner->GetObjectHeading()  * glm::vec2(33, 33), glm::vec3(0, 1, 0));
 
 	float angle = GetAngle(glm::vec2(0, 1), owner->object_heading);
 	
@@ -106,10 +109,10 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 			//continue;
 
 
-		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), -angle, glm::vec3(0, 0, 1));
+		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)(-angle), glm::vec3(0, 0, 1));
 		
-		glm::vec2 local_position(rot * glm::vec4(object->GetObjectPosition()-owner->GetObjectPosition(), 0.0f, 0.0f));
-		local_position += owner->GetObjectPosition();
+		glm::vec2 local_position(rot * glm::vec4(object->GetObjectPosition() - owner->GetObjectPosition(), 0.0f, 0.0f));
+		//local_position += owner->GetObjectPosition();
 
 		//glm::mat4 matrix(glm::mat4(1.0f) / object->GetModelMatrix());
 		//glm::vec2 local_position(glm::vec4(object->GetObjectPosition(), 0.0f, 0.0f) * matrix);
