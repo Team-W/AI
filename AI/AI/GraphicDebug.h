@@ -19,6 +19,8 @@ class GraphicDebug
 		void DrawLine();
 		void DrawRectngle();
 		void Hide();
+		
+		glm::vec2 getPosition();
 
 	private:
 		bool hidden;

@@ -130,3 +130,6 @@ void GraphicDebug::Hide()
 {
 	this->hidden = !this->hidden;
 }
+glm::vec2 GraphicDebug::getPosition(){
+	return this->begin;
+}
