@@ -3,7 +3,9 @@
 
 #include "Headers.h"
 #include "Utilities.h"
+#include "GameEntity.h"
 #include "Zombie.h"
+#include "Obstacle.h"
 #include "GraphicDebug.h"
 
 class Zombie;
@@ -27,13 +29,14 @@ class SteeringBehaviour
 	private:
 		Zombie *owner;
 
-		// ---------- WANDER PARAMS ---------- //
+		// ---------- PARAMS ---------- //
 		float wander_radius;
 		float wander_distance;
 		float wander_jitter;
 		glm::vec2 wander_target;
 		GraphicDebug wander_target_point;
-		// ----------------------------------- //
+		GraphicDebug obstacle_position;
+		// ----------------------------- //
 
 		glm::vec2 steering_force;
 

@@ -7,6 +7,7 @@
 
 #define ZOMBIE_MAX_SPEED 50.0f
 #define ZOMBIE_TURNING_MAX_SPEED 3.0f
+#define MIN_DETECTION_BOX_LENGTH 2.0f
 #define PLAYER_SPEED 100.0f
 
 // Standard Libraries

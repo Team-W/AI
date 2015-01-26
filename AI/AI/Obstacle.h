@@ -20,6 +20,7 @@ class Obstacle: public GameEntity
     private:
 		double object_radius;
 
+		friend class SteeringBehaviours;
         friend ostream& operator<<(ostream &o, const Obstacle &ob);
 };
 

@@ -26,7 +26,7 @@ void Zombie::Update(double delta_time)
 	target_point.UpdatePoint(target_position, glm::vec3(1, 0, 0));
 
 	//object_velocity += steering_behaviour->CalculateSeek(target_position)*glm::vec2(delta_time, delta_time);
-	object_velocity += steering_behaviour->CalculateWander();
+	object_velocity += steering_behaviour->CalculateObstacleAvoidance();
 	//SetLength(object_velocity, ZOMBIE_MAX_SPEED);
 	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
 

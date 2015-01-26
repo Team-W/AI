@@ -12,6 +12,8 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	float alpha = (float)(rand()%360) * (float)(PI/180.0f);
 	wander_target = glm::vec2(wander_radius*cos(alpha), wander_radius*sin(alpha));
 	wander_target_point.InitPoint(wander_target, 0.2, glm::vec3(0, 0, 1));
+
+	obstacle_position.InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(0, 1, 0));
 }
 
 SteeringBehaviour::~SteeringBehaviour(void)
@@ -27,6 +29,7 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 void SteeringBehaviour::Draw(void)
 {
 	wander_target_point.DrawPoint();
+	obstacle_position.DrawPoint();
 }
 
 glm::vec2 SteeringBehaviour::CalculateWander(void)
@@ -69,6 +72,28 @@ glm::vec2 SteeringBehaviour::CalculateArrive(void)
 
 glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 {
+	GameEntity *object = 0;
+	float detection_box_length = (GetLength(owner->object_velocity)/ZOMBIE_MAX_SPEED);
+	detection_box_length *=	MIN_DETECTION_BOX_LENGTH;
+	detection_box_length += MIN_DETECTION_BOX_LENGTH;
+	float distance = 0.0f;
+							
+	for(unsigned int i=0; i<owner->scene->objects.size(); ++i)
+	{
+		
+		object = owner->scene->objects[i];
+
+		if(object == owner || object == owner->scene->player)
+			continue;
+
+		//if(GetLength(object->GetObjectPosition() - owner->GetObjectPosition()))
+			//continue;
+
+		glm::mat4 matrix(glm::mat4(1.0f) / object->GetModelMatrix());
+		glm::vec2 local_position(glm::vec4(object->GetObjectPosition(), 0.0f, 0.0f) * matrix);
+
+		obstacle_position.UpdatePoint(object->GetObjectPosition(), glm::vec3(0, 1, 0));
+	}
 
 	return glm::vec2(0, 0);
 }
