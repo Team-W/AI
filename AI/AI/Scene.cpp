@@ -8,11 +8,12 @@ Scene::Scene(void)
 	test_zombie = new Zombie(this, 0.0f, 0.0f);
 	player = new Player(this, 20.0f, 20.0f);
 	// Init Objects
-	AddObject(test_zombie);
+	
 	AddObject(new Obstacle(this, 15.0, 15.0, 7.00));
 	AddObject(new Obstacle(this, -12.0, -17.0, 9.00));
 	AddObject(new Obstacle(this, 12.0, -6.0, 5.00));
 	AddObject(new Obstacle(this, -16.0, 15.0, 6.00));
+	AddObject(test_zombie);
 }
 
 Scene::~Scene(void)

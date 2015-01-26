@@ -28,15 +28,20 @@ void GraphicDebug::InitLine(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
 	this->color = color;
 }
 
+void GraphicDebug::InitRectangle(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
+{
+	this->begin = begin;
+	this->end = end;
+	this->color = color;
+}
+
 void GraphicDebug::UpdatePoint(glm::vec2 begin, glm::vec3 color)
 {	
 	if(!this->hidden)
 	{
 		this->begin = begin;
 		this->color = color;
-	}
-	else
-	{
+	}else{
 		this->begin = glm::vec2(100, 100);
 	}
 }
@@ -48,8 +53,20 @@ void GraphicDebug::UpdateLine(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
 		this->begin = begin;
 		this->end = end;
 		this->color = color;
-	}else
+	}else{
+		this->begin = glm::vec2(100, 100);
+		this->end = glm::vec2(100, 100);
+	}
+};
+
+void GraphicDebug::UpdateRectangle(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
+{
+	if(!this->hidden)
 	{
+		this->begin = begin;
+		this->end = end;
+		this->color = color;
+	}else{
 		this->begin = glm::vec2(100, 100);
 		this->end = glm::vec2(100, 100);
 	}
@@ -82,12 +99,30 @@ void GraphicDebug::DrawPoint()
 void GraphicDebug::DrawLine()
 {
 	glPushMatrix();
-	glScalef(scale.x, scale.y, 1.0f);
-	glBegin(GL_LINES);
-	glColor3f(color.x, color.y, color.z);
-	glVertex2f(begin.x, begin.y);
-	glVertex2f(end.x, end.y);
-	glEnd();
+		glScalef(scale.x, scale.y, 1.0f);
+		glBegin(GL_LINES);
+			glColor3f(color.x, color.y, color.z);
+			glVertex2f(begin.x, begin.y);
+			glVertex2f(end.x, end.y);
+		glEnd();
+	glPopMatrix();
+}
+
+void GraphicDebug::DrawRectngle()
+{
+	glPushMatrix();
+		glScalef(1.0, 1.0, 1.0f);
+		glBegin(GL_LINES);
+			glColor3f(color.x, color.y, color.z);
+			glVertex2f(begin.x - end.x, begin.y - 1.20f);
+			glVertex2f(begin.x + end.x, begin.y - 1.20f);
+			glVertex2f(begin.x + end.x, begin.y - 1.20f);
+			glVertex2f(begin.x + end.x, end.y);
+			glVertex2f(begin.x + end.x, end.y);
+			glVertex2f(begin.x - end.x, end.y);
+			glVertex2f(begin.x - end.x, end.y);
+			glVertex2f(begin.x - end.x, begin.y - 1.20f);
+		glEnd();
 	glPopMatrix();
 }
 
