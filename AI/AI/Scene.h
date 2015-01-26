@@ -22,6 +22,8 @@ class Scene
 		void Key(unsigned char key);
 		void KeyState(unsigned char key, bool tf);
 		void AddObject(GameEntity *entity);
+		void AddZombie(GameEntity *entity);
+		void AddObstacle(GameEntity *entity);
 		void RemoveObject(GameEntity *entity);
 		
 		void PlayerRotate(glm::vec2 heading);
@@ -40,6 +42,8 @@ class Scene
 		
 		Player *player;
 
+		vector<GameEntity*> zombies;
+		vector<GameEntity*> obstacles;
 		vector<GameEntity*> objects;
 
 		friend class SteeringBehaviour;

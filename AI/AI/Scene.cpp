@@ -9,11 +9,11 @@ Scene::Scene(void)
 	player = new Player(this, 20.0f, 20.0f);
 	// Init Objects
 	
-	AddObject(new Obstacle(this, 15.0, 15.0, 7.00));
-	AddObject(new Obstacle(this, -12.0, -17.0, 9.00));
-	AddObject(new Obstacle(this, 12.0, -6.0, 5.00));
-	AddObject(new Obstacle(this, -16.0, 15.0, 6.00));
-	AddObject(test_zombie);
+	AddObstacle(new Obstacle(this, 15.0, 15.0, 7.00));
+	AddObstacle(new Obstacle(this, -12.0, -17.0, 9.00));
+	AddObstacle(new Obstacle(this, 12.0, -6.0, 5.00));
+	AddObstacle(new Obstacle(this, -16.0, 15.0, 6.00));
+	AddZombie(test_zombie);
 }
 
 Scene::~Scene(void)
@@ -27,10 +27,10 @@ void Scene::Update(double delta_time)
 	{
 		objects[i]->Update(delta_time);
 	}
-	if (KeyStates['w']) player->Move(glm::vec2(0, 0.3), delta_time);
-	if (KeyStates['s']) player->Move(glm::vec2(0, -0.3), delta_time);
-	if (KeyStates['a']) player->Move(glm::vec2(-0.3, 0), delta_time);
-	if (KeyStates['d']) player->Move(glm::vec2(0.3, 0), delta_time);
+	if (KeyStates['w'] || KeyStates['W']) player->Move(glm::vec2(0, 0.3), delta_time);
+	if (KeyStates['s'] || KeyStates['S']) player->Move(glm::vec2(0, -0.3), delta_time);
+	if (KeyStates['a'] || KeyStates['A']) player->Move(glm::vec2(-0.3, 0), delta_time);
+	if (KeyStates['d'] || KeyStates['D']) player->Move(glm::vec2(0.3, 0), delta_time);
 	player->Update(delta_time);
 }
 
@@ -65,6 +65,16 @@ void Scene::KeyState(unsigned char key, bool tf)
 
 void Scene::AddObject(GameEntity *entity)
 {
+	objects.push_back(entity);
+}
+void Scene::AddZombie(GameEntity *entity)
+{
+	zombies.push_back(entity);
+	objects.push_back(entity);
+}
+void Scene::AddObstacle(GameEntity *entity)
+{
+	obstacles.push_back(entity);
 	objects.push_back(entity);
 }
 
