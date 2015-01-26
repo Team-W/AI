@@ -35,12 +35,13 @@ void GraphicDebug::InitRectangle(glm::vec2 begin, glm::vec2 end, glm::vec3 color
 	this->color = color;
 }
 
-void GraphicDebug::UpdatePoint(glm::vec2 begin, glm::vec3 color)
+void GraphicDebug::UpdatePoint(glm::vec2 begin, double r, glm::vec3 color)
 {	
 	if(!this->hidden)
 	{
 		this->begin = begin;
 		this->color = color;
+		this->radius = r;
 	}else{
 		this->begin = glm::vec2(100, 100);
 	}
@@ -78,7 +79,7 @@ void GraphicDebug::DrawPoint()
 	glPushMatrix();
 	glScalef(scale.x, scale.y, 1.0f);
 	glTranslatef(begin.x, begin.y, 0.0);
-	glBegin(GL_TRIANGLE_FAN);
+	glBegin(GL_LINES);
 
 	glColor3f(color.x, color.y, color.z);
 

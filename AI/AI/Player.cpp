@@ -47,7 +47,7 @@ void Player::Rotate(glm::vec2 heading)
 		shooting_target *= 10000;
 	}
 	Normalize(object_heading);
-	this->mouse->UpdatePoint(heading, glm::vec3(0.9, 0.9, 0.9));
+	this->mouse->UpdatePoint(heading, 0.2, glm::vec3(0.9, 0.9, 0.9));
 	
 	
 }

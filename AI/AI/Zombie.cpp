@@ -12,7 +12,6 @@ Zombie::Zombie(Scene *s, float x, float y)
 
 	heading_vector.InitLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
 	target_point.InitPoint(target_position, 0.2, glm::vec3(1, 0, 0));
-	obstacle_avoidance.InitRectangle(object_position, glm::vec2(1.0,7.2), glm::vec3(0.0f, 0.7f, 0.7f));
 }
 
 Zombie::~Zombie(void)
@@ -24,14 +23,21 @@ Zombie::~Zombie(void)
 void Zombie::Update(double delta_time)
 {
 	heading_vector.UpdateLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
-	target_point.UpdatePoint(target_position, glm::vec3(1, 0, 0));
-	//obstacle_avoidance.UpdateRectangle(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
+	target_point.UpdatePoint(target_position, 0.2, glm::vec3(1, 0, 0));
+	
 	//object_velocity += steering_behaviour->CalculateSeek(target_position)*glm::vec2(delta_time, delta_time);
 	object_velocity += steering_behaviour->CalculateObstacleAvoidance() + steering_behaviour->CalculateWander();
 	//SetLength(object_velocity, ZOMBIE_MAX_SPEED);
 	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
 
 	object_position += object_velocity * glm::vec2(delta_time, delta_time);
+
+	// tmp
+	if(object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
+	{
+		object_position -= object_velocity * glm::vec2(delta_time, delta_time);
+	}
+
 	object_heading = object_velocity;
 	Normalize(object_heading);
 	object_side = GetPerpendicular(object_heading);

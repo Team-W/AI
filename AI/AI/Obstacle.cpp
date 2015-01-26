@@ -4,6 +4,7 @@ Obstacle::Obstacle(Scene *s, double x, double y, double r): object_radius(r)
 {
 	this->scene = s;
 	this->object_position = glm::vec2(x, y);
+	this->collision_radius = r;
 	object_scale = glm::vec2(0.03f, 0.03f);
 	model_matrix = glm::mat4(1.0f);
 	model_matrix = glm::scale(model_matrix, glm::vec3(object_scale, 1.0f));

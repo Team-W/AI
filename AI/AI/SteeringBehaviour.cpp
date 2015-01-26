@@ -54,7 +54,7 @@ glm::vec2 SteeringBehaviour::CalculateWander(void)
 	glm::vec2 target_world(rot * glm::vec4(target_local, 0.0f, 0.0f));
 	target_world += owner->object_position;
 
-	wander_target_point.UpdatePoint(target_world, glm::vec3(0, 0, 1));
+	wander_target_point.UpdatePoint(target_world, 0.2, glm::vec3(0, 0, 1));
 
 	return target_world - owner->object_position;
 }
@@ -88,6 +88,12 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	obstacle_number = 0;
 	for(int i=0; i<obstacle_number; ++i)
 		obstacle_position[i].Hide();
+
+	/*glm::vec2 direction(object->GetObjectPosition() - owner->GetObjectPosition());
+	Normalize(direction);
+	float angle = GetAngle(owner->object_heading, direction);*/
+
+	float angle = GetAngle(glm::vec2(0, 1), owner->object_heading);
 	
 	for(unsigned int i=0; i<owner->scene->objects.size(); ++i)
 	{
@@ -99,18 +105,16 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 		//if(GetLength(object->GetObjectPosition() - owner->GetObjectPosition()))
 			//continue;
 
-		glm::vec2 direction(object->GetObjectPosition() - owner->GetObjectPosition());
-		Normalize(direction);
-		float angle = GetAngle(owner->object_heading, direction);
 
-		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), angle, glm::vec3(0, 0, 1));
-		glm::vec2 local_position(rot * glm::vec4(object->GetObjectPosition(), 0.0f, 0.0f));
-		local_position -= owner->object_position;
+		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), -angle, glm::vec3(0, 0, 1));
+		
+		glm::vec2 local_position(rot * glm::vec4(object->GetObjectPosition()-owner->GetObjectPosition(), 0.0f, 0.0f));
+		local_position += owner->GetObjectPosition();
 
 		//glm::mat4 matrix(glm::mat4(1.0f) / object->GetModelMatrix());
 		//glm::vec2 local_position(glm::vec4(object->GetObjectPosition(), 0.0f, 0.0f) * matrix);
 
-		obstacle_position[obstacle_number].UpdatePoint(direction + owner->GetObjectPosition(), glm::vec3(0, 1, 0));
+		obstacle_position[obstacle_number].UpdatePoint(local_position, object->GetCollisionRadius(), glm::vec3(0, 1, 0));
 		obstacle_position[obstacle_number++].Hide();
 	}
 
