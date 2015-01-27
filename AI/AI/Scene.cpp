@@ -18,6 +18,8 @@ Scene::Scene(void)
 
 Scene::~Scene(void)
 {
+	if (player != 0) delete player;
+	if (test_zombie != 0) delete test_zombie;
 
 }
 
