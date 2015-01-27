@@ -10,6 +10,7 @@ void Init()
 
 void RenderScene(void)
 {
+	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
@@ -22,6 +23,7 @@ void RenderScene(void)
 
 void Idle()
 {
+	Sleep(16);
 	static long long int old_time = 0;
 
 	long long int time_since_start = glutGet(GLUT_ELAPSED_TIME);
@@ -53,11 +55,14 @@ void MouseCoords(int x, int y)
 }
 
 void MouseClick(int button, int state, int x, int y) {
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-		float a, b;
-		a = (float)(33.33*(x - 350) / 350);
-		b = (float)(33.33*(-y + 350) / 350);
+	float a, b;
+	a = (float)(33.33*(x - 350) / 350);
+	b = (float)(33.33*(-y + 350) / 350);
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {		
 		scene.PlayerShoot(glm::vec2(a, b));
+	}
+	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
+		scene.ZombieTarget(glm::vec2(a, b));
 	}
 }
 

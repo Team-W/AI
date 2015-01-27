@@ -29,6 +29,7 @@ class GraphicDebug
 		glm::vec2 scale;
 		glm::vec2 begin;
 		glm::vec2 end;
+		glm::vec2 heading;
 };
 
 #endif

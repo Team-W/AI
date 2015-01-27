@@ -28,11 +28,6 @@ void Player::Move(glm::vec2 move, double delta_time)
 	move *= delta_time;
 	object_position += move;
 	object_heading = mouse->getPosition() -object_position;
-	if (!CDrail){
-		shooting_pos = object_position;
-		shooting_target = object_heading;
-		shooting_target*=10000;
-	}
 	Normalize(object_heading);
 
 }
@@ -47,7 +42,7 @@ void Player::Rotate(glm::vec2 heading)
 		shooting_target *= 10000;
 	}
 	Normalize(object_heading);
-	this->mouse->UpdatePoint(heading, 0.2, glm::vec3(0.9, 0.9, 0.9));
+	this->mouse->UpdatePoint(heading, 0.5, glm::vec3(0.9, 0.9, 0.9));
 	
 	
 }
@@ -74,6 +69,9 @@ void Player::Update(double delta_time)
 	else{
 		color *= 0;
 		CDrail = false;
+		shooting_pos = object_position;
+		shooting_target = object_heading;
+		shooting_target *= 10000;
 	}
 
 	this->rail->UpdateLine(shooting_pos, shooting_target, color);
@@ -93,14 +91,14 @@ void Player::Draw()
 	glLoadMatrixf(Matrix);
 
 	glBegin(GL_TRIANGLES);
-		glColor3f(0.0f, 0.0f, 1.0f);
+		glColor3f(0.0f, 1.0f, 1.0f);
 		glVertex3f(-0.50f, -0.60f, 0.f);
 		glVertex3f(0.50f, -0.60f, 0.f);
 		glVertex3f(0.00f, 0.75f, 0.f);
 	glEnd();
 
 	glBegin(GL_LINES);
-		glColor3f(0.5f, 0.0f, 0.0f);
+		glColor3f(0.5f, 0.5f, 0.0f);
 
 		a = 1.0f * (float)cos(359 * PI / 180.0f);
 		b = 1.0f * (float)sin(359 * PI / 180.0f);

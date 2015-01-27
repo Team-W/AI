@@ -47,11 +47,17 @@ void Scene::Draw(void)
 void Scene::PlayerRotate(glm::vec2 heading)
 {
 	player->Rotate(heading);
+	
 }
 
 void Scene::PlayerShoot(glm::vec2 aim)
 {
 	player->Shoot(aim);
+}
+
+void Scene::ZombieTarget(glm::vec2 target)
+{
+	test_zombie->MousePoint(target);
 }
 
 void Scene::Key(unsigned char key)
