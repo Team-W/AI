@@ -21,7 +21,7 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	}
 	obstacle_x_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
 	obstacle_y_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
-	obstacle_box.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
+	//obstacle_box.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
 }
 
 SteeringBehaviour::~SteeringBehaviour(void)
@@ -42,7 +42,7 @@ void SteeringBehaviour::Draw(void)
 		obstacle_position[i].DrawPoint();
 	obstacle_x_axis.DrawLine();
 	obstacle_y_axis.DrawLine();
-	obstacle_box.DrawLine();
+	//obstacle_box.DrawLine();
 }
 
 glm::vec2 SteeringBehaviour::CalculateWander(void)
@@ -91,13 +91,17 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	detection_box_length += MIN_DETECTION_BOX_LENGTH;
 	float distance = 0.0f;
 
+	float dist_to_closest_ip = 999999.0f;
+	GameEntity *pointer_to_closest_ob = 0;
+	glm::vec2 local_position_of_closest_ob = glm::vec2(0, 0);
+
 	obstacle_number = 0;
 	for(int i=0; i<obstacle_number; ++i)
 		obstacle_position[i].Hide();
 
 	obstacle_x_axis.UpdateLine(owner->GetObjectPosition() - GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), owner->GetObjectPosition() + GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), glm::vec3(0, 1, 0));
 	obstacle_y_axis.UpdateLine(owner->GetObjectPosition() - owner->GetObjectHeading() * glm::vec2(33, 33), owner->GetObjectPosition() + owner->GetObjectHeading()  * glm::vec2(33, 33), glm::vec3(0, 1, 0));
-	obstacle_box.UpdateLine(owner->GetObjectPosition(), owner->GetObjectPosition() + owner->GetObjectHeading() * glm::vec2(detection_box_length, detection_box_length), glm::vec3(0, 0, 1));
+	//obstacle_box.UpdateLine(owner->GetObjectPosition(), owner->GetObjectPosition() + owner->GetObjectHeading() * glm::vec2(detection_box_length, detection_box_length), glm::vec3(0, 0, 1));
 
 	float angle = GetAngle(glm::vec2(0, 1), owner->object_heading);
 	
@@ -125,8 +129,38 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 		if(fabs(local_position.x) > expanded_radius)
 			continue;
 
+		double cX = local_position.x;
+		double cY = local_position.y;
 
+		double sqrt_part = sqrt(expanded_radius*expanded_radius - cX*cX);
+
+		double ip = cY - sqrt_part;
+		if(ip <= 0) ip = cY + sqrt_part;
+
+		if(ip < dist_to_closest_ip)
+		{
+			dist_to_closest_ip = ip;
+			pointer_to_closest_ob = object;
+			local_position_of_closest_ob = local_position;
+		}
 	}
 
-	return glm::vec2(0, 0);
+	glm::vec2 force(0.0f, 0.0f);
+
+	if(pointer_to_closest_ob == 0)
+		return force;
+
+	double multiplier = 1.0 + (detection_box_length - local_position_of_closest_ob.y) / detection_box_length;
+
+	// lateral force
+	force.x = (pointer_to_closest_ob->GetCollisionRadius() - local_position_of_closest_ob.x) * multiplier;
+
+	const double braking_weight = 0.2;
+
+	force.y = (pointer_to_closest_ob->GetCollisionRadius() - local_position_of_closest_ob.y) * braking_weight;
+
+	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), GetAngle(glm::vec2(0, 1), owner->object_heading), glm::vec3(0, 0, 1));
+	glm::vec2 force_world(rot * glm::vec4(force, 0.0f, 0.0f));
+
+	return force_world;
 }

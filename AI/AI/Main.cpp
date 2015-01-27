@@ -23,7 +23,7 @@ void RenderScene(void)
 
 void Idle()
 {
-	Sleep(16);
+	//Sleep(16);
 	static long long int old_time = 0;
 
 	long long int time_since_start = glutGet(GLUT_ELAPSED_TIME);
