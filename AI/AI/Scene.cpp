@@ -36,21 +36,28 @@ void Scene::Update(double delta_time)
 
 void Scene::Draw(void)
 {
+	player->Draw();
 	for(unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Draw();
 	}
-	player->Draw();
+	
 }
 
 void Scene::PlayerRotate(glm::vec2 heading)
 {
 	player->Rotate(heading);
+	
 }
 
 void Scene::PlayerShoot(glm::vec2 aim)
 {
 	player->Shoot(aim);
+}
+
+void Scene::ZombieTarget(glm::vec2 target)
+{
+	test_zombie->MousePoint(target);
 }
 
 void Scene::Key(unsigned char key)

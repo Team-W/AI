@@ -29,6 +29,7 @@ class Scene
 		void PlayerRotate(glm::vec2 heading);
 		void PlayerMove(glm::vec2 move, double delta_time);
 		void PlayerShoot(glm::vec2 aim);
+		void ZombieTarget(glm::vec2 target);
 
 		const glm::mat4& GetViewMatrix(void) const;
 

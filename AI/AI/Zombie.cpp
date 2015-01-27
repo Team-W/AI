@@ -12,6 +12,7 @@ Zombie::Zombie(Scene *s, float x, float y)
 
 	heading_vector.InitLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
 	target_point.InitPoint(target_position, 0.2, glm::vec3(1, 0, 0));
+	obstacle_avoidance.InitRectangle(object_position, glm::vec2(1.0,7.2), glm::vec3(0.0f, 0.7f, 0.7f));
 }
 
 Zombie::~Zombie(void)
@@ -20,13 +21,20 @@ Zombie::~Zombie(void)
 		delete steering_behaviour;
 }
 
+
+
 void Zombie::Update(double delta_time)
 {
 	heading_vector.UpdateLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
 	target_point.UpdatePoint(target_position, 0.2, glm::vec3(1, 0, 0));
-	
+
+	float detection_box_length = (GetLength(this->object_velocity) / ZOMBIE_MAX_SPEED);
+	detection_box_length *= MIN_DETECTION_BOX_LENGTH;
+	detection_box_length += MIN_DETECTION_BOX_LENGTH;
+	obstacle_avoidance.UpdateRectangle(object_position, glm::vec2(1.0, detection_box_length), glm::vec3(0.0f, 0.7f, 0.7f));
+
 	//object_velocity += steering_behaviour->CalculateSeek(target_position)*glm::vec2(delta_time, delta_time);
-	object_velocity += steering_behaviour->CalculateObstacleAvoidance() + steering_behaviour->CalculateWander();
+	object_velocity += steering_behaviour->CalculateObstacleAvoidance() + steering_behaviour->CalculateSeek(target_position);
 	//SetLength(object_velocity, ZOMBIE_MAX_SPEED);
 	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
 
@@ -53,6 +61,9 @@ void Zombie::RandomPoint()
 	int sign1 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
 	int sign2 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
 	target_position = glm::vec2(sign1 * rand()%20, sign2 * rand()%20);
+}
+void Zombie::MousePoint(glm::vec2 target){
+	target_position = target;
 }
 
 void Zombie::Draw()
@@ -85,12 +96,14 @@ void Zombie::Draw()
 				b = 1.0f * (float)sin(j * PI / 180.0f);
 				glVertex2f(a, b);
 			}
-		glEnd();obstacle_avoidance.DrawRectngle();
+		glEnd();
+		obstacle_avoidance.DrawRectngle();
 	glPopMatrix();
 	glDisable(GL_LINE_SMOOTH);
 
 	heading_vector.DrawLine();
 	target_point.DrawPoint();
+	
 	
 	steering_behaviour->Draw();
 }
