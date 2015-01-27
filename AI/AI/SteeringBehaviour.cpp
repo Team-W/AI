@@ -91,8 +91,6 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	detection_box_length += MIN_DETECTION_BOX_LENGTH;
 	float distance = 0.0f;
 
-	cout << detection_box_length << endl;
-
 	obstacle_number = 0;
 	for(int i=0; i<obstacle_number; ++i)
 		obstacle_position[i].Hide();
@@ -122,6 +120,11 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 		obstacle_position[obstacle_number].Hide();
 		obstacle_position[obstacle_number++].UpdatePoint(local_position, object->GetCollisionRadius(), glm::vec3(0, 1, 0));
 		
+		float expanded_radius = object->GetCollisionRadius() + owner->GetCollisionRadius() * 0.5f;
+
+		if(fabs(local_position.x) > expanded_radius)
+			continue;
+
 
 	}
 

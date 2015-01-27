@@ -4,6 +4,7 @@ Zombie::Zombie(Scene *s, float x, float y)
 {
 	this->steering_behaviour = new SteeringBehaviour(this);
 	this->scene = s;
+	this->collision_radius = 1.0f;
 	this->object_position = glm::vec2(x, y);
 	this->object_velocity = glm::vec2(0.0f, 0.0f);
 	this->target_position = glm::vec2(0.0f, 0.0f);
