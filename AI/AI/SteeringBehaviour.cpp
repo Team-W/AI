@@ -1,6 +1,6 @@
 #include "SteeringBehaviour.h"
 
-SteeringBehaviour::SteeringBehaviour(Zombie *z): owner(z),
+SteeringBehaviour::SteeringBehaviour(Zombie *z): owner(z), seek_target(0),
 wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 {
 	steering_force = glm::vec2(0.0f, 0.0f);
@@ -31,7 +31,21 @@ SteeringBehaviour::~SteeringBehaviour(void)
 
 glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 {
-	return glm::vec2(0, 0);
+	glm::vec2 force_wander = CalculateWander();
+	glm::vec2 force_seek = CalculateSeek(seek_target);
+	glm::vec2 force_oa = CalculateObstacleAvoidance();
+	steering_force = glm::vec2(0.0f, 0.0f);
+
+	if(GetLength(force_oa) > 0)
+	{
+		steering_force += force_oa * 0.8f;
+		steering_force += force_seek * 0.2f;
+		return steering_force;
+	}
+	else
+	{
+		return force_seek;
+	}
 }
 
 void SteeringBehaviour::Draw(void)

@@ -26,6 +26,8 @@ class SteeringBehaviour
 		void ToggleArrive(void);
 		void ToggleObstacleAvoidance(void);
 
+		void SetSeekTarget(glm::vec2 target);
+
 	private:
 		Zombie *owner;
 
@@ -40,6 +42,7 @@ class SteeringBehaviour
 		GraphicDebug obstacle_y_axis;
 		//GraphicDebug obstacle_box;
 		int obstacle_number;
+		glm::vec2 seek_target;
 		// ----------------------------- //
 
 		glm::vec2 steering_force;
@@ -91,6 +94,11 @@ inline void SteeringBehaviour::ToggleArrive(void)
 inline void SteeringBehaviour::ToggleObstacleAvoidance(void)
 {
 	obstacle_avoidance_on = !obstacle_avoidance_on;
+}
+
+inline void SteeringBehaviour::SetSeekTarget(glm::vec2 target)
+{
+	seek_target = target;
 }
 
 #endif
