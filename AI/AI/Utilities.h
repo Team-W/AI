@@ -11,22 +11,22 @@ ostream& operator<<(ostream &o, const glm::mat4 &matrix);
 void MatrixToArray(GLfloat array[16], const glm::mat4 &model_matrix, const glm::mat4 &view_matrix);
 
 // Vector Operations
-inline int GetSign(glm::vec2 &a, glm::vec2 &b)
+inline int GetSign(const glm::vec2 &a, const glm::vec2 &b)
 {
 	return (a.y*b.x > a.x*b.y) ? -1 : 1;
 }
 
-inline float GetLength(glm::vec2 &vector)
+inline float GetLength(const glm::vec2 &vector)
 {
 	return sqrt(vector.x*vector.x + vector.y*vector.y);
 }
 
-inline float GetLengthSqrt(glm::vec2 &vector)
+inline float GetLengthSqrt(const glm::vec2 &vector)
 {
 	return (vector.x*vector.x + vector.y*vector.y);
 }
 
-inline float GetDistance(glm::vec2 &a, glm::vec2 &b)
+inline float GetDistance(const glm::vec2 &a, const glm::vec2 &b)
 {
 	double xd = b.x - a.x;
 	double yd = b.y - a.y;
@@ -34,7 +34,7 @@ inline float GetDistance(glm::vec2 &a, glm::vec2 &b)
 	return (float)sqrt(xd*xd + yd*yd);
 }
 
-inline float GetDistanceSqrt(glm::vec2 &a, glm::vec2 &b)
+inline float GetDistanceSqrt(const glm::vec2 &a, const glm::vec2 &b)
 {
 	double xd = b.x - a.x;
 	double yd = b.y - a.y;
@@ -42,12 +42,12 @@ inline float GetDistanceSqrt(glm::vec2 &a, glm::vec2 &b)
 	return (float)(xd*xd + yd*yd);
 }
 
-inline float Dot(glm::vec2 &a, glm::vec2 &b)
+inline float Dot(const glm::vec2 &a, const glm::vec2 &b)
 {
 	return a.x*b.x + a.y*b.y;
 }
 
-inline float GetAngle(glm::vec2 &a, glm::vec2 &b)
+inline float GetAngle(const glm::vec2 &a, const glm::vec2 &b)
 {
 	return GetSign(a, b) * acos(Dot(a, b));
 }
@@ -81,12 +81,12 @@ inline void Truncate(glm::vec2 &vector, float f)
 		SetLength(vector, f);
 }
 
-inline glm::vec2 GetReversed(glm::vec2 &vector)
+inline glm::vec2 GetReversed(const glm::vec2 &vector)
 {
 	return glm::vec2(-vector.x, -vector.y);
 }
 
-inline glm::vec2 GetPerpendicular(glm::vec2 &vector)
+inline glm::vec2 GetPerpendicular(const glm::vec2 &vector)
 {
 	return glm::vec2(-vector.y, vector.x);
 }
