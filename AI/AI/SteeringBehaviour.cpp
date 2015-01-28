@@ -126,7 +126,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 		if(object == owner || object == owner->scene->player)
 			continue;
 
-		if(GetDistance(object->GetObjectPosition(), owner->GetObjectPosition()) < detection_box_length)
+		if(GetDistance(object->GetObjectPosition(), owner->GetObjectPosition()) > detection_box_length)
 			continue;
 
 		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)(-angle), glm::vec3(0, 0, 1));
