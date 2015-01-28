@@ -21,7 +21,7 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	}
 	obstacle_x_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
 	obstacle_y_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
-	//obstacle_box.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
+	obstacle_box.InitRectangle(glm::vec2(0, 0), glm::vec2(1, MIN_DETECTION_BOX_LENGTH), glm::vec3(0, 1, 0));
 }
 
 SteeringBehaviour::~SteeringBehaviour(void)
@@ -56,7 +56,7 @@ void SteeringBehaviour::Draw(void)
 		obstacle_position[i].DrawPoint();
 	obstacle_x_axis.DrawLine();
 	obstacle_y_axis.DrawLine();
-	//obstacle_box.DrawLine();
+	obstacle_box.DrawRectngle();
 }
 
 glm::vec2 SteeringBehaviour::CalculateWander(void)
@@ -115,7 +115,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 	obstacle_x_axis.UpdateLine(owner->GetObjectPosition() - GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), owner->GetObjectPosition() + GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), glm::vec3(0, 1, 0));
 	obstacle_y_axis.UpdateLine(owner->GetObjectPosition() - owner->GetObjectHeading() * glm::vec2(33, 33), owner->GetObjectPosition() + owner->GetObjectHeading()  * glm::vec2(33, 33), glm::vec3(0, 1, 0));
-	//obstacle_box.UpdateLine(owner->GetObjectPosition(), owner->GetObjectPosition() + owner->GetObjectHeading() * glm::vec2(detection_box_length, detection_box_length), glm::vec3(0, 0, 1));
+	obstacle_box.UpdateRectangle(glm::vec2(0.f, 0.f), glm::vec2(1.f, MIN_DETECTION_BOX_LENGTH), glm::vec3(0, 1, 0));
 
 	float angle = GetAngle(glm::vec2(0, 1), owner->object_heading);
 	
@@ -138,7 +138,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 		obstacle_position[obstacle_number].Hide();
 		obstacle_position[obstacle_number++].UpdatePoint(local_position, object->GetCollisionRadius(), glm::vec3(0, 1, 0));
 		
-		float expanded_radius = object->GetCollisionRadius() + owner->GetCollisionRadius() * 0.5f;
+		float expanded_radius = object->GetCollisionRadius() + owner->GetCollisionRadius();
 
 		if(fabs(local_position.x) > expanded_radius)
 			continue;
@@ -148,7 +148,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 		double sqrt_part = sqrt(expanded_radius*expanded_radius - cX*cX);
 
-		double ip = cY - sqrt_part;
+		double ip = cX - sqrt_part;
 		if(ip <= 0) ip = cY + sqrt_part;
 
 		if(ip < dist_to_closest_ip)

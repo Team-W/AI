@@ -40,7 +40,7 @@ class SteeringBehaviour
 		GraphicDebug obstacle_position[20];
 		GraphicDebug obstacle_x_axis;
 		GraphicDebug obstacle_y_axis;
-		//GraphicDebug obstacle_box;
+		GraphicDebug obstacle_box;
 		int obstacle_number;
 		glm::vec2 seek_target;
 		// ----------------------------- //
