@@ -126,25 +126,25 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 		if(object == owner || object == owner->scene->player)
 			continue;
 
-		
+
+		if ((GetDistance(object->GetObjectPosition(), owner->GetObjectPosition())) > detection_box_length+ object->GetCollisionRadius()){
+			cout << GetDistance(object->GetObjectPosition(), owner->GetObjectPosition()) + object->GetCollisionRadius() << ", " << detection_box_length << "\n";
+			continue;
+		}
 
 		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)(-angle), glm::vec3(0, 0, 1));
 		glm::vec2 local_position(rot * glm::vec4(object->GetObjectPosition() - owner->GetObjectPosition(), 0.0f, 0.0f));
-
-		if(local_position.y < 0)
-			continue;
 		
+		if (local_position.y < 0)
+			continue;		
+
 		obstacle_position[obstacle_number].Hide();
 		obstacle_position[obstacle_number++].UpdatePoint(local_position, object->GetCollisionRadius(), glm::vec3(0, 1, 0));
 
 
-
-		if(GetDistance(object->GetObjectPosition(), owner->GetObjectPosition()) > detection_box_length + object->GetCollisionRadius())
-			continue;
-
 		float expanded_radius = object->GetCollisionRadius() + owner->GetCollisionRadius();
 
-		if(fabs(local_position.x) > expanded_radius)
+		if (fabs(local_position.x) > expanded_radius)
 			continue;
 
 		cout << expanded_radius << endl;
