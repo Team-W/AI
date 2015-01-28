@@ -115,7 +115,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 	obstacle_x_axis.UpdateLine(owner->GetObjectPosition() - GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), owner->GetObjectPosition() + GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), glm::vec3(0, 1, 0));
 	obstacle_y_axis.UpdateLine(owner->GetObjectPosition() - owner->GetObjectHeading() * glm::vec2(33, 33), owner->GetObjectPosition() + owner->GetObjectHeading()  * glm::vec2(33, 33), glm::vec3(0, 1, 0));
-	obstacle_box.UpdateRectangle(glm::vec2(0.f, 0.f), glm::vec2(1.f, MIN_DETECTION_BOX_LENGTH), glm::vec3(0, 1, 0));
+	obstacle_box.UpdateRectangle(glm::vec2(0.f, 0.f), glm::vec2(1.f, detection_box_length), glm::vec3(0, 1, 0));
 
 	float angle = GetAngle(glm::vec2(0, 1), owner->object_heading);
 	
