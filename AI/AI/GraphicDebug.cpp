@@ -28,12 +28,12 @@ void GraphicDebug::InitLine(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
 	this->color = color;
 }
 
-void GraphicDebug::InitRectangle(glm::vec2 begin, glm::vec2 end, glm::vec3 color)
+void GraphicDebug::InitRectangle(glm::vec2 begin, glm::vec2 end,glm::vec2 scale, glm::vec3 color)
 {
 	this->begin = begin;
 	this->end = end;
 	this->color = color;
-	scale = glm::vec2(1.0f, 1.0f);
+	this->scale = scale;
 }
 
 void GraphicDebug::UpdatePoint(glm::vec2 begin, double r, glm::vec3 color)
@@ -68,7 +68,6 @@ void GraphicDebug::UpdateRectangle(glm::vec2 begin, glm::vec2 end, glm::vec3 col
 		this->begin = glm::vec2(0,0);
 		this->end = end;
 		this->color = color;
-		this->heading = heading;
 	}else{
 		this->begin = glm::vec2(100, 100);
 	}

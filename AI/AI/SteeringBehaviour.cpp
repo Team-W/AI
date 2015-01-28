@@ -6,7 +6,7 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	steering_force = glm::vec2(0.0f, 0.0f);
 
 	// ---------- WANDER INIT ---------- //
-	wander_radius	= 2.0f;
+	wander_radius	= 3.0f;
 	wander_distance = 5.0f;
 	wander_jitter	= 0.8f;
 	float alpha = (float)(rand()%360) * (float)(PI/180.0f);
@@ -21,7 +21,7 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	}
 	obstacle_x_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
 	obstacle_y_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
-	obstacle_box.InitRectangle(glm::vec2(0, 0), glm::vec2(1, MIN_DETECTION_BOX_LENGTH), glm::vec3(0, 1, 0));
+	obstacle_box.InitRectangle(glm::vec2(0, 0), glm::vec2(1, MIN_DETECTION_BOX_LENGTH), glm::vec2(0.03,0.03), glm::vec3(0, 1, 0));
 }
 
 SteeringBehaviour::~SteeringBehaviour(void)
@@ -153,7 +153,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 		if(ip < dist_to_closest_ip)
 		{
-			dist_to_closest_ip = ip;
+			dist_to_closest_ip = (float)ip;
 			pointer_to_closest_ob = object;
 			local_position_of_closest_ob = local_position;
 		}
@@ -167,11 +167,11 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	double multiplier = 1.0 + (detection_box_length - local_position_of_closest_ob.y) / detection_box_length;
 
 	// lateral force
-	force.x = (pointer_to_closest_ob->GetCollisionRadius() - local_position_of_closest_ob.x) * multiplier;
+	force.x = (float)((pointer_to_closest_ob->GetCollisionRadius() - local_position_of_closest_ob.x) * multiplier);
 
 	const double braking_weight = 0.2;
 
-	force.y = (pointer_to_closest_ob->GetCollisionRadius() - local_position_of_closest_ob.y) * braking_weight;
+	force.y = (float)((pointer_to_closest_ob->GetCollisionRadius() - local_position_of_closest_ob.y) * braking_weight);
 
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), GetAngle(glm::vec2(0, 1), owner->object_heading), glm::vec3(0, 0, 1));
 	glm::vec2 force_world(rot * glm::vec4(force, 0.0f, 0.0f));

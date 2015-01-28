@@ -13,7 +13,7 @@ Zombie::Zombie(Scene *s, float x, float y)
 
 	heading_vector.InitLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
 	target_point.InitPoint(target_position, 0.2, glm::vec3(1, 0, 0));
-	obstacle_avoidance.InitRectangle(object_position, glm::vec2(1.0,7.2), glm::vec3(0.0f, 0.7f, 0.7f));
+	obstacle_avoidance.InitRectangle(object_position, glm::vec2(1.0,7.2), glm::vec2(1.0,1.0), glm::vec3(0.0f, 0.7f, 0.7f));
 }
 
 Zombie::~Zombie(void)
