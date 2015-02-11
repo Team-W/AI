@@ -65,18 +65,41 @@ void Player::Update(double delta_time)
 
 	if (color.x - 0.016f > 0.0){
 		color -= 0.016f;
-	}
-	else{
+	}else{
 		color *= 0;
 		CDrail = false;
 		shooting_pos = object_position;
 		shooting_target = object_heading;
-		shooting_target *= 10000;
+		shooting_target *= 1000;
+		shooting_target += object_position;
+		RailPhysics();
 	}
 
 	this->rail->UpdateLine(shooting_pos, shooting_target, color);
 }
 
+void Player::RailPhysics(){
+	GameEntity *obstacle = 0;
+	glm::vec2 target;
+	float angle = GetAngle(glm::vec2(0, 1), object_heading);
+
+	for (unsigned int i = 0; i < scene->obstacles.size(); ++i)
+	{
+		target = object_heading;
+		obstacle = scene->obstacles[i];	
+
+		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)(-angle), glm::vec3(0, 0, 1));
+		glm::vec2 local_position(rot * glm::vec4(obstacle->GetObjectPosition()-this->GetObjectPosition(), 0.0f, 0.0f));
+	
+		Truncate(target, GetDistance(local_position, this->GetObjectPosition()));
+		
+		//cout << target;
+		if ((GetDistance(obstacle->GetObjectPosition(), target)) < obstacle->GetCollisionRadius()){
+			shooting_target = target;
+		}	
+	}
+	
+}
 void Player::Draw()
 {
 	mouse->DrawPoint();

@@ -19,7 +19,10 @@ Scene::Scene(void)
 Scene::~Scene(void)
 {
 	if (player != 0) delete player;
-	if (test_zombie != 0) delete test_zombie;
+	//if (test_zombie != 0) delete test_zombie;
+	for (int i = 0; i < objects.size(); i++){
+		if (objects[i] != 0) delete objects[i];
+	}
 
 }
 
@@ -76,21 +79,17 @@ void Scene::AddObject(GameEntity *entity)
 {
 	objects.push_back(entity);
 }
-void Scene::AddZombie(GameEntity *entity)
+void Scene::AddZombie(Zombie *entity)
 {
 	zombies.push_back(entity);
 	objects.push_back(entity);
 }
-void Scene::AddObstacle(GameEntity *entity)
+void Scene::AddObstacle(Obstacle *entity)
 {
 	obstacles.push_back(entity);
 	objects.push_back(entity);
 }
 
-void Scene::RemoveObject(GameEntity *entity)
-{
-	
-}
 
 ostream& operator<<(ostream &o, const Scene &gw)
 {

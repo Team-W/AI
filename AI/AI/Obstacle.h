@@ -16,10 +16,11 @@ class Obstacle: public GameEntity
 
         void Update(double delta_time);
 		void Draw(void);
+		void setColor(glm::vec3 color);
 
     private:
 		double object_radius;
-
+		glm::vec3 color;
 		friend class SteeringBehaviours;
         friend ostream& operator<<(ostream &o, const Obstacle &ob);
 };
