@@ -14,10 +14,16 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	wander_target_point.InitPoint(wander_target, 0.2, glm::vec3(0, 0, 1));
 
 	obstacle_number = 0;
+	intersection_number = 0;
 	for(int i=0; i<20; ++i)
 	{
 		obstacle_position[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(0, 1, 0));
 		obstacle_position[i].Hide();
+	}
+	for(int i=0; i<10; ++i)
+	{
+		intersection[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(1, 0, 0));
+		intersection[i].Hide();
 	}
 	obstacle_x_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
 	obstacle_y_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
@@ -54,6 +60,8 @@ void SteeringBehaviour::Draw(void)
 
 	for(int i=0; i<obstacle_number; ++i)
 		obstacle_position[i].DrawPoint();
+	for(int i=0; i<intersection_number; ++i)
+		intersection[i].DrawPoint();
 	obstacle_x_axis.DrawLine();
 	obstacle_y_axis.DrawLine();
 	obstacle_box.DrawRectngle();
@@ -112,6 +120,9 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	obstacle_number = 0;
 	for(int i=0; i<obstacle_number; ++i)
 		obstacle_position[i].Hide();
+	intersection_number = 0;
+	for(int i=0; i<intersection_number; ++i)
+		intersection[i].Hide();
 
 	obstacle_x_axis.UpdateLine(owner->GetObjectPosition() - GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), owner->GetObjectPosition() + GetPerpendicular(owner->object_heading) * glm::vec2(33, 33), glm::vec3(0, 1, 0));
 	obstacle_y_axis.UpdateLine(owner->GetObjectPosition() - owner->GetObjectHeading() * glm::vec2(33, 33), owner->GetObjectPosition() + owner->GetObjectHeading()  * glm::vec2(33, 33), glm::vec3(0, 1, 0));
@@ -156,6 +167,9 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 		double ip = cY - sqrt_part;
 		if(ip <= 0) ip = cY + sqrt_part;
+
+		intersection[intersection_number].Hide();
+		intersection[intersection_number++].UpdatePoint(glm::vec2(0, ip) , 0.2f, glm::vec3(1, 0, 0));
 
 		if(ip < dist_to_closest_ip)
 		{
