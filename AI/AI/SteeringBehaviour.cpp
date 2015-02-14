@@ -48,8 +48,8 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 	glm::vec2 force_hide = CalculateHide();
 	steering_force = glm::vec2(0.0f, 0.0f);
 
-	steering_force += force_hide;
-	return steering_force;
+	//steering_force += force_hide;
+	return CalculateSteeringForce_2();
 /*
 	if(GetLength(force_oa) > 0)
 	{
@@ -270,10 +270,8 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 		float expanded_radius = object->GetCollisionRadius() + owner->GetCollisionRadius();
 
-		if (fabs(local_position.x) > expanded_radius)
+		if(fabs(local_position.x) > expanded_radius)
 			continue;
-
-		cout << expanded_radius << endl;
 
 		double cX = local_position.x;
 		double cY = local_position.y;
@@ -328,6 +326,30 @@ glm::vec2 SteeringBehaviour::CalculateHidingSpot(const glm::vec2 &target, const 
 
 glm::vec2 SteeringBehaviour::CalculateHide(void)
 {
+	glm::vec2 direction;
+	float distance;
+	bool b = false;
+
+	for(int i=0; i<scene->obstacles.size(); ++i)
+	{
+		direction = scene->player->GetObjectPosition() - owner->GetObjectPosition();
+		Normalize(direction);
+
+		distance = GetDistance(owner->GetObjectPosition(), scene->obstacles[i]->GetObjectPosition());
+		SetLength(direction, distance);
+
+		if(GetDistance(direction + owner->GetObjectPosition(), scene->obstacles[i]->GetObjectPosition()) < scene->obstacles[i]->GetCollisionRadius())
+		{
+			b = true;
+			break;
+		}
+	}
+
+	if(b == true)
+	{
+		return glm::vec2(0, 0);
+	}
+
 	double best_dist = 999999.0;
 	glm::vec2 best_spot;
 	int best_index = -1;
