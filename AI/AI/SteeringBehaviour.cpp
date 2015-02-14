@@ -127,7 +127,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 			continue;
 
 		if ((GetDistance(object->GetObjectPosition(), owner->GetObjectPosition())) > detection_box_length+ object->GetCollisionRadius()){
-			cout << GetDistance(object->GetObjectPosition(), owner->GetObjectPosition()) + object->GetCollisionRadius() << ", " << detection_box_length << "\n";
+			//cout << GetDistance(object->GetObjectPosition(), owner->GetObjectPosition()) + object->GetCollisionRadius() << ", " << detection_box_length << "\n";
 			continue;
 		}
 		glm::mat4 rot = glm::rotate(glm::mat4(1.0f), (float)(-angle), glm::vec3(0, 0, 1));

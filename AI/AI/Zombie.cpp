@@ -36,7 +36,7 @@ void Zombie::Update(double delta_time)
 
 	//object_velocity += steering_behaviour->CalculateSeek(target_position)*glm::vec2(delta_time, delta_time);
 	steering_behaviour->SetSeekTarget(target_position);
-	object_velocity += steering_behaviour->CalculateSteeringForce();
+	object_velocity += steering_behaviour->CalculateSteeringForce() * glm::vec2(delta_time, delta_time);;
 	//SetLength(object_velocity, ZOMBIE_MAX_SPEED);
 	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
 
