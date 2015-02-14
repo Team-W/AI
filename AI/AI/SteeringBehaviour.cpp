@@ -1,7 +1,7 @@
 #include "SteeringBehaviour.h"
 
-SteeringBehaviour::SteeringBehaviour(Zombie *z): owner(z), seek_target(0),
-wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
+SteeringBehaviour::SteeringBehaviour(Zombie *z, Scene *s): owner(z), seek_target(0),
+wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0), scene(s)
 {
 	steering_force = glm::vec2(0.0f, 0.0f);
 
@@ -25,6 +25,10 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 		intersection[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(1, 0, 0));
 		intersection[i].Hide();
 	}
+	for(int i=0; i<4; ++i)
+	{
+		hiding_spot[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(1, 0, 1));
+	}
 	obstacle_x_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
 	obstacle_y_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
 	obstacle_box.InitRectangle(glm::vec2(0, 0), glm::vec2(1, MIN_DETECTION_BOX_LENGTH), glm::vec2(0.03,0.03), glm::vec3(0, 1, 0));
@@ -40,7 +44,9 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 	glm::vec2 force_wander = CalculateWander();
 	glm::vec2 force_seek = CalculateSeek(seek_target);
 	glm::vec2 force_oa = CalculateObstacleAvoidance();
+	glm::vec2 force_hide = CalculateHide();
 	steering_force = glm::vec2(0.0f, 0.0f);
+
 	steering_force += force_seek;
 	return steering_force;
 /*
@@ -64,6 +70,8 @@ void SteeringBehaviour::Draw(void)
 		obstacle_position[i].DrawPoint();
 	for(int i=0; i<intersection_number; ++i)
 		intersection[i].DrawPoint();
+	for(int i=0; i<4; ++i)
+		hiding_spot[i].DrawPoint();
 	obstacle_x_axis.DrawLine();
 	obstacle_y_axis.DrawLine();
 	obstacle_box.DrawRectngle();
@@ -210,4 +218,43 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	glm::vec2 force_world(rot * glm::vec4(force, 0.0f, 0.0f));
 
 	return force_world;
+}
+
+glm::vec2 SteeringBehaviour::CalculateHidingSpot(const glm::vec2 &target, const glm::vec2 &obstacle, double radius)
+{
+	const double dist_from_boundry = 3.0;
+	double dist = radius + dist_from_boundry;
+
+	glm::vec2 to_obstacle = obstacle - target;
+	Normalize(to_obstacle);
+	to_obstacle *= dist;
+
+	return to_obstacle + obstacle;
+}
+
+glm::vec2 SteeringBehaviour::CalculateHide(void)
+{
+	double best_dist = 999999.0;
+	glm::vec2 best_spot;
+	int best_index = -1;
+
+	for(int i=0; i<scene->obstacles.size(); ++i)
+	{
+		glm::vec2 hide_spot = CalculateHidingSpot(scene->player->GetObjectPosition(), scene->obstacles[i]->GetObjectPosition(), scene->obstacles[i]->GetCollisionRadius());
+
+		double dist = GetDistanceSqrt(hide_spot, owner->GetObjectPosition());
+
+		if(dist < best_dist)
+		{
+			best_dist = dist;
+			best_spot = hide_spot;
+			best_index = i;
+		}
+
+		hiding_spot[i].UpdatePoint(hide_spot, 0.2f, glm::vec3(1, 0, 1));
+	}
+
+	hiding_spot[best_index].UpdatePoint(best_spot, 0.2f, glm::vec3(1, 1, 0));
+
+	return CalculateSeek(best_spot);  // !!!!!! ZMIENIC NA ARRIVE !!!!!!!
 }

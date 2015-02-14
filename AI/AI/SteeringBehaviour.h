@@ -13,7 +13,7 @@ class Zombie;
 class SteeringBehaviour
 {
 	public:
-		SteeringBehaviour(Zombie *z);
+		SteeringBehaviour(Zombie *z, Scene *s);
 		~SteeringBehaviour(void);
 
 		const glm::vec2& GetSteeringForce(void) const;
@@ -30,6 +30,7 @@ class SteeringBehaviour
 
 	private:
 		Zombie *owner;
+		Scene *scene;
 
 		// ---------- PARAMS ---------- //
 		float wander_radius;
@@ -39,6 +40,7 @@ class SteeringBehaviour
 		GraphicDebug wander_target_point;
 		GraphicDebug obstacle_position[20];
 		GraphicDebug intersection[10];
+		GraphicDebug hiding_spot[4];
 		GraphicDebug obstacle_x_axis;
 		GraphicDebug obstacle_y_axis;
 		GraphicDebug obstacle_box;
@@ -61,6 +63,9 @@ class SteeringBehaviour
 		glm::vec2 CalculateFlee(void);
 		glm::vec2 CalculateArrive(void);
 		glm::vec2 CalculateObstacleAvoidance(void);
+		glm::vec2 CalculateHide(void);
+
+		glm::vec2 CalculateHidingSpot(const glm::vec2 &target, const glm::vec2 &obstacle, double radius);
 
 		friend class Zombie;
 		friend ostream& operator<<(ostream &o, const SteeringBehaviour &sb);
