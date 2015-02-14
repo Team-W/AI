@@ -24,6 +24,7 @@ class Zombie: public GameEntity
 
     private:
         SteeringBehaviour *steering_behaviour;
+		bool aggressive;
 
 		glm::vec2 target_position;
 		glm::vec2 object_velocity;
@@ -34,6 +35,7 @@ class Zombie: public GameEntity
 
 		friend class SteeringBehaviour;
         friend ostream& operator<<(ostream &o, const Zombie &z);
+		friend class Scene;
 };
 
 ostream& operator<<(ostream &o, const Zombie &z);

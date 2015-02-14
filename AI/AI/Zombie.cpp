@@ -9,6 +9,7 @@ Zombie::Zombie(Scene *s, float x, float y)
 	this->object_velocity = glm::vec2(0.0f, 0.0f);
 	this->target_position = glm::vec2(0.0f, 0.0f);
 	this->object_scale = glm::vec2(0.03f, 0.03f);
+	this->aggressive = false;
 	RandomPoint();
 
 	heading_vector.InitLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));

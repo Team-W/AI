@@ -90,6 +90,43 @@ void Scene::AddObstacle(Obstacle *entity)
 	objects.push_back(entity);
 }
 
+void Scene::GroupZombies(void)
+{
+	const double radius = 5.0f;
+
+	vector<int> group;
+	glm::vec2 position;
+
+	for(int i=0; i<zombies.size(); ++i)
+	{
+		if(zombies[i]->aggressive)
+			continue;
+
+		position = zombies[i]->GetObjectPosition();
+		group.clear();
+
+		for(int j=0; j<zombies.size(); ++j)
+		{
+			if(i == j) continue;
+
+			/*if(zombies[j]->aggressive)		pytanie czy to ma byc :)
+				continue;*/
+
+			if(GetDistance(position, zombies[j]->GetObjectPosition()) < radius)
+			{
+				group.push_back(j);
+			}
+		}
+
+		if(group.size() >= 2)
+		{
+			for(int j=0; j<group.size(); ++j)
+			{
+				zombies[j]->aggressive = true;
+			}
+		}
+	}
+}
 
 ostream& operator<<(ostream &o, const Scene &gw)
 {
