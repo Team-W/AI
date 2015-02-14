@@ -8,7 +8,7 @@ wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0)
 	// ---------- WANDER INIT ---------- //
 	wander_radius	= 3.0f;
 	wander_distance = 5.0f;
-	wander_jitter	= 0.8f;
+	wander_jitter	= 1.f;
 	float alpha = (float)(rand()%360) * (float)(PI/180.0f);
 	wander_target = glm::vec2(wander_radius*cos(alpha), wander_radius*sin(alpha));
 	wander_target_point.InitPoint(wander_target, 0.2, glm::vec3(0, 0, 1));
@@ -41,17 +41,19 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 	glm::vec2 force_seek = CalculateSeek(seek_target);
 	glm::vec2 force_oa = CalculateObstacleAvoidance();
 	steering_force = glm::vec2(0.0f, 0.0f);
-
+	steering_force += force_seek;
+	return steering_force;
+/*
 	if(GetLength(force_oa) > 0)
 	{
-		steering_force += force_oa * 0.8f;
-		steering_force += force_seek * 0.2f;
+		steering_force += force_oa * 1.f;
+		//steering_force += force_seek * 0.2f;
 		return steering_force;
 	}
 	else
 	{
-		return force_seek;
-	}
+		
+	}*/
 }
 
 void SteeringBehaviour::Draw(void)
@@ -90,9 +92,20 @@ glm::vec2 SteeringBehaviour::CalculateWander(void)
 glm::vec2 SteeringBehaviour::CalculateSeek(const glm::vec2 &target)
 {
 	glm::vec2 desired_velocity = target - owner->object_position;
+	double distance = GetDistance(owner->GetObjectPosition(), target);
 	SetLength(desired_velocity, ZOMBIE_MAX_SPEED);
+	if (distance > 0){
+		double Decelerate = 0.01;
+		double speed = distance / Decelerate;	
+		if (speed > ZOMBIE_MAX_SPEED){
+			speed = ZOMBIE_MAX_SPEED;
+		}
+		desired_velocity *= speed / distance;
 
-	return desired_velocity - owner->object_velocity;
+		return desired_velocity - owner->object_velocity;
+	}
+
+	return glm::vec2(0, 0);
 }
 
 glm::vec2 SteeringBehaviour::CalculateFlee(void)

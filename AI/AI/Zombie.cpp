@@ -41,16 +41,18 @@ void Zombie::Update(double delta_time)
 	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
 
 	object_position += object_velocity * glm::vec2(delta_time, delta_time);
+	
+	if (object_velocity.length() > 0.000001){
+		object_heading = object_velocity;
+		Normalize(object_heading);
+		object_side = GetPerpendicular(object_heading);
+	}
 
-	// tmp
-	if(object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
+	// tmp to be implemented in collision
+	if (object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
 	{
 		object_position -= object_velocity * glm::vec2(delta_time, delta_time);
 	}
-
-	object_heading = object_velocity;
-	Normalize(object_heading);
-	object_side = GetPerpendicular(object_heading);
 
 	model_matrix = glm::mat4(1.0f);
 	model_matrix = glm::scale(model_matrix, glm::vec3(object_scale, 1.0f));
