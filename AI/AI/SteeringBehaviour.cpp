@@ -1,7 +1,8 @@
 #include "SteeringBehaviour.h"
 
 SteeringBehaviour::SteeringBehaviour(Zombie *z, Scene *s): owner(z), seek_target(0),
-wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0), scene(s)
+wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0), scene(s),
+hide_on(0), pursuit_on(0)
 {
 	steering_force = glm::vec2(0.0f, 0.0f);
 
@@ -47,7 +48,7 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 	glm::vec2 force_hide = CalculateHide();
 	steering_force = glm::vec2(0.0f, 0.0f);
 
-	steering_force += force_seek;
+	steering_force += force_hide;
 	return steering_force;
 /*
 	if(GetLength(force_oa) > 0)
@@ -60,8 +61,101 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 	{
 		
 	}*/
+
 }
 
+glm::vec2 SteeringBehaviour::CalculateSteeringForce_2(void)
+{
+	ToggleState();
+
+	const double mult_obstacle_avoidance	= 0.8;
+	const double mult_hide					= 0.7;
+	const double mult_seek					= 0.7;
+	const double mult_wander				= 0.5;
+	const double mult_pursuit				= 0.7;
+
+	glm::vec2 force_wander = CalculateWander();
+	glm::vec2 force_seek = CalculateSeek(seek_target);
+	glm::vec2 force_oa = CalculateObstacleAvoidance();
+	glm::vec2 force_hide = CalculateHide();
+	steering_force = glm::vec2(0.0f, 0.0f);
+	glm::vec2 force;
+
+	if(obstacle_avoidance_on)
+	{
+		force = CalculateObstacleAvoidance();
+		force *= mult_obstacle_avoidance;
+		if(!AccumulateForce(steering_force, force)) return steering_force;
+	}
+
+	if(hide_on)
+	{
+		force = CalculateHide();
+		force *= mult_hide;
+		if(!AccumulateForce(steering_force, force)) return steering_force;
+	}
+
+	if(seek_on)
+	{
+		force = CalculateSeek(seek_target);
+		force *= mult_seek;
+		if(!AccumulateForce(steering_force, force)) return steering_force;
+	}
+
+	/*if(pursuit_on)
+	{
+		force = CalculatePursuit();
+		force *= mult_pursuit;
+		if(!AccumulateForce(steering_force, force)) return steering_force;
+	}*/
+
+	if(wander_on)
+	{
+		force = CalculateWander();
+		force *= mult_wander;
+		if(!AccumulateForce(steering_force, force)) return steering_force;
+	}
+
+	return steering_force;
+}
+
+void SteeringBehaviour::ToggleState()
+{
+	if(owner->aggressive)
+	{
+		hide_on = false;
+		wander_on = false;
+		pursuit_on = true;
+		seek_on = true;
+	}
+	else
+	{
+		hide_on = true;
+		wander_on = true;
+		pursuit_on = false;
+		seek_on = false;
+	}
+}
+
+bool SteeringBehaviour::AccumulateForce(glm::vec2 &total, glm::vec2 &force)
+{
+	double total_length = GetLength(total);
+	double remaining_force = ZOMBIE_MAX_FORCE - total_length;
+
+	if(remaining_force <= 0)
+		return false;
+
+	double length = GetLength(force);
+
+	if(length <= remaining_force)
+		total += force;
+	else
+		total += force * glm::vec2(remaining_force, remaining_force);
+
+	return true;
+}
+
+ 
 void SteeringBehaviour::Draw(void)
 {
 	wander_target_point.DrawPoint();

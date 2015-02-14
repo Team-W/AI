@@ -32,6 +32,8 @@ class Scene
 		void PlayerShoot(glm::vec2 aim);
 		void ZombieTarget(glm::vec2 target);
 
+		void GroupZombies(void);
+
 		const glm::mat4& GetViewMatrix(void) const;
 
 	private:

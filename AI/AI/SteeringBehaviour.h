@@ -56,8 +56,11 @@ class SteeringBehaviour
 		bool flee_on;
 		bool arrive_on;
 		bool obstacle_avoidance_on;
+		bool pursuit_on;
+		bool hide_on;
 
 		glm::vec2 CalculateSteeringForce(void);
+		glm::vec2 CalculateSteeringForce_2(void);
 		glm::vec2 CalculateWander(void);
 		glm::vec2 CalculateSeek(const glm::vec2 &target);
 		glm::vec2 CalculateFlee(void);
@@ -66,6 +69,9 @@ class SteeringBehaviour
 		glm::vec2 CalculateHide(void);
 
 		glm::vec2 CalculateHidingSpot(const glm::vec2 &target, const glm::vec2 &obstacle, double radius);
+
+		bool AccumulateForce(glm::vec2 &total, glm::vec2 &force);
+		void ToggleState();
 
 		friend class Zombie;
 		friend ostream& operator<<(ostream &o, const SteeringBehaviour &sb);
