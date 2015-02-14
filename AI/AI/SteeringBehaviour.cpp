@@ -139,7 +139,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 
 		if ((GetDistance(object->GetObjectPosition(), owner->GetObjectPosition())) > detection_box_length+ object->GetCollisionRadius()){
-			cout << GetDistance(object->GetObjectPosition(), owner->GetObjectPosition()) + object->GetCollisionRadius() << ", " << detection_box_length << "\n";
+			//cout << GetDistance(object->GetObjectPosition(), owner->GetObjectPosition()) + object->GetCollisionRadius() << ", " << detection_box_length << "\n";
 			continue;
 		}
 

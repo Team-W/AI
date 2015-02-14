@@ -10,6 +10,7 @@
 class GameEntity;
 class Zombie;
 class Player;
+class Obstacle;
 
 class Scene
 {
@@ -22,9 +23,9 @@ class Scene
 		void Key(unsigned char key);
 		void KeyState(unsigned char key, bool tf);
 		void AddObject(GameEntity *entity);
-		void AddZombie(GameEntity *entity);
-		void AddObstacle(GameEntity *entity);
-		void RemoveObject(GameEntity *entity);
+		void AddZombie(Zombie *entity);
+		void AddObstacle(Obstacle *entity);
+		void RemoveObject(Zombie *entity);
 		
 		void PlayerRotate(glm::vec2 heading);
 		void PlayerMove(glm::vec2 move, double delta_time);
@@ -43,8 +44,8 @@ class Scene
 		
 		Player *player;
 
-		vector<GameEntity*> zombies;
-		vector<GameEntity*> obstacles;
+		vector<Zombie*> zombies;
+		vector<Obstacle*> obstacles;
 		vector<GameEntity*> objects;
 
 		friend class Player;

@@ -36,11 +36,6 @@ void Player::Rotate(glm::vec2 heading)
 {
 	object_heading = heading-object_position;
 	
-	if (!CDrail){
-		shooting_pos = object_position;
-		shooting_target = object_heading;
-		shooting_target *= 10000;
-	}
 	Normalize(object_heading);
 	this->mouse->UpdatePoint(heading, 0.5, glm::vec3(0.9, 0.9, 0.9));
 	
@@ -52,6 +47,7 @@ void Player::Shoot(glm::vec2 fire)
 	if (!CDrail){
 		color = glm::vec3(1, 1, 1);
 		CDrail = true;
+		RailPhysics();
 	}
 	
 }
@@ -62,21 +58,42 @@ void Player::Update(double delta_time)
 	model_matrix = glm::scale(model_matrix, glm::vec3(object_scale, 1.0f));
 	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
-
+	
 	if (color.x - 0.016f > 0.0){
 		color -= 0.016f;
-	}
-	else{
+	}else{
 		color *= 0;
 		CDrail = false;
 		shooting_pos = object_position;
 		shooting_target = object_heading;
-		shooting_target *= 10000;
+		shooting_target *= 1000;
+		shooting_target += this->GetObjectPosition();	
 	}
 
 	this->rail->UpdateLine(shooting_pos, shooting_target, color);
 }
 
+void Player::RailPhysics(){
+	GameEntity *obstacle = 0;
+	glm::vec2 target;
+	float distance=1000,tmpDist=0;
+
+	for (unsigned int i = 0; i < scene->obstacles.size(); ++i)
+	{
+		target = object_heading;
+		obstacle = scene->obstacles[i];	
+		tmpDist = GetDistance(obstacle->GetObjectPosition(), this->GetObjectPosition());
+		SetLength(target, tmpDist);
+		target += this->GetObjectPosition();
+		if (GetDistance(obstacle->GetObjectPosition(), target) < obstacle->GetCollisionRadius()){		
+			if (tmpDist < distance){
+				distance = tmpDist;
+				shooting_target = target;
+			}
+		}
+	}
+	
+}
 void Player::Draw()
 {
 	mouse->DrawPoint();
