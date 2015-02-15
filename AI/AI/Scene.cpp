@@ -7,6 +7,8 @@ Scene::Scene(void)
 	// Init Test Objects
 	test_zombie = new Zombie(this, 22.0f, 22.0f);
 	player = new Player(this, 0.0f, 0.0f);
+	bool game = true;
+	int score = 0;
 	// Init Objects
 	
 	AddObstacle(new Obstacle(this, 15.0, 15.0, 7.00));
@@ -33,8 +35,36 @@ Scene::~Scene(void)
 
 }
 
+bool Scene::CheckVictoryCondition(void)
+{
+	int z = 0;
+
+	for(unsigned int i=0; i<zombies.size(); ++i)
+	{
+		if(GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) < 2)
+		{
+			game = false;
+			cout << "PRZEGRALES!" << endl;
+		}
+		else
+		{
+			++z;
+		}
+	}
+
+	if(z == 0)
+	{
+		game = false;
+		cout << "WYGRALES!" << endl;
+	}
+
+	return game;
+}
+
 void Scene::Update(double delta_time)
 {
+	CheckVictoryCondition();
+
 	GroupZombies();
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{

@@ -23,6 +23,8 @@ void RenderScene(void)
 
 void Idle()
 {
+	
+
 	//Sleep(16);
 	static long long int old_time = 0;
 
@@ -32,6 +34,12 @@ void Idle()
 	scene.Update(dt);
 
 	glutPostRedisplay();
+
+	if(!scene.game)
+	{
+		Sleep(50);
+		system("pause");
+	}
 }
 
 void KeyPressed(unsigned char key, int x, int y)
