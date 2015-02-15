@@ -27,6 +27,21 @@ void Player::Move(glm::vec2 move, double delta_time)
 	SetLength(move, PLAYER_SPEED);
 	move *= delta_time;
 	object_position += move;
+	if (object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
+	{
+		object_position -= move;
+	}
+
+	float radius = this->GetCollisionRadius();
+
+	for (unsigned int i = 0; i < scene->obstacles.size(); ++i){
+		Obstacle *obstacle = scene->obstacles[i];
+		float radius = this->GetCollisionRadius() + obstacle->GetCollisionRadius();
+		if (radius>GetDistance(object_position, obstacle->GetObjectPosition())){
+			object_position -= move;
+		}
+	}
+
 	object_heading = mouse->getPosition() -object_position;
 	Normalize(object_heading);
 
