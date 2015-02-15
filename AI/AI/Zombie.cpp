@@ -113,6 +113,10 @@ void Zombie::Draw()
 	steering_behaviour->Draw();
 }
 
+void Zombie::gotHit(){
+	object_position = glm::vec2(2000, 2000);
+}
+
 ostream& operator<<(ostream &o, const Zombie &z)
 {
 	o.setf(ios::fixed, ios::floatfield);

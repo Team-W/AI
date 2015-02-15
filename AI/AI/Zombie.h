@@ -20,6 +20,7 @@ class Zombie: public GameEntity
         void Update(double delta_time);
 		void RandomPoint();
 		void MousePoint(glm::vec2 target);
+		void gotHit();
 		void Draw();
 
     private:

@@ -49,18 +49,18 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 	steering_force = glm::vec2(0.0f, 0.0f);
 
 	//steering_force += force_hide;
-	return CalculateSteeringForce_2();
-/*	if(GetLength(force_oa) > 0)
+	/*return CalculateSteeringForce_2();*/
+	if(GetLength(force_oa) > 0)
 	{
-		steering_force += force_oa * 0.8f;
-		steering_force += force_seek * 0.2f;
+		steering_force += force_oa * 1.0f;
+		//steering_force += force_seek * 0.2f;
 		return steering_force;
 	}
 	else
 	{
-		steering_force += force_seek;
+		steering_force += force_wander;
 		return steering_force;
-	}*/
+	}
 
 }
 
