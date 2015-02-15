@@ -27,7 +27,7 @@ void Idle()
 
 	//Sleep(16);
 	static long long int old_time = 0;
-
+	
 	long long int time_since_start = glutGet(GLUT_ELAPSED_TIME);
 	double dt = (time_since_start - old_time) * 0.0001f;
 	old_time = time_since_start;
@@ -35,11 +35,6 @@ void Idle()
 
 	glutPostRedisplay();
 
-	if(!scene.game)
-	{
-		Sleep(50);
-		system("pause");
-	}
 }
 
 void KeyPressed(unsigned char key, int x, int y)

@@ -4,25 +4,18 @@ Scene::Scene(void)
 {
 	view_matrix = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 	memset(&KeyStates, 0, sizeof(KeyStates));
-	// Init Test Objects
-	test_zombie = new Zombie(this, 22.0f, 22.0f);
+	// Init Player
 	player = new Player(this, 0.0f, 0.0f);
+
 	bool game = true;
 	int score = 0;
-	// Init Objects
-	
+
+	// Init Objects	
 	AddObstacle(new Obstacle(this, 15.0, 15.0, 7.00));
 	AddObstacle(new Obstacle(this, -12.0, -17.0, 9.00));
 	AddObstacle(new Obstacle(this, 12.0, -6.0, 5.00));
 	AddObstacle(new Obstacle(this, -16.0, 15.0, 6.00));
-	AddZombie(test_zombie);
-	AddZombie(new Zombie(this, 10.0f, 10.0f));
-	AddZombie(new Zombie(this, 5.0f, 5.0f));
-	AddZombie(new Zombie(this, -7.0f, -20.0f));
-	AddZombie(new Zombie(this, 13.0f, 13.0f));
-	AddZombie(new Zombie(this, 8.0f, 8.0f));
-	AddZombie(new Zombie(this, -5.0f, -15.0f));
-	AddZombie(new Zombie(this, -7.0f, -25.0f));
+	for (unsigned int i = 0; i < 20; ++i) AddZombie(new Zombie(this));
 }
 
 Scene::~Scene(void)
