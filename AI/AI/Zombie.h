@@ -14,7 +14,7 @@ class SteeringBehaviour;
 class Zombie: public GameEntity
 {
     public:
-        Zombie(Scene *s, float x, float y);
+        Zombie(Scene *s);
         ~Zombie(void);
 
         void Update(double delta_time);

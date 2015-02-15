@@ -1,16 +1,42 @@
 #include "Zombie.h"
 
-Zombie::Zombie(Scene *s, float x, float y)
+Zombie::Zombie(Scene *s)
 {
 	this->scene = s;
 	this->steering_behaviour = new SteeringBehaviour(this, scene);
 	this->collision_radius = 1.0f;
-	this->object_position = glm::vec2(x, y);
 	this->object_velocity = glm::vec2(0.0f, 0.0f);
 	this->target_position = glm::vec2(0.0f, 0.0f);
 	this->object_scale = glm::vec2(0.03f, 0.03f);
 	this->aggressive = false;
 	RandomPoint();
+
+	int sign1 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
+	int sign2 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
+	this->object_position = glm::vec2(sign1*(rand() % 320) / 10, sign2*(rand() % 320) / 10);
+
+	Player *player = scene->player;
+	unsigned int count = 0;
+	while (count < scene->objects.size()){
+		GameEntity *object = scene->objects[count];
+
+		if (player->GetCollisionRadius() + 8 > GetDistance(player->GetObjectPosition(), this->object_position)){
+			count = 0;
+			sign1 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
+			sign2 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
+			this->object_position = glm::vec2(sign1*(rand() % 320) / 10, sign2*(rand() % 320) / 10);
+			continue;
+		}
+
+		if (object->GetCollisionRadius() + 1 > GetDistance(object->GetObjectPosition(), this->object_position)){
+			count = 0;
+			sign1 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
+			sign2 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
+			this->object_position = glm::vec2(sign1*(rand() % 320) / 10, sign2*(rand() % 320) / 10);
+			continue;
+		}
+		count++;
+	} 
 
 	heading_vector.InitLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
 	//target_point.InitPoint(target_position, 0.2, glm::vec3(1, 0, 0));

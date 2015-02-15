@@ -30,10 +30,7 @@ void Player::Move(glm::vec2 move, double delta_time)
 	bool collision = false;
 	move *= delta_time;
 
-	if (object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
-	{
-		collision = true;
-	}
+	
 
 	for(unsigned int i=0; i<scene->obstacles.size(); ++i)
 	{
@@ -52,6 +49,11 @@ void Player::Move(glm::vec2 move, double delta_time)
 
 	if(!collision)
 		object_position += move;
+
+	if (object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
+	{
+		object_position -= move;
+	}
 
 	object_heading = mouse->getPosition() -object_position;
 	Normalize(object_heading);
@@ -85,8 +87,8 @@ void Player::Update(double delta_time)
 	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
 	
-	if (color.x - 0.016f > 0.0){
-		color -= 0.016f;
+	if (color.x - 0.0033f > 0.0){
+		color -= 0.0033f;
 	}else{
 		color *= 0;
 		CDrail = false;
