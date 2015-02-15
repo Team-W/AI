@@ -47,7 +47,27 @@ void Zombie::Update(double delta_time)
 	//SetLength(object_velocity, ZOMBIE_MAX_SPEED);
 	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
 
-	object_position += object_velocity * glm::vec2(delta_time, delta_time);
+	GameEntity *object = 0;
+	float radius = 0;
+	glm::vec2 move = object_velocity * glm::vec2(delta_time, delta_time);
+	bool collision = false;
+	for(unsigned int i=0; i<scene->objects.size(); ++i)
+	{
+		object = scene->objects[i];
+
+		if(object == this) continue;
+
+		radius = object->GetCollisionRadius() + collision_radius;
+
+		if(radius > GetDistance(object_position + move, object->GetObjectPosition()))
+		{
+			collision = true;
+			break;
+		}
+	}
+
+	if(!collision)
+		object_position += move;
 	
 	if (object_velocity.length() > 0.000001){
 		object_heading = object_velocity;

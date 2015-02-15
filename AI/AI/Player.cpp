@@ -25,22 +25,33 @@ Player::~Player()
 void Player::Move(glm::vec2 move, double delta_time)
 {
 	SetLength(move, PLAYER_SPEED);
+	GameEntity *object = 0;
+	float radius = 0;
+	bool collision = false;
 	move *= delta_time;
-	object_position += move;
+
 	if (object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
 	{
-		object_position -= move;
+		collision = true;
 	}
 
-	float radius = this->GetCollisionRadius();
+	for(unsigned int i=0; i<scene->obstacles.size(); ++i)
+	{
+		object = scene->obstacles[i];
 
-	for (unsigned int i = 0; i < scene->obstacles.size(); ++i){
-		Obstacle *obstacle = scene->obstacles[i];
-		float radius = this->GetCollisionRadius() + obstacle->GetCollisionRadius();
-		if (radius>GetDistance(object_position, obstacle->GetObjectPosition())){
-			object_position -= move;
+		if(object == this) continue;
+
+		radius = object->GetCollisionRadius() + collision_radius + 1;
+
+		if(radius > GetDistance(object_position + move, object->GetObjectPosition()))
+		{
+			collision = true;
+			break;
 		}
 	}
+
+	if(!collision)
+		object_position += move;
 
 	object_heading = mouse->getPosition() -object_position;
 	Normalize(object_heading);
