@@ -54,12 +54,13 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 		if(!AccumulateForce(steering_force, force)) return steering_force;
 	}
 
-	/*if(seek_on)
+	if(seek_on)
 	{
 		force = CalculateSeek(seek_target);
+		SetLength(force, ZOMBIE_MAX_FORCE);
 		force *= mult_seek;
 		if(!AccumulateForce(steering_force, force)) return steering_force;
-	}*/
+	}
 
 	/*if(pursuit_on)
 	{
@@ -188,9 +189,11 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 	float angle = GetAngle(glm::vec2(0, 1), owner->object_heading);
 	
-	for(unsigned int i=0; i<owner->scene->obstacles.size(); ++i)
+	for(unsigned int i=0; i<owner->scene->objects.size(); ++i)
 	{
-		object = owner->scene->obstacles[i];
+		object = owner->scene->objects[i];
+
+		if(owner == object) continue;
 
 		//if dist(obj.pos + zom.pos) > detectionBox + obj.rad -> skip
 		if ((GetDistance(object->GetObjectPosition(), owner->GetObjectPosition())) > detection_box_length+ object->GetCollisionRadius()) continue;	

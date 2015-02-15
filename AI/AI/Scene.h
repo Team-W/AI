@@ -51,6 +51,7 @@ class Scene
 		vector<GameEntity*> objects;
 
 		friend class Player;
+		friend class Zombie;
 		friend class SteeringBehaviour;
 		friend ostream& operator<<(ostream &o, const Scene &scene);
 };

@@ -5,8 +5,8 @@ Scene::Scene(void)
 	view_matrix = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 	memset(&KeyStates, 0, sizeof(KeyStates));
 	// Init Test Objects
-	test_zombie = new Zombie(this, 0.0f, 0.0f);
-	player = new Player(this, 20.0f, 20.0f);
+	test_zombie = new Zombie(this, 22.0f, 22.0f);
+	player = new Player(this, 0.0f, 0.0f);
 	// Init Objects
 	
 	AddObstacle(new Obstacle(this, 15.0, 15.0, 7.00));
@@ -35,6 +35,7 @@ Scene::~Scene(void)
 
 void Scene::Update(double delta_time)
 {
+	GroupZombies();
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Update(delta_time);
@@ -99,40 +100,7 @@ void Scene::AddObstacle(Obstacle *entity)
 
 void Scene::GroupZombies(void)
 {
-	const double radius = 5.0f;
 
-	vector<int> group;
-	glm::vec2 position;
-
-	for(int i=0; i<zombies.size(); ++i)
-	{
-		if(zombies[i]->aggressive)
-			continue;
-
-		position = zombies[i]->GetObjectPosition();
-		group.clear();
-
-		for(int j=0; j<zombies.size(); ++j)
-		{
-			if(i == j) continue;
-
-			/*if(zombies[j]->aggressive)		pytanie czy to ma byc :)
-				continue;*/
-
-			if(GetDistance(position, zombies[j]->GetObjectPosition()) < radius)
-			{
-				group.push_back(j);
-			}
-		}
-
-		if(group.size() >= 2)
-		{
-			for(int j=0; j<group.size(); ++j)
-			{
-				zombies[j]->aggressive = true;
-			}
-		}
-	}
 }
 
 ostream& operator<<(ostream &o, const Scene &gw)

@@ -25,10 +25,14 @@ Zombie::~Zombie(void)
 
 void Zombie::Update(double delta_time)
 {
+	Group();
+
 	if(aggressive)
 		color = glm::vec3(0.5f, 0.f, 0.f);
 	else
 		color = glm::vec3(0.f, 0.5f, 0.f);
+
+	steering_behaviour->SetSeekTarget(scene->player->GetObjectPosition());
 
 	heading_vector.UpdateLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
 	//target_point.UpdatePoint(target_position, 0.2, glm::vec3(1, 0, 0));
@@ -39,7 +43,6 @@ void Zombie::Update(double delta_time)
 	obstacle_avoidance.UpdateRectangle(object_position, glm::vec2(1.0, detection_box_length), glm::vec3(0.0f, 0.7f, 0.7f));
 
 	//object_velocity += steering_behaviour->CalculateSeek(target_position)*glm::vec2(delta_time, delta_time);
-	steering_behaviour->SetSeekTarget(target_position);
 	object_velocity += steering_behaviour->CalculateSteeringForce() * glm::vec2(delta_time, delta_time);
 	//SetLength(object_velocity, ZOMBIE_MAX_SPEED);
 	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
@@ -118,6 +121,31 @@ void Zombie::Draw()
 
 void Zombie::gotHit(){
 	object_position = glm::vec2(2000, 2000);
+}
+
+void Zombie::Group()
+{
+	const double radius = 6.0f;
+
+	int group = 0;
+
+	for(int j=0; j<scene->zombies.size(); ++j)
+	{
+		if(GetDistance(object_position, scene->zombies[j]->GetObjectPosition()) < radius)
+		{
+			++group;
+			if(scene->zombies[j]->aggressive)
+			{
+				this->aggressive = true;
+				return;
+			}
+		}
+	}
+
+	if(group >= 3)
+	{
+		this->aggressive = true;
+	}
 }
 
 ostream& operator<<(ostream &o, const Zombie &z)

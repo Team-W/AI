@@ -22,6 +22,7 @@ class Zombie: public GameEntity
 		void MousePoint(glm::vec2 target);
 		void gotHit();
 		void Draw();
+		void Group();
 
     private:
         SteeringBehaviour *steering_behaviour;
