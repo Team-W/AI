@@ -1,7 +1,7 @@
 #include "SteeringBehaviour.h"
 
 SteeringBehaviour::SteeringBehaviour(Zombie *z, Scene *s): owner(z), seek_target(0),
-wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(0), scene(s),
+wander_on(0), seek_on(0), flee_on(0), arrive_on(0), obstacle_avoidance_on(1), scene(s),
 hide_on(0), pursuit_on(0)
 {
 	steering_force = glm::vec2(0.0f, 0.0f);
@@ -14,25 +14,10 @@ hide_on(0), pursuit_on(0)
 	wander_target = glm::vec2(wander_radius*cos(alpha), wander_radius*sin(alpha));
 	wander_target_point.InitPoint(wander_target, 0.2, glm::vec3(0, 0, 1));
 
-	obstacle_number = 0;
-	intersection_number = 0;
-	for(int i=0; i<20; ++i)
-	{
-		obstacle_position[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(0, 1, 0));
-		obstacle_position[i].Hide();
-	}
-	for(int i=0; i<10; ++i)
-	{
-		intersection[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(1, 0, 0));
-		intersection[i].Hide();
-	}
 	for(int i=0; i<4; ++i)
 	{
 		hiding_spot[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(1, 0, 1));
 	}
-	obstacle_x_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
-	obstacle_y_axis.InitLine(glm::vec2(0, 0), glm::vec2(0, 0), glm::vec3(0, 1, 0));
-	obstacle_box.InitRectangle(glm::vec2(0, 0), glm::vec2(1, MIN_DETECTION_BOX_LENGTH), glm::vec2(0.03,0.03), glm::vec3(0, 1, 0));
 }
 
 SteeringBehaviour::~SteeringBehaviour(void)
@@ -50,17 +35,19 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
 
 	//steering_force += force_hide;
 	return CalculateSteeringForce_2();
-/*	if(GetLength(force_oa) > 0)
-	{
-		steering_force += force_oa * 0.8f;
-		steering_force += force_seek * 0.2f;
-		return steering_force;
-	}
-	else
-	{
-		steering_force += force_seek;
-		return steering_force;
-	}*/
+	//if(GetLength(force_oa) > 0)
+	//{
+	//	steering_force += force_oa * 0.9f;
+	//	steering_force += force_wander * 0.1f;
+	//	SetLength(steering_force, ZOMBIE_MAX_FORCE);
+	//	return steering_force;
+	//}
+	//else
+	//{
+	//	steering_force += force_wander;
+	//	SetLength(steering_force, ZOMBIE_MAX_FORCE);
+	//	return steering_force;
+	//}
 
 }
 
@@ -68,22 +55,19 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce_2(void)
 {
 	ToggleState();
 
-	const double mult_obstacle_avoidance	= 0.8;
+	const double mult_obstacle_avoidance	= 0.9;
 	const double mult_hide					= 0.7;
 	const double mult_seek					= 0.7;
 	const double mult_wander				= 0.5;
 	const double mult_pursuit				= 0.7;
 
-	glm::vec2 force_wander = CalculateWander();
-	glm::vec2 force_seek = CalculateSeek(seek_target);
-	glm::vec2 force_oa = CalculateObstacleAvoidance();
-	glm::vec2 force_hide = CalculateHide();
 	steering_force = glm::vec2(0.0f, 0.0f);
 	glm::vec2 force;
 
 	if(obstacle_avoidance_on)
 	{
 		force = CalculateObstacleAvoidance();
+		SetLength(force, ZOMBIE_MAX_FORCE);
 		force *= mult_obstacle_avoidance;
 		if(!AccumulateForce(steering_force, force)) return steering_force;
 	}
@@ -91,16 +75,17 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce_2(void)
 	if(hide_on)
 	{
 		force = CalculateHide();
+		SetLength(force, ZOMBIE_MAX_FORCE);
 		force *= mult_hide;
 		if(!AccumulateForce(steering_force, force)) return steering_force;
 	}
 
-	if(seek_on)
+	/*if(seek_on)
 	{
 		force = CalculateSeek(seek_target);
 		force *= mult_seek;
 		if(!AccumulateForce(steering_force, force)) return steering_force;
-	}
+	}*/
 
 	/*if(pursuit_on)
 	{
@@ -112,10 +97,12 @@ glm::vec2 SteeringBehaviour::CalculateSteeringForce_2(void)
 	if(wander_on)
 	{
 		force = CalculateWander();
+		SetLength(force, ZOMBIE_MAX_FORCE);
 		force *= mult_wander;
 		if(!AccumulateForce(steering_force, force)) return steering_force;
 	}
 
+	SetLength(steering_force, ZOMBIE_MAX_FORCE);
 	return steering_force;
 }
 
@@ -150,7 +137,7 @@ bool SteeringBehaviour::AccumulateForce(glm::vec2 &total, glm::vec2 &force)
 	if(length <= remaining_force)
 		total += force;
 	else
-		total += force * glm::vec2(remaining_force, remaining_force);
+		total += force * (glm::vec2(remaining_force, remaining_force) / ZOMBIE_MAX_FORCE);
 
 	return true;
 }
@@ -160,15 +147,8 @@ void SteeringBehaviour::Draw(void)
 {
 	wander_target_point.DrawPoint();
 
-	for(int i=0; i<obstacle_number; ++i)
-		obstacle_position[i].DrawPoint();
-	for(int i=0; i<intersection_number; ++i)
-		intersection[i].DrawPoint();
 	for(int i=0; i<4; ++i)
 		hiding_spot[i].DrawPoint();
-	obstacle_x_axis.DrawLine();
-	obstacle_y_axis.DrawLine();
-	obstacle_box.DrawRectngle();
 }
 
 glm::vec2 SteeringBehaviour::CalculateWander(void)
@@ -188,7 +168,7 @@ glm::vec2 SteeringBehaviour::CalculateWander(void)
 
 	wander_target_point.UpdatePoint(target_world, 0.2, glm::vec3(0, 0, 1));
 
-	return (target_world - owner->object_position)*glm::vec2(3333,3333);
+	return (target_world - owner->object_position);
 }
 
 glm::vec2 SteeringBehaviour::CalculateSeek(const glm::vec2 &target)
@@ -232,24 +212,13 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	GameEntity *pointer_to_closest_ob = 0;
 	glm::vec2 local_position_of_closest_ob = glm::vec2(0, 0);
 
-	//debug
-	obstacle_number = 0;
-	for(int i=0; i<obstacle_number; ++i)
-		obstacle_position[i].Hide();
-	intersection_number = 0;
-	for(int i=0; i<intersection_number; ++i)
-		intersection[i].Hide();
-
-	//debug
-	obstacle_x_axis.UpdateLine(owner->GetObjectPosition() - GetPerpendicular(owner->object_heading) * glm::vec2(2, 2), owner->GetObjectPosition() + GetPerpendicular(owner->object_heading) * glm::vec2(2, 2), glm::vec3(0, 1, 0));
-	obstacle_y_axis.UpdateLine(owner->GetObjectPosition() - owner->GetObjectHeading() * glm::vec2(3, 3), owner->GetObjectPosition() + owner->GetObjectHeading()  * glm::vec2(7, 7), glm::vec3(0, 1, 0));
-	obstacle_box.UpdateRectangle(glm::vec2(0.f, 0.f), glm::vec2(1.f, detection_box_length), glm::vec3(0, 1, 0));
-
 	float angle = GetAngle(glm::vec2(0, 1), owner->object_heading);
 	
-	for(unsigned int i=0; i<owner->scene->obstacles.size(); ++i)
+	for(unsigned int i=0; i<owner->scene->objects.size(); ++i)
 	{
-		object = owner->scene->obstacles[i];
+		object = owner->scene->objects[i];
+
+		if(object == owner) continue;
 
 		//if dist(obj.pos + zom.pos) > detectionBox + obj.rad -> skip
 		if ((GetDistance(object->GetObjectPosition(), owner->GetObjectPosition())) > detection_box_length+ object->GetCollisionRadius()) continue;	
@@ -260,10 +229,6 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 		//if behind -> skip
 		if (local_position.y < 0) continue;		
-
-		//debug
-		obstacle_position[obstacle_number].Hide();
-		obstacle_position[obstacle_number++].UpdatePoint(local_position, object->GetCollisionRadius(), glm::vec3(0, 1, 0));
 
 		//obj.rad + zom.rad
 		float expanded_radius = object->GetCollisionRadius() + owner->GetCollisionRadius();
@@ -279,10 +244,6 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 		//intersection point
 		double ip = cY - sqrt_part;
 		if(ip <= 0) ip = cY + sqrt_part;
-
-		//debug
-		intersection[intersection_number].Hide();
-		intersection[intersection_number++].UpdatePoint(glm::vec2(0, ip) , 0.2f, glm::vec3(1, 0, 0));
 
 		if(ip < dist_to_closest_ip)
 		{
@@ -301,7 +262,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	double multiplier = 1.0 + (detection_box_length - local_position_of_closest_ob.y) / detection_box_length;
 	
 	//if negative -> collapses zombie behaviour
-	if (multiplier < 0) multiplier = 0.1;
+	if (multiplier <= 0) multiplier = 0.1;
 
 	// lateral force with sides
 	if (local_position_of_closest_ob.x<0)
@@ -317,7 +278,7 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 	glm::mat4 rot = glm::rotate(glm::mat4(1.0f), GetAngle(glm::vec2(0, 1), owner->object_heading), glm::vec3(0, 0, 1));
 	glm::vec2 force_world(rot * glm::vec4(force, 0.0f, 0.0f));
 
-	return force_world*glm::vec2(333,333);
+	return force_world;
 }
 
 glm::vec2 SteeringBehaviour::CalculateHidingSpot(const glm::vec2 &target, const glm::vec2 &obstacle, double radius)
