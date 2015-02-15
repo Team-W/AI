@@ -14,6 +14,13 @@ Scene::Scene(void)
 	AddObstacle(new Obstacle(this, 12.0, -6.0, 5.00));
 	AddObstacle(new Obstacle(this, -16.0, 15.0, 6.00));
 	AddZombie(test_zombie);
+	AddZombie(new Zombie(this, 10.0f, 10.0f));
+	AddZombie(new Zombie(this, 5.0f, 5.0f));
+	AddZombie(new Zombie(this, -7.0f, -20.0f));
+	AddZombie(new Zombie(this, 13.0f, 13.0f));
+	AddZombie(new Zombie(this, 8.0f, 8.0f));
+	AddZombie(new Zombie(this, -5.0f, -15.0f));
+	AddZombie(new Zombie(this, -7.0f, -25.0f));
 }
 
 Scene::~Scene(void)

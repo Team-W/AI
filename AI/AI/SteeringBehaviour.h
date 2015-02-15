@@ -53,7 +53,6 @@ class SteeringBehaviour
 		bool hide_on;
 
 		glm::vec2 CalculateSteeringForce(void);
-		glm::vec2 CalculateSteeringForce_2(void);
 		glm::vec2 CalculateWander(void);
 		glm::vec2 CalculateSeek(const glm::vec2 &target);
 		glm::vec2 CalculateFlee(void);

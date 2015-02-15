@@ -13,7 +13,7 @@ Zombie::Zombie(Scene *s, float x, float y)
 	RandomPoint();
 
 	heading_vector.InitLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
-	target_point.InitPoint(target_position, 0.2, glm::vec3(1, 0, 0));
+	//target_point.InitPoint(target_position, 0.2, glm::vec3(1, 0, 0));
 	obstacle_avoidance.InitRectangle(object_position, glm::vec2(1.0,7.2), glm::vec2(1.0,1.0), glm::vec3(0.0f, 0.7f, 0.7f));
 }
 
@@ -23,12 +23,15 @@ Zombie::~Zombie(void)
 		delete steering_behaviour;
 }
 
-
-
 void Zombie::Update(double delta_time)
 {
+	if(aggressive)
+		color = glm::vec3(0.5f, 0.f, 0.f);
+	else
+		color = glm::vec3(0.f, 0.5f, 0.f);
+
 	heading_vector.UpdateLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
-	target_point.UpdatePoint(target_position, 0.2, glm::vec3(1, 0, 0));
+	//target_point.UpdatePoint(target_position, 0.2, glm::vec3(1, 0, 0));
 
 	float detection_box_length = (GetLength(this->object_velocity) / ZOMBIE_MAX_SPEED);
 	detection_box_length *= MIN_DETECTION_BOX_LENGTH;
@@ -90,7 +93,7 @@ void Zombie::Draw()
 		glEnd();
 
 		glBegin(GL_LINES);
-			glColor3f(0.5f, 0.0f, 0.0f);
+			glColor3f(color.x, color.y, color.z);
 
 			a = 1.0f * (float)cos(359 * PI / 180.0f);
 			b = 1.0f * (float)sin(359 * PI / 180.0f);
@@ -102,15 +105,19 @@ void Zombie::Draw()
 				glVertex2f(a, b);
 			}
 		glEnd();
-		obstacle_avoidance.DrawRectngle();
+		//obstacle_avoidance.DrawRectngle();
 	glPopMatrix();
 	glDisable(GL_LINE_SMOOTH);
 
-	heading_vector.DrawLine();
-	target_point.DrawPoint();
+	//heading_vector.DrawLine();
+	//target_point.DrawPoint();
 	
 	
-	steering_behaviour->Draw();
+	//steering_behaviour->Draw();
+}
+
+void Zombie::gotHit(){
+	object_position = glm::vec2(2000, 2000);
 }
 
 ostream& operator<<(ostream &o, const Zombie &z)

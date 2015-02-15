@@ -16,42 +16,16 @@ hide_on(0), pursuit_on(0)
 
 	for(int i=0; i<4; ++i)
 	{
-		hiding_spot[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(1, 0, 1));
+		//hiding_spot[i].InitPoint(glm::vec2(0, 0), 0.2, glm::vec3(1, 0, 1));
 	}
 }
 
 SteeringBehaviour::~SteeringBehaviour(void)
 {
-	
+
 }
 
 glm::vec2 SteeringBehaviour::CalculateSteeringForce(void)
-{
-	glm::vec2 force_wander = CalculateWander();
-	glm::vec2 force_seek = CalculateSeek(seek_target);
-	glm::vec2 force_oa = CalculateObstacleAvoidance();
-	glm::vec2 force_hide = CalculateHide();
-	steering_force = glm::vec2(0.0f, 0.0f);
-
-	//steering_force += force_hide;
-	return CalculateSteeringForce_2();
-	//if(GetLength(force_oa) > 0)
-	//{
-	//	steering_force += force_oa * 0.9f;
-	//	steering_force += force_wander * 0.1f;
-	//	SetLength(steering_force, ZOMBIE_MAX_FORCE);
-	//	return steering_force;
-	//}
-	//else
-	//{
-	//	steering_force += force_wander;
-	//	SetLength(steering_force, ZOMBIE_MAX_FORCE);
-	//	return steering_force;
-	//}
-
-}
-
-glm::vec2 SteeringBehaviour::CalculateSteeringForce_2(void)
 {
 	ToggleState();
 
@@ -147,8 +121,8 @@ void SteeringBehaviour::Draw(void)
 {
 	wander_target_point.DrawPoint();
 
-	for(int i=0; i<4; ++i)
-		hiding_spot[i].DrawPoint();
+	//for(int i=0; i<4; ++i)
+		//hiding_spot[i].DrawPoint();
 }
 
 glm::vec2 SteeringBehaviour::CalculateWander(void)
@@ -214,11 +188,9 @@ glm::vec2 SteeringBehaviour::CalculateObstacleAvoidance(void)
 
 	float angle = GetAngle(glm::vec2(0, 1), owner->object_heading);
 	
-	for(unsigned int i=0; i<owner->scene->objects.size(); ++i)
+	for(unsigned int i=0; i<owner->scene->obstacles.size(); ++i)
 	{
-		object = owner->scene->objects[i];
-
-		if(object == owner) continue;
+		object = owner->scene->obstacles[i];
 
 		//if dist(obj.pos + zom.pos) > detectionBox + obj.rad -> skip
 		if ((GetDistance(object->GetObjectPosition(), owner->GetObjectPosition())) > detection_box_length+ object->GetCollisionRadius()) continue;	
@@ -336,10 +308,10 @@ glm::vec2 SteeringBehaviour::CalculateHide(void)
 			best_index = i;
 		}
 
-		hiding_spot[i].UpdatePoint(hide_spot, 0.2f, glm::vec3(1, 0, 1));
+		//hiding_spot[i].UpdatePoint(hide_spot, 0.2f, glm::vec3(1, 0, 1));
 	}
 
-	hiding_spot[best_index].UpdatePoint(best_spot, 0.2f, glm::vec3(1, 1, 0));
+	//hiding_spot[best_index].UpdatePoint(best_spot, 0.2f, glm::vec3(1, 1, 0));
 
 	return CalculateSeek(best_spot);  // !!!!!! ZMIENIC NA ARRIVE !!!!!!!
 }

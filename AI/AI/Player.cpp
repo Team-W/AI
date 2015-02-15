@@ -74,14 +74,12 @@ void Player::Update(double delta_time)
 }
 
 void Player::RailPhysics(){
-	GameEntity *obstacle = 0;
-	glm::vec2 target;
+
 	float distance=1000,tmpDist=0;
 
-	for (unsigned int i = 0; i < scene->obstacles.size(); ++i)
-	{
-		target = object_heading;
-		obstacle = scene->obstacles[i];	
+	for (unsigned int i = 0; i < scene->obstacles.size(); ++i){
+		glm::vec2 target = object_heading;
+		Obstacle *obstacle = scene->obstacles[i];
 		tmpDist = GetDistance(obstacle->GetObjectPosition(), this->GetObjectPosition());
 		SetLength(target, tmpDist);
 		target += this->GetObjectPosition();
@@ -90,6 +88,17 @@ void Player::RailPhysics(){
 				distance = tmpDist;
 				shooting_target = target;
 			}
+		}
+	}
+
+	for (unsigned int i = 0; i < scene->zombies.size(); ++i)
+	{
+		glm::vec2 target = object_heading;
+		Zombie *zombie = scene->zombies[i];
+		SetLength(target, GetDistance(zombie->GetObjectPosition(), this->GetObjectPosition()));
+		target += this->GetObjectPosition();
+		if (GetDistance(zombie->GetObjectPosition(), target) < zombie->GetCollisionRadius() && GetDistance(zombie->GetObjectPosition(), this->GetObjectPosition())<distance){
+			zombie->gotHit();
 		}
 	}
 	

@@ -20,11 +20,13 @@ class Zombie: public GameEntity
         void Update(double delta_time);
 		void RandomPoint();
 		void MousePoint(glm::vec2 target);
+		void gotHit();
 		void Draw();
 
     private:
         SteeringBehaviour *steering_behaviour;
 		bool aggressive;
+		glm::vec3 color;
 
 		glm::vec2 target_position;
 		glm::vec2 object_velocity;
