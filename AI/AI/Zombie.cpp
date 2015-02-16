@@ -188,7 +188,7 @@ void Zombie::Group()
 		}
 	}
 
-	if(group >= 3)
+	if(group >= 4)
 	{
 		this->aggressive = true;
 	}

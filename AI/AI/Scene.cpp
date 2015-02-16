@@ -15,7 +15,7 @@ Scene::Scene(void)
 	AddObstacle(new Obstacle(this, -12.0, -17.0, 9.00));
 	AddObstacle(new Obstacle(this, 12.0, -6.0, 5.00));
 	AddObstacle(new Obstacle(this, -16.0, 15.0, 6.00));
-	for (unsigned int i = 0; i < 20; ++i) AddZombie(new Zombie(this));
+	for (unsigned int i = 0; i < 15; ++i) AddZombie(new Zombie(this));
 }
 
 Scene::~Scene(void)
@@ -30,7 +30,7 @@ Scene::~Scene(void)
 
 bool Scene::CheckVictoryCondition(void)
 {
-	int z = 0;
+	int z = zombies.size();
 
 	for(unsigned int i=0; i<zombies.size(); ++i)
 	{
@@ -38,17 +38,16 @@ bool Scene::CheckVictoryCondition(void)
 		{
 			game = false;
 			cout << "PRZEGRALES!" << endl;
+			system("pause");
 		}
-		else
-		{
-			++z;
-		}
+		if (GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) > 200) --z;
 	}
-
+	
 	if(z == 0)
 	{
 		game = false;
 		cout << "WYGRALES!" << endl;
+		system("pause");
 	}
 
 	return game;
