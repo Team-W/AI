@@ -31,14 +31,13 @@ Scene::~Scene(void)
 bool Scene::CheckVictoryCondition(void)
 {
 	int z = zombies.size();
-
+	game = true;
 	for(unsigned int i=0; i<zombies.size(); ++i)
 	{
 		if(GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) < 2)
 		{
 			game = false;
 			cout << "PRZEGRALES!" << endl;
-			system("pause");
 		}
 		if (GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) > 200) --z;
 	}
@@ -47,7 +46,6 @@ bool Scene::CheckVictoryCondition(void)
 	{
 		game = false;
 		cout << "WYGRALES!" << endl;
-		system("pause");
 	}
 
 	return game;
@@ -55,18 +53,23 @@ bool Scene::CheckVictoryCondition(void)
 
 void Scene::Update(double delta_time)
 {
-	CheckVictoryCondition();
+	if (CheckVictoryCondition()){
 
-	GroupZombies();
-	for (unsigned int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(delta_time);
+		GroupZombies();
+		for (unsigned int i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(delta_time);
+		}
+	
+		if (KeyStates['w'] || KeyStates['W']) player->Move(glm::vec2(0, 0.3), delta_time);
+		if (KeyStates['s'] || KeyStates['S']) player->Move(glm::vec2(0, -0.3), delta_time);
+		if (KeyStates['a'] || KeyStates['A']) player->Move(glm::vec2(-0.3, 0), delta_time);
+		if (KeyStates['d'] || KeyStates['D']) player->Move(glm::vec2(0.3, 0), delta_time);
+	
+		player->Update(delta_time);
 	}
-	if (KeyStates['w'] || KeyStates['W']) player->Move(glm::vec2(0, 0.3), delta_time);
-	if (KeyStates['s'] || KeyStates['S']) player->Move(glm::vec2(0, -0.3), delta_time);
-	if (KeyStates['a'] || KeyStates['A']) player->Move(glm::vec2(-0.3, 0), delta_time);
-	if (KeyStates['d'] || KeyStates['D']) player->Move(glm::vec2(0.3, 0), delta_time);
-	player->Update(delta_time);
+
+	//if (KeyStates['r'] || KeyStates['R']) Restart();
 }
 
 void Scene::Draw(void)
