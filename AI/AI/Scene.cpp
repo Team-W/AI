@@ -15,7 +15,7 @@ Scene::Scene(void)
 	AddObstacle(new Obstacle(this, -12.0, -17.0, 9.00));
 	AddObstacle(new Obstacle(this, 12.0, -6.0, 5.00));
 	AddObstacle(new Obstacle(this, -16.0, 15.0, 6.00));
-	for (unsigned int i = 0; i < 20; ++i) AddZombie(new Zombie(this));
+	for (unsigned int i = 0; i < 10; ++i) AddZombie(new Zombie(this));
 }
 
 Scene::~Scene(void)
