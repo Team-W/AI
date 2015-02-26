@@ -11,10 +11,6 @@ Zombie::Zombie(Scene *s)
 	this->aggressive = false;
 	RandomPoint();
 
-	int sign1 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
-	int sign2 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
-	this->object_position = glm::vec2(sign1*(rand() % 320) / 10, sign2*(rand() % 320) / 10);
-
 	Player *player = scene->player;
 	unsigned int count = 0;
 	while (count < scene->objects.size()){
@@ -22,17 +18,13 @@ Zombie::Zombie(Scene *s)
 
 		if (player->GetCollisionRadius() + 8 > GetDistance(player->GetObjectPosition(), this->object_position)){
 			count = 0;
-			sign1 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
-			sign2 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
-			this->object_position = glm::vec2(sign1*(rand() % 320) / 10, sign2*(rand() % 320) / 10);
+			RandomPoint();
 			continue;
 		}
 
 		if (object->GetCollisionRadius() + 1 > GetDistance(object->GetObjectPosition(), this->object_position)){
 			count = 0;
-			sign1 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
-			sign2 = (((float)rand() / RAND_MAX - 0.5)>0) ? 1 : -1;
-			this->object_position = glm::vec2(sign1*(rand() % 320) / 10, sign2*(rand() % 320) / 10);
+			RandomPoint();
 			continue;
 		}
 		count++;
@@ -117,7 +109,7 @@ void Zombie::RandomPoint()
 {
 	int sign1 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
 	int sign2 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
-	target_position = glm::vec2(sign1 * rand()%20, sign2 * rand()%20);
+	object_position = glm::vec2(sign1 * (rand()%320)/10, sign2 * (rand()%320)/10);
 }
 void Zombie::MousePoint(glm::vec2 target){
 	target_position = target;
@@ -188,7 +180,7 @@ void Zombie::Group()
 		}
 	}
 
-	if(group >= 3)
+	if(group >= 4)
 	{
 		this->aggressive = true;
 	}

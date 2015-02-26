@@ -15,7 +15,9 @@ Scene::Scene(void)
 	AddObstacle(new Obstacle(this, -12.0, -17.0, 9.00));
 	AddObstacle(new Obstacle(this, 12.0, -6.0, 5.00));
 	AddObstacle(new Obstacle(this, -16.0, 15.0, 6.00));
+
 	for (unsigned int i = 0; i < 10; ++i) AddZombie(new Zombie(this));
+
 }
 
 Scene::~Scene(void)
@@ -30,8 +32,8 @@ Scene::~Scene(void)
 
 bool Scene::CheckVictoryCondition(void)
 {
-	int z = 0;
-
+	int z = zombies.size();
+	game = true;
 	for(unsigned int i=0; i<zombies.size(); ++i)
 	{
 		if(GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) < 2)
@@ -39,12 +41,9 @@ bool Scene::CheckVictoryCondition(void)
 			game = false;
 			cout << "PRZEGRALES!" << endl;
 		}
-		else
-		{
-			++z;
-		}
+		if (GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) > 200) --z;
 	}
-
+	
 	if(z == 0)
 	{
 		game = false;
@@ -56,18 +55,23 @@ bool Scene::CheckVictoryCondition(void)
 
 void Scene::Update(double delta_time)
 {
-	CheckVictoryCondition();
+	if (CheckVictoryCondition()){
 
-	GroupZombies();
-	for (unsigned int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(delta_time);
+		GroupZombies();
+		for (unsigned int i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(delta_time);
+		}
+	
+		if (KeyStates['w'] || KeyStates['W']) player->Move(glm::vec2(0, 0.3), delta_time);
+		if (KeyStates['s'] || KeyStates['S']) player->Move(glm::vec2(0, -0.3), delta_time);
+		if (KeyStates['a'] || KeyStates['A']) player->Move(glm::vec2(-0.3, 0), delta_time);
+		if (KeyStates['d'] || KeyStates['D']) player->Move(glm::vec2(0.3, 0), delta_time);
+	
+		player->Update(delta_time);
 	}
-	if (KeyStates['w'] || KeyStates['W']) player->Move(glm::vec2(0, 0.3), delta_time);
-	if (KeyStates['s'] || KeyStates['S']) player->Move(glm::vec2(0, -0.3), delta_time);
-	if (KeyStates['a'] || KeyStates['A']) player->Move(glm::vec2(-0.3, 0), delta_time);
-	if (KeyStates['d'] || KeyStates['D']) player->Move(glm::vec2(0.3, 0), delta_time);
-	player->Update(delta_time);
+
+	//if (KeyStates['r'] || KeyStates['R']) Restart();
 }
 
 void Scene::Draw(void)
