@@ -41,22 +41,55 @@ void Player::Move(glm::vec2 move, double delta_time)
 
 		radius = object->GetCollisionRadius() + collision_radius;
 
-		if(radius > GetDistance(object_position + move, object->GetObjectPosition()))
+		if (radius > GetDistance(object_position + move, object->GetObjectPosition()))
 		{
-			collision = true;
+			float x = move.x, y = move.y;
+			glm::vec2 objpos = object->GetObjectPosition();
+			if (x > 0 && objpos.y >= object_position.y){
+				move.y = -x; move.x = 0;
+				break;
+			}
+			if (x > 0 && objpos.y < object_position.y){
+				move.y = x; move.x = 0;
+				break;
+			}
+			if (x < 0 && objpos.y >= object_position.y){
+				move.y = x; move.x = 0;
+				break;
+			}
+			if (x < 0 && objpos.y < object_position.y){
+				move.y = -x; move.x = 0;
+				break;
+			}
+
+			if (y > 0 && objpos.x >= object_position.x){
+				move.y = 0; move.x = -y;
+				break;
+			}
+			if (y > 0 && objpos.x < object_position.x){
+				move.y = 0; move.x = y;
+				break;
+			}
+			if (y < 0 && objpos.x >= object_position.x){
+				move.y = 0; move.x = y;
+				break;
+			}
+			if (y < 0 && objpos.x < object_position.x){
+				move.y = 0; move.x = -y;
+				break;
+			}
 			break;
 		}
 	}
 
-	if(!collision)
-		object_position += move;
+	object_position += move;
 
 	if (object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
 	{
 		object_position -= move;
 	}
 
-	object_heading = mouse->getPosition() -object_position;
+	object_heading = mouse->getPosition() - object_position;
 	Normalize(object_heading);
 
 }

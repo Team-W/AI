@@ -11,7 +11,7 @@ Zombie::Zombie(Scene *s)
 	this->aggressive = false;
 	this->dead = false;
 	this->respawn_timer = ZOMBIE_RESPAWN_TIMER;
-	
+	srand(time(NULL));
 	RandomPosition();
 }
 
@@ -23,6 +23,7 @@ Zombie::~Zombie(void)
 
 void Zombie::Update(double delta_time)
 {
+	Respawn(delta_time);
 	Group();
 
 	if(aggressive)
@@ -81,12 +82,24 @@ void Zombie::Update(double delta_time)
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
 }
 
+void Zombie::Respawn(double delta_time){
+	if (!dead)return;
+
+	if (respawn_timer > 0){
+		respawn_timer -= delta_time;
+		return;
+	}
+
+	respawn_timer = ZOMBIE_RESPAWN_TIMER;
+	RandomPosition();
+}
+
 void Zombie::RandomPosition(){
 	this->dead = false;
+	this->aggressive = false;
 	RandomPoint();
 	Player *player = scene->player;
 	unsigned int count = 0;
-	if (scene->debug) cout << "Entering while loop" << endl;
 	while (count < scene->objects.size()){
 		GameEntity *object = scene->objects[count];
 		

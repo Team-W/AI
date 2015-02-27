@@ -80,8 +80,6 @@ int main(int argc, char **argv)
 	glMatrixMode(GL_MODELVIEW);
 	glutCreateWindow("Basic AI");
 
-	srand(time(NULL));
-
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
 	glutPassiveMotionFunc(MouseCoords);

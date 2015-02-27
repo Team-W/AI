@@ -24,6 +24,7 @@ class Zombie: public GameEntity
 		void gotHit();
 		void Draw();
 		void Group();
+		void Respawn(double delta_time);
 
 
     private:
