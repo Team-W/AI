@@ -53,6 +53,51 @@ bool Scene::CheckVictoryCondition(void)
 	return game;
 }
 
+void RenderBitmapString(float x, float y, char *string)
+{
+	char *c;
+	glColor3f(1, 0, 0);
+	glRasterPos3f(x, y, -0.1);
+	for(c=string; *c != '\0'; c++)
+	{
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);
+	}
+}
+
+float GlutPrint(float x, float y, char *txt, float scale)
+{
+	int i;
+	int len=strlen(txt);
+	
+	for(i=0; i<len; i++)
+	{
+		glRasterPos2f(x, y);
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, txt[i]);
+		x += glutBitmapWidth(GLUT_BITMAP_TIMES_ROMAN_24, txt[i])*scale;
+	}
+
+	return 0;
+}
+
+void PrintText(char* string, int x, int y) {
+
+	if(string && strlen(string))
+	{
+		glPushMatrix();
+		glLoadIdentity();
+		glScalef(0.003f, 0.003f,0.003f);
+		glColor3f(1, 0, 0);
+		glRasterPos3d(x, y, 0.1);
+		while(*string)
+		{
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *string);
+			string++;
+		}
+		glPopMatrix();
+	}
+
+}
+
 void Scene::Update(double delta_time)
 {
 	if (CheckVictoryCondition()){
