@@ -20,19 +20,19 @@ class Scene
 
 		void Update(double delta_time);
 		void Draw(void);
+		void Restart(void);
 		void Key(unsigned char key);
 		void KeyState(unsigned char key, bool tf);
 		void AddObject(GameEntity *entity);
 		void AddZombie(Zombie *entity);
 		void AddObstacle(Obstacle *entity);
-		void RemoveObject(Zombie *entity);
 		
 		void PlayerRotate(glm::vec2 heading);
 		void PlayerMove(glm::vec2 move, double delta_time);
 		void PlayerShoot(glm::vec2 aim);
 		void ZombieTarget(glm::vec2 target);
 		bool CheckVictoryCondition(void);
-		bool game;
+		
 		void GroupZombies(void);
 
 		const glm::mat4& GetViewMatrix(void) const;
@@ -40,7 +40,9 @@ class Scene
 	private:
 		glm::mat4 view_matrix;
 		bool KeyStates[256];
-		
+		bool debug;
+		bool game;
+
 		int score;
 
 		// TEST OBJECTS

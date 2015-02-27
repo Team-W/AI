@@ -6,6 +6,7 @@ Player::Player(Scene *s, float x, float y)
 	this->scene = s;
 	this->object_position = glm::vec2(x, y);
 	this->object_scale = glm::vec2(0.03f, 0.03f);
+	this->collision_radius = 1.0f;
 	this->mouse = new GraphicDebug();
 	this->mouse->InitPoint(glm::vec2(0, 0), 0.8, glm::vec3(0.9, 0.9, 0.9));
 	this->color = glm::vec3(0, 0, 0);
@@ -38,24 +39,57 @@ void Player::Move(glm::vec2 move, double delta_time)
 
 		if(object == this) continue;
 
-		radius = object->GetCollisionRadius() + collision_radius + 1;
+		radius = object->GetCollisionRadius() + collision_radius;
 
-		if(radius > GetDistance(object_position + move, object->GetObjectPosition()))
+		if (radius > GetDistance(object_position + move, object->GetObjectPosition()))
 		{
-			collision = true;
+			float x = move.x, y = move.y;
+			glm::vec2 objpos = object->GetObjectPosition();
+			if (x > 0 && objpos.y >= object_position.y){
+				move.y = -x; move.x = 0;
+				break;
+			}
+			if (x > 0 && objpos.y < object_position.y){
+				move.y = x; move.x = 0;
+				break;
+			}
+			if (x < 0 && objpos.y >= object_position.y){
+				move.y = x; move.x = 0;
+				break;
+			}
+			if (x < 0 && objpos.y < object_position.y){
+				move.y = -x; move.x = 0;
+				break;
+			}
+
+			if (y > 0 && objpos.x >= object_position.x){
+				move.y = 0; move.x = -y;
+				break;
+			}
+			if (y > 0 && objpos.x < object_position.x){
+				move.y = 0; move.x = y;
+				break;
+			}
+			if (y < 0 && objpos.x >= object_position.x){
+				move.y = 0; move.x = y;
+				break;
+			}
+			if (y < 0 && objpos.x < object_position.x){
+				move.y = 0; move.x = -y;
+				break;
+			}
 			break;
 		}
 	}
 
-	if(!collision)
-		object_position += move;
+	object_position += move;
 
 	if (object_position.x < -32 || object_position.x > 32 || object_position.y < -32 || object_position.y > 32)
 	{
 		object_position -= move;
 	}
 
-	object_heading = mouse->getPosition() -object_position;
+	object_heading = mouse->getPosition() - object_position;
 	Normalize(object_heading);
 
 }
