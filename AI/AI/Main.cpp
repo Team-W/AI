@@ -46,7 +46,7 @@ void KeyUp(unsigned char key, int x, int y)
 void MouseCoords(int x, int y)
 { 
 	float a, b;
-	a =(float) (33.33*(x - 350) / 350);
+	a = (float)(33.33*( x - 350) / 350);
 	b = (float)(33.33*(-y + 350) / 350);
 	scene.PlayerRotate(glm::vec2(a, b));
 	//cout << a << ", " << b <<"\n";

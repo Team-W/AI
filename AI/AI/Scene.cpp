@@ -5,10 +5,10 @@ Scene::Scene(void)
 	view_matrix = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 	memset(&KeyStates, 0, sizeof(KeyStates));
 	// Init Player
-	player = new Player(this, 0.0f, 0.0f);
-
-	bool game = true;
-	int score = 0;
+	this->player = new Player(this, 0.0f, 0.0f);
+	this->debug = false;
+	this->game = true;
+	this->score = 0;
 
 	// Init Objects	
 	AddObstacle(new Obstacle(this, 15.0, 15.0, 7.00));
@@ -32,22 +32,13 @@ Scene::~Scene(void)
 
 bool Scene::CheckVictoryCondition(void)
 {
-	int z = zombies.size();
-	game = true;
 	for(unsigned int i=0; i<zombies.size(); ++i)
 	{
 		if(GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) < 2)
 		{
-			game = false;
+			this->game = false;
 			cout << "PRZEGRALES!" << endl;
 		}
-		if (GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) > 200) --z;
-	}
-	
-	if(z == 0)
-	{
-		game = false;
-		cout << "WYGRALES!" << endl;
 	}
 
 	return game;
@@ -55,8 +46,8 @@ bool Scene::CheckVictoryCondition(void)
 
 void Scene::Update(double delta_time)
 {
-	if (CheckVictoryCondition()){
-
+	if (this->game){
+		CheckVictoryCondition();
 		GroupZombies();
 		for (unsigned int i = 0; i < objects.size(); i++)
 		{
@@ -70,8 +61,20 @@ void Scene::Update(double delta_time)
 	
 		player->Update(delta_time);
 	}
+	
 
-	//if (KeyStates['r'] || KeyStates['R']) Restart();
+	if ((KeyStates['r'] || KeyStates['R']) && !game) Restart(); 
+}
+
+void Scene::Restart(void){
+	this->game = true;
+	this->debug = true;
+	for (unsigned int i = 0; i < zombies.size(); i++)
+	{
+		zombies[i]->RandomPosition();	
+		zombies[i]->aggressive = false;
+	}
+	this->debug = false;
 }
 
 void Scene::Draw(void)
@@ -97,12 +100,12 @@ void Scene::PlayerShoot(glm::vec2 aim)
 
 void Scene::ZombieTarget(glm::vec2 target)
 {
-	test_zombie->MousePoint(target);
+	//test_zombie->MousePoint(target);
 }
 
 void Scene::Key(unsigned char key)
 {
-	if (KeyStates['r']) test_zombie->RandomPoint();
+	//if (KeyStates['r']) test_zombie->RandomPoint();
 }
 
 void Scene::KeyState(unsigned char key, bool tf)

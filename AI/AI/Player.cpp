@@ -6,6 +6,7 @@ Player::Player(Scene *s, float x, float y)
 	this->scene = s;
 	this->object_position = glm::vec2(x, y);
 	this->object_scale = glm::vec2(0.03f, 0.03f);
+	this->collision_radius = 1.0f;
 	this->mouse = new GraphicDebug();
 	this->mouse->InitPoint(glm::vec2(0, 0), 0.8, glm::vec3(0.9, 0.9, 0.9));
 	this->color = glm::vec3(0, 0, 0);
@@ -38,7 +39,7 @@ void Player::Move(glm::vec2 move, double delta_time)
 
 		if(object == this) continue;
 
-		radius = object->GetCollisionRadius() + collision_radius + 1;
+		radius = object->GetCollisionRadius() + collision_radius;
 
 		if(radius > GetDistance(object_position + move, object->GetObjectPosition()))
 		{

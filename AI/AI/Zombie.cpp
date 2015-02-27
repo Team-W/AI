@@ -9,30 +9,10 @@ Zombie::Zombie(Scene *s)
 	this->target_position = glm::vec2(0.0f, 0.0f);
 	this->object_scale = glm::vec2(0.03f, 0.03f);
 	this->aggressive = false;
-	RandomPoint();
-
-	Player *player = scene->player;
-	unsigned int count = 0;
-	while (count < scene->objects.size()){
-		GameEntity *object = scene->objects[count];
-
-		if (player->GetCollisionRadius() + 8 > GetDistance(player->GetObjectPosition(), this->object_position)){
-			count = 0;
-			RandomPoint();
-			continue;
-		}
-
-		if (object->GetCollisionRadius() + 1 > GetDistance(object->GetObjectPosition(), this->object_position)){
-			count = 0;
-			RandomPoint();
-			continue;
-		}
-		count++;
-	} 
-
-	heading_vector.InitLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
-	//target_point.InitPoint(target_position, 0.2, glm::vec3(1, 0, 0));
-	obstacle_avoidance.InitRectangle(object_position, glm::vec2(1.0,7.2), glm::vec2(1.0,1.0), glm::vec3(0.0f, 0.7f, 0.7f));
+	this->dead = false;
+	this->respawn_timer = ZOMBIE_RESPAWN_TIMER;
+	
+	RandomPosition();
 }
 
 Zombie::~Zombie(void)
@@ -52,13 +32,9 @@ void Zombie::Update(double delta_time)
 
 	steering_behaviour->SetSeekTarget(scene->player->GetObjectPosition());
 
-	heading_vector.UpdateLine(object_position, object_heading + object_position, glm::vec3(0.7f, 0.7f, 0.7f));
-	//target_point.UpdatePoint(target_position, 0.2, glm::vec3(1, 0, 0));
-
 	float detection_box_length = (GetLength(this->object_velocity) / ZOMBIE_MAX_SPEED);
 	detection_box_length *= MIN_DETECTION_BOX_LENGTH;
 	detection_box_length += MIN_DETECTION_BOX_LENGTH;
-	obstacle_avoidance.UpdateRectangle(object_position, glm::vec2(1.0, detection_box_length), glm::vec3(0.0f, 0.7f, 0.7f));
 
 	//object_velocity += steering_behaviour->CalculateSeek(target_position)*glm::vec2(delta_time, delta_time);
 	object_velocity += steering_behaviour->CalculateSteeringForce() * glm::vec2(delta_time, delta_time);
@@ -105,11 +81,35 @@ void Zombie::Update(double delta_time)
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
 }
 
+void Zombie::RandomPosition(){
+	this->dead = false;
+	RandomPoint();
+	Player *player = scene->player;
+	unsigned int count = 0;
+	if (scene->debug) cout << "Entering while loop" << endl;
+	while (count < scene->objects.size()){
+		GameEntity *object = scene->objects[count];
+		
+		if (this->object_id == object->GetObjectID()){ count++; continue; }
+
+		if (player->GetCollisionRadius() + 7 > GetDistance(player->GetObjectPosition(), this->object_position)){
+			count = 0; RandomPoint();
+			continue;
+		}
+
+		if (object->GetCollisionRadius() + 1 > GetDistance(object->GetObjectPosition(), this->object_position)){
+			count = 0; RandomPoint();
+			continue;
+		}
+		count++;
+	}
+}
 void Zombie::RandomPoint()
 {
 	int sign1 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
 	int sign2 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
-	object_position = glm::vec2(sign1 * (rand()%320)/10, sign2 * (rand()%320)/10);
+	this->object_position = glm::vec2(sign1 * (float)(rand() % 320) / 10, sign2 * (float)(rand() % 320) / 10);
+	
 }
 void Zombie::MousePoint(glm::vec2 target){
 	target_position = target;
@@ -158,6 +158,7 @@ void Zombie::Draw()
 }
 
 void Zombie::gotHit(){
+	this->dead = true;
 	object_position = glm::vec2(2000, 2000);
 }
 
@@ -180,7 +181,7 @@ void Zombie::Group()
 		}
 	}
 
-	if(group >= 4)
+	if(group >= ZOMBIE_GROUP)
 	{
 		this->aggressive = true;
 	}

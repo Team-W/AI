@@ -7,9 +7,12 @@
 
 #define ZOMBIE_MAX_SPEED 120.0f
 #define ZOMBIE_MAX_FORCE 15000.0f
-#define ZOMBIE_TURNING_MAX_SPEED 3.0f
+#define ZOMBIE_RESPAWN_TIMER 3.0f
+#define ZOMBIE_GROUP 4
+
 #define MIN_DETECTION_BOX_LENGTH 3.0f
 #define PLAYER_SPEED 100.0f
+
 
 // Standard Libraries
 #include <iostream>

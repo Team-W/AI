@@ -146,6 +146,7 @@ glm::vec2 SteeringBehaviour::CalculateWander(void)
 	return (target_world - owner->object_position);
 }
 
+//arrive
 glm::vec2 SteeringBehaviour::CalculateSeek(const glm::vec2 &target)
 {
 	glm::vec2 desired_velocity = target - owner->object_position;
