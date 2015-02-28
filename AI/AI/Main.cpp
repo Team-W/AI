@@ -18,7 +18,6 @@ void RenderScene(void)
 
 void Idle()
 {
-	//Sleep(16);
 	static long long int old_time = 0;
 	
 	long long int time_since_start = glutGet(GLUT_ELAPSED_TIME);
@@ -46,7 +45,6 @@ void MouseCoords(int x, int y)
 	a = (float)(33.33*( x - 350) / 350);
 	b = (float)(33.33*(-y + 350) / 350);
 	scene.PlayerRotate(glm::vec2(a, b));
-	//cout << a << ", " << b <<"\n";
 }
 
 void MouseClick(int button, int state, int x, int y) {

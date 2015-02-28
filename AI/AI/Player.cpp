@@ -169,8 +169,8 @@ void Player::Update(double delta_time)
 	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
 	
-	if (color.x - 0.0033f > 0.0){
-		color -= 0.0033f;
+	if (color.x - RAIL_TIMER > 0.0){
+		color -= RAIL_TIMER;
 	}else{
 		color *= 0;
 		CDrail = false;
