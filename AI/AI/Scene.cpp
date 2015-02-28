@@ -86,7 +86,6 @@ void Scene::Update(double delta_time)
 {
 	if (this->game){
 		CheckVictoryCondition();
-		GroupZombies();
 		for (unsigned int i = 0; i < objects.size(); i++)
 		{
 			objects[i]->Update(delta_time);
@@ -148,11 +147,6 @@ void Scene::PlayerShoot(glm::vec2 aim)
 	player->Shoot(aim);
 }
 
-void Scene::ZombieTarget(glm::vec2 target)
-{
-	//test_zombie->MousePoint(target);
-}
-
 void Scene::KeyState(unsigned char key, bool tf)
 {
 	KeyStates[key] = tf;
@@ -171,11 +165,6 @@ void Scene::AddObstacle(Obstacle *entity)
 {
 	obstacles.push_back(entity);
 	objects.push_back(entity);
-}
-
-void Scene::GroupZombies(void)
-{
-
 }
 
 ostream& operator<<(ostream &o, const Scene &gw)
