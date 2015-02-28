@@ -20,25 +20,12 @@ void Idle()
 {
 	//Sleep(16);
 	static long long int old_time = 0;
-	static bool tmp = true;
 	
 	long long int time_since_start = glutGet(GLUT_ELAPSED_TIME);
 	double dt = (time_since_start - old_time) * 0.0001f;
 	old_time = time_since_start;
 
-	if(scene.CheckVictoryCondition())
-	{
-		scene.Update(dt);
-		tmp = true;
-	}
-	else
-	{
-		if(tmp)
-		{
-			scene.PrintResult();
-			tmp = false;
-		}
-	}
+	scene.Update(dt);
 
 	glutPostRedisplay();
 }
@@ -46,7 +33,6 @@ void Idle()
 void KeyPressed(unsigned char key, int x, int y)
 {
 	scene.KeyState(key,true);
-	scene.Key(key);
 }
 
 void KeyUp(unsigned char key, int x, int y)

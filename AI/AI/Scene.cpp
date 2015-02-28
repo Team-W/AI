@@ -37,19 +37,6 @@ void Scene::PrintResult()
 	cout << "Type [R] to restart game" << endl << endl;
 }
 
-bool Scene::CheckVictoryCondition(void)
-{
-	for(unsigned int i=0; i<zombies.size(); ++i)
-	{
-		if(GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) < 2)
-		{
-			this->game = false;
-		}
-	}
-
-	return game;
-}
-
 void RenderBitmapString(float x, float y, char *string)
 {
 	char *c;
@@ -97,18 +84,36 @@ void PrintText(char* string, int x, int y) {
 
 void Scene::Update(double delta_time)
 {
-	GroupZombies();
-	for (unsigned int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Update(delta_time);
+	if (this->game){
+		CheckVictoryCondition();
+		GroupZombies();
+		for (unsigned int i = 0; i < objects.size(); i++)
+		{
+			objects[i]->Update(delta_time);
+		}
+
+		if (KeyStates['w'] || KeyStates['W']) player->Move(glm::vec2(0, 0.3), delta_time);
+		if (KeyStates['s'] || KeyStates['S']) player->Move(glm::vec2(0, -0.3), delta_time);
+		if (KeyStates['a'] || KeyStates['A']) player->Move(glm::vec2(-0.3, 0), delta_time);
+		if (KeyStates['d'] || KeyStates['D']) player->Move(glm::vec2(0.3, 0), delta_time);
+
+		player->Update(delta_time);
 	}
-	
-	if (KeyStates['w'] || KeyStates['W']) player->Move(glm::vec2(0, 0.3), delta_time);
-	if (KeyStates['s'] || KeyStates['S']) player->Move(glm::vec2(0, -0.3), delta_time);
-	if (KeyStates['a'] || KeyStates['A']) player->Move(glm::vec2(-0.3, 0), delta_time);
-	if (KeyStates['d'] || KeyStates['D']) player->Move(glm::vec2(0.3, 0), delta_time);
-	
-	player->Update(delta_time);
+	if ((KeyStates['r'] || KeyStates['R']) && !game) Restart();
+}
+
+bool Scene::CheckVictoryCondition(void)
+{
+	for (unsigned int i = 0; i<zombies.size(); ++i)
+	{
+		if (GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) < 2)
+		{
+			this->game = false;
+			PrintResult();
+		}
+	}
+
+	return game;
 }
 
 void Scene::Restart(void){
@@ -146,11 +151,6 @@ void Scene::PlayerShoot(glm::vec2 aim)
 void Scene::ZombieTarget(glm::vec2 target)
 {
 	//test_zombie->MousePoint(target);
-}
-
-void Scene::Key(unsigned char key)
-{
-	if((KeyStates['r'] || KeyStates['R']) && !game) Restart();
 }
 
 void Scene::KeyState(unsigned char key, bool tf)

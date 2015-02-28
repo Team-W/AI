@@ -21,7 +21,6 @@ class Scene
 		void Update(double delta_time);
 		void Draw(void);
 		void Restart(void);
-		void Key(unsigned char key);
 		void KeyState(unsigned char key, bool tf);
 		void AddObject(GameEntity *entity);
 		void AddZombie(Zombie *entity);
