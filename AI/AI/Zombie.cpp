@@ -170,9 +170,11 @@ void Zombie::Draw()
 	//steering_behaviour->Draw();
 }
 
-void Zombie::gotHit(){
+void Zombie::gotHit()
+{
 	this->dead = true;
 	object_position = glm::vec2(2000, 2000);
+	scene->PrintPlayerData();
 }
 
 void Zombie::Group()
