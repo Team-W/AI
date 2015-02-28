@@ -35,6 +35,7 @@ class GameEntity
 		glm::vec2 object_side;
 
         float collision_radius;
+		friend class PowerUp;
 };
 
 inline int GameEntity::GetObjectID(void) const

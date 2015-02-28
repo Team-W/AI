@@ -15,6 +15,8 @@ Player::Player(Scene *s, float x, float y)
 	this->mouse->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
 	this->shooting_pos = object_position;
 	this->shooting_target = object_position;
+
+	Reset();
 }
 
 
@@ -106,7 +108,7 @@ void Player::Rotate(glm::vec2 heading)
 
 void Player::Shoot(glm::vec2 fire)
 {
-	if (!CDrail){
+	if (!CDrail && rail_ammo){
 		color = glm::vec3(1, 1, 1);
 		CDrail = true;
 		RailPhysics();
@@ -161,6 +163,7 @@ void Player::RailPhysics(){
 		target += this->GetObjectPosition();
 		if (GetDistance(zombie->GetObjectPosition(), target) < zombie->GetCollisionRadius() && GetDistance(zombie->GetObjectPosition(), this->GetObjectPosition())<distance){
 			zombie->gotHit();
+			++score;
 		}
 	}
 	

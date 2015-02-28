@@ -32,6 +32,7 @@ class Scene
 		void PlayerShoot(glm::vec2 aim);
 		void ZombieTarget(glm::vec2 target);
 		bool CheckVictoryCondition(void);
+		void PrintResult();
 		
 		void GroupZombies(void);
 
@@ -67,5 +68,7 @@ inline const glm::mat4& Scene::GetViewMatrix(void) const
 {
 	return view_matrix;
 }
+
+
 
 #endif
