@@ -99,6 +99,7 @@ void Scene::Update(double delta_time)
 		player->Update(delta_time);
 	}
 	if ((KeyStates['r'] || KeyStates['R']) && !game) Restart();
+	if (KeyStates[27]) exit(0); //ESC key quits the game
 }
 
 bool Scene::CheckVictoryCondition(void)

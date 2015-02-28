@@ -56,9 +56,6 @@ void MouseClick(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {		
 		scene.PlayerShoot(glm::vec2(a, b));
 	}
-	if (button == GLUT_RIGHT_BUTTON && state == GLUT_DOWN) {
-		scene.ZombieTarget(glm::vec2(a, b));
-	}
 }
 
 void MouseClicked(int x, int y) {
