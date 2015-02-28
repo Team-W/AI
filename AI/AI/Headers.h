@@ -12,6 +12,7 @@
 
 #define MIN_DETECTION_BOX_LENGTH 3.0f
 #define PLAYER_SPEED 100.0f
+#define RAIL_TIMER 0.033f
 
 
 // Standard Libraries
