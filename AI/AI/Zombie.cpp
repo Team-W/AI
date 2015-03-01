@@ -11,7 +11,9 @@ Zombie::Zombie(Scene *s)
 	this->aggressive = false;
 	this->dead = false;
 	this->respawn_timer = ZOMBIE_RESPAWN_TIMER;
-	srand(time(NULL));
+	this->texture[0] = SOIL_load_OGL_texture("images/zombie.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y); // ../images/zombie.png - error, but this is correct address of img
+
+	srand((int)time(NULL));
 	RandomPosition();
 }
 
@@ -37,9 +39,7 @@ void Zombie::Update(double delta_time)
 	detection_box_length *= MIN_DETECTION_BOX_LENGTH;
 	detection_box_length += MIN_DETECTION_BOX_LENGTH;
 
-	//object_velocity += steering_behaviour->CalculateSeek(target_position)*glm::vec2(delta_time, delta_time);
 	object_velocity += steering_behaviour->CalculateSteeringForce() * glm::vec2(delta_time, delta_time);
-	//SetLength(object_velocity, ZOMBIE_MAX_SPEED);
 	Truncate(object_velocity, ZOMBIE_MAX_SPEED);
 
 	GameEntity *object = 0;
@@ -130,7 +130,6 @@ void Zombie::MousePoint(glm::vec2 target){
 
 void Zombie::Draw()
 {
-	float a, b;
 	glEnable(GL_LINE_SMOOTH);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
@@ -139,35 +138,16 @@ void Zombie::Draw()
 		MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
 		glLoadMatrixf(Matrix);
 
-		glBegin(GL_TRIANGLES);
-			glColor3f(0.0f, 0.0f, 1.0f);
-			glVertex3f(-0.50f, -0.60f, 0.f);
-			glVertex3f(0.50f, -0.60f, 0.f);
-			glVertex3f(0.00f, 0.75f, 0.f);
-		glEnd();
-
-		glBegin(GL_LINES);
+		glBindTexture(GL_TEXTURE_2D, this->texture[0]);
+		glBegin(GL_QUADS);	
 			glColor3f(color.x, color.y, color.z);
-
-			a = 1.0f * (float)cos(359 * PI / 180.0f);
-			b = 1.0f * (float)sin(359 * PI / 180.0f);
-			for (int j = 0; j < 360; j++)
-			{
-				glVertex2f(a, b);
-				a = 1.0f * (float)cos(j * PI / 180.0f);
-				b = 1.0f * (float)sin(j * PI / 180.0f);
-				glVertex2f(a, b);
-			}
+			glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.50f, -0.60f, 0.f); 
+			glTexCoord2f(1.0f, 0.0f); glVertex3f(0.50f, -0.60f, 0.f); 
+			glTexCoord2f(0.0f, 0.0f); glVertex3f(0.50f, 0.75f, 0.f); 
+			glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.50f, 0.75f, 0.f); 
 		glEnd();
-		//obstacle_avoidance.DrawRectngle();
 	glPopMatrix();
 	glDisable(GL_LINE_SMOOTH);
-
-	//heading_vector.DrawLine();
-	//target_point.DrawPoint();
-	
-	
-	//steering_behaviour->Draw();
 }
 
 void Zombie::gotHit(){
@@ -181,7 +161,7 @@ void Zombie::Group()
 
 	int group = 0;
 
-	for(int j=0; j<scene->zombies.size(); ++j)
+	for(unsigned int j=0; j<scene->zombies.size(); ++j)
 	{
 		if(GetDistance(object_position, scene->zombies[j]->GetObjectPosition()) < radius)
 		{

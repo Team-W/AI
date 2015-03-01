@@ -24,7 +24,7 @@ Scene::~Scene(void)
 {
 	if (player != 0) delete player;
 	//if (test_zombie != 0) delete test_zombie;
-	for (int i = 0; i < objects.size(); i++){
+	for (unsigned int i = 0; i < objects.size(); i++){
 		if (objects[i] != 0) delete objects[i];
 	}
 
@@ -41,7 +41,7 @@ void RenderBitmapString(float x, float y, char *string)
 {
 	char *c;
 	glColor3f(1, 0, 0);
-	glRasterPos3f(x, y, -0.1);
+	glRasterPos3f(x, y, -0.1f);
 	for(c=string; *c != '\0'; c++)
 	{
 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, *c);

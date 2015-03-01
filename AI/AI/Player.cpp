@@ -15,6 +15,7 @@ Player::Player(Scene *s, float x, float y)
 	this->mouse->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
 	this->shooting_pos = object_position;
 	this->shooting_target = object_position;
+	this->texture[0] = SOIL_load_OGL_texture("images/cat.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y); // ../images/cat.png
 
 	Reset();
 }
@@ -180,6 +181,17 @@ void Player::Draw()
 	GLfloat Matrix[16];
 	MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
 	glLoadMatrixf(Matrix);
+	glBindTexture(GL_TEXTURE_2D, this->texture[0]);
+	
+	glBegin(GL_QUADS);
+		glColor3f(color.x, color.y, color.z);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.50f, -0.60f, 0.f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(0.50f, -0.60f, 0.f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(0.50f, 0.75f, 0.f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.50f, 0.75f, 0.f);
+	glEnd();
+
+
 
 	glBegin(GL_TRIANGLES);
 		glColor3f(0.0f, 1.0f, 1.0f);
@@ -203,4 +215,5 @@ void Player::Draw()
 	glEnd();
 	glPopMatrix();
 	glDisable(GL_LINE_SMOOTH);
+
 }

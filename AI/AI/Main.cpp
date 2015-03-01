@@ -1,7 +1,7 @@
 #include "Headers.h"
 #include "Scene.h"
 
-Scene scene;
+Scene scene;	
 
 void RenderScene(void)
 {
@@ -71,6 +71,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(700, 700);
 	glMatrixMode(GL_MODELVIEW);
 	glutCreateWindow("Basic AI");
+	
+	glEnable(GL_TEXTURE_2D);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);
