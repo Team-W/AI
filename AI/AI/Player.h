@@ -32,6 +32,7 @@ public:
 	void RandomPosition();
 	void RandomPoint();
 	string GetPlayerData();
+	void UpgradeWeapon(Player::WEAPON_TYPE type);
 
 private:
 	GraphicDebug *mouse;
@@ -39,6 +40,7 @@ private:
 	glm::vec3 color;
 	glm::vec2 shooting_pos;
 	glm::vec2 shooting_target;
+	float machine_timer;
 	double speed;
 	bool CDrail;
 	bool CDmachine;
@@ -49,6 +51,8 @@ private:
 	int machine_ammo;
 	int lifes;
 	int cash;
+	int rail_lvl;
+	int machine_lvl;
 
 	friend class Scene;
 	friend class PowerUp;
@@ -60,10 +64,12 @@ inline void Player::Reset()
 	object_position = glm::vec2(0, 0);
 	immortality_duration = 0.0f;
 	score = 0;
-	rail_ammo = 1000;
-	machine_ammo = 2000;
-	lifes = 3000;
+	rail_ammo = PLAYER_STARTING_RAIL_AMMO;
+	machine_ammo = PLAYER_STARTING_MACHINE_AMMO;
+	lifes = PLAYER_STARTING_LIFES;
 	cash = 0;
+	rail_lvl = 1;
+	machine_lvl = 1;
 }
 
 inline string Player::GetPlayerData()

@@ -163,11 +163,10 @@ void Player::Shoot(glm::vec2 fire)
 		--rail_ammo;
 		scene->PrintPlayerData();
 	}
-
-	if(current_weapon == MACHINE && !CDmachine && machine_ammo)
+	else if(current_weapon == MACHINE && !CDmachine && machine_ammo)
 	{
 		scene->bbo->AddBullet(object_position, object_heading);
-		//CDmachine = true;
+		CDmachine = true;
 		--machine_ammo;
 		scene->PrintPlayerData();
 	}
@@ -180,8 +179,8 @@ void Player::Update(double delta_time)
 	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
 	model_matrix = glm::rotate(model_matrix, GetAngle(glm::vec2(0, 1), object_heading), glm::vec3(0, 0, 1));
 	
-	if (color.x - RAIL_TIMER > 0.0){
-		color -= RAIL_TIMER;
+	if (color.x - (RAIL_TIMER * rail_lvl) > 0.0){
+		color -= (RAIL_TIMER * rail_lvl);
 	}else{
 		color *= 0;
 		CDrail = false;
@@ -189,6 +188,16 @@ void Player::Update(double delta_time)
 		shooting_target = object_heading;
 		shooting_target *= 1000;
 		shooting_target += this->GetObjectPosition();	
+	}
+
+	if(machine_timer - (MACHINE_TIMER * machine_lvl) > 0.0)
+	{
+		machine_timer -= (MACHINE_TIMER * machine_lvl);
+	}
+	else
+	{
+		CDmachine = false;
+		machine_timer = 1.0f;
 	}
 
 	this->rail->UpdateLine(shooting_pos, shooting_target, color);
@@ -325,4 +334,18 @@ void Player::RandomPoint()
 	int sign2 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
 	this->object_position = glm::vec2(sign1 * (float)(rand() % 320) / 10, sign2 * (float)(rand() % 320) / 10);
 
+}
+
+void Player::UpgradeWeapon(Player::WEAPON_TYPE type)
+{
+	if(type == RAIL && rail_lvl != WEAPON_MAX_UPGRADE && cash >= rail_lvl * 100)
+	{
+		cash -= rail_lvl * 100;
+		++rail_lvl;
+	}
+	else if(type == MACHINE && machine_lvl != WEAPON_MAX_UPGRADE && cash >= machine_lvl * 100)
+	{
+		cash -= machine_lvl * 100;
+		++machine_lvl;
+	}
 }

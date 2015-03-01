@@ -54,18 +54,7 @@ void Scene::PrintResult()
 
 void Scene::PrintPlayerData()
 {
-	//system("cls");
 
-	cout << "---------- PLAYER ----------" << "\n";
-	cout << "Lifes: " << player->lifes << "\n";
-	cout << "Score: " << player->score << "\n";
-	cout << "Cash:  " << player->cash << "\n";
-	cout << "Railgun ammo: " << player->rail_ammo << "\n";
-	cout << "Machine ammo: " << player->machine_ammo << "\n";
-	cout << "Current weapon: " << (player->current_weapon == Player::WEAPON_TYPE::RAIL ? "Railgun" : "Machine gun") << "\n\n";
-	cout << "Press [q] to switch weapon." << "\n";
-
-	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 string Scene::GetPlayerData()
 {
@@ -135,13 +124,65 @@ void Scene::Restart(void){
 	PrintPlayerData();
 }
 
+string NumberWithSpaces(int n, int m)
+{
+	stringstream ss;
+	ss << n;
+
+	string s = ss.str();
+
+	while(s.size() < m)
+		s = " " + s;
+
+	return s;
+}
+
 void Scene::Draw(void)
 {
-	glRasterPos2f(-0.95f, -0.95f);
+	string rail_info = (player->current_weapon == Player::WEAPON_TYPE::RAIL ? "-> " : "   ");
+	rail_info += "Railgun     [" + NumberWithSpaces(player->rail_lvl, 1) +  "] [" + NumberWithSpaces(player->rail_ammo, 4) + "]";
 
-	string s = GetPlayerData();
+	if(player->current_weapon == Player::WEAPON_TYPE::RAIL)
+		glColor3f(1.0f, 1.0f, 1.0f);
+	else
+		glColor3f(0.2f, 0.2f, 1.0f);
+	glRasterPos2f(0.35f, -0.94f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)rail_info.c_str());
 
-	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)s.c_str());
+	string machine_info = (player->current_weapon == Player::WEAPON_TYPE::MACHINE ? "-> " : "   ");
+	machine_info += "Machine gun [" + NumberWithSpaces(player->machine_lvl, 1) +  "] [" + NumberWithSpaces(player->machine_ammo, 4) + "]";
+
+	if(player->current_weapon == Player::WEAPON_TYPE::MACHINE)
+		glColor3f(1.0f, 1.0f, 1.0f);
+	else
+		glColor3f(0.2f, 0.2f, 1.0f);
+	glRasterPos2f(0.35f, -0.98f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)machine_info.c_str());
+
+	string lifes_info = "Lifes: " + NumberWithSpaces(player->lifes, 3);
+	glColor3f(1.0f, 0.1f, 0.1f);
+	glRasterPos2f(-0.99f, -0.90f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)lifes_info.c_str());
+
+	string score_info = "Score: " + NumberWithSpaces(player->score, 3);
+	glColor3f(0.3f, 0.8f, 0.8f);
+	glRasterPos2f(-0.99f, -0.94f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)score_info.c_str());
+
+	string cash_info = "Cash:  " + NumberWithSpaces(player->cash, 3);
+	glColor3f(0.2f, 1.0f, 0.2f);
+	glRasterPos2f(-0.99f, -0.98f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)cash_info.c_str());
+
+	string info = "Press [q] to switch weapon";
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glRasterPos2f(0.30f, 0.96f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
+
+	info = "Press [e] to upgrade weapon";
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glRasterPos2f(0.30f, 0.92f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
 
 	player->Draw();
 	bbo->Draw();
@@ -174,6 +215,13 @@ void Scene::KeyState(unsigned char key, bool tf)
 			player->current_weapon = Player::WEAPON_TYPE::RAIL;
 
 		PrintPlayerData();
+	}
+	else if(key == 'e' && tf)
+	{
+		if(player->current_weapon == Player::WEAPON_TYPE::MACHINE)
+			player->UpgradeWeapon(Player::WEAPON_TYPE::MACHINE);
+		else
+			player->UpgradeWeapon(Player::WEAPON_TYPE::RAIL);
 	}
 }
 
