@@ -129,6 +129,12 @@ void Scene::Restart(void){
 
 void Scene::Draw(void)
 {
+	glRasterPos2f(-0.95, -0.95);
+
+	string s = GetPlayerData();
+
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)s.c_str());
+
 	player->Draw();
 	bbo->Draw();
 	for(unsigned int i = 0; i < objects.size(); i++)

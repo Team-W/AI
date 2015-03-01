@@ -9,11 +9,6 @@ void RenderScene(void)
 	glLoadIdentity();
 
 	// building display
-	glRasterPos2i(-1, -1);
-
-	string s = scene.GetPlayerData();
-
-	//glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)s[0]);
 
 	glPushMatrix();
 		scene.Draw();
