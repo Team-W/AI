@@ -129,9 +129,6 @@ void Zombie::MousePoint(glm::vec2 target){
 
 void Zombie::Draw()
 {
-	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-	float a, b; 
 	glPushMatrix();
 		GLfloat Matrix[16];
 		MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
@@ -140,29 +137,14 @@ void Zombie::Draw()
 		glBindTexture(GL_TEXTURE_2D, this->texture);
 		glBegin(GL_QUADS);	
 			glColor3f(1, 1, 1);
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.50f, -0.60f, 0.f); 
-			glTexCoord2f(0.0f, 1.0f); glVertex3f(0.50f, -0.60f, 0.f); 
-			glTexCoord2f(1.0f, 1.0f); glVertex3f(0.50f, 0.75f, 0.f); 
-			glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.50f, 0.75f, 0.f); 
+			glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 0.f);
+			glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, -1.0f, 0.f);
+			glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.f);
+			glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 0.f);
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
-		glBegin(GL_LINES);
-			glColor3f(color.x, color.y, color.z);
-			a = 1.0f * (float)cos(359 * PI / 180.0f);
-			b = 1.0f * (float)sin(359 * PI / 180.0f);
-			for (int j = 0; j < 360; j++)
-			{
-				glVertex2f(a, b);
-				a = 1.0f * (float)cos(j * PI / 180.0f);
-				b = 1.0f * (float)sin(j * PI / 180.0f);
-				glVertex2f(a, b);
-			}
-		glEnd();
-
-
 
 	glPopMatrix();
-	glDisable(GL_LINE_SMOOTH);
 }
 
 void Zombie::gotHit()
