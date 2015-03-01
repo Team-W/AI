@@ -11,7 +11,6 @@ Zombie::Zombie(Scene *s)
 	this->aggressive = false;
 	this->dead = false;
 	this->respawn_timer = ZOMBIE_RESPAWN_TIMER;
-	this->texture[0] = SOIL_load_OGL_texture("images/zombie.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y); // ../images/zombie.png - error, but this is correct address of img
 
 	srand((int)time(NULL));
 	RandomPosition();
@@ -132,20 +131,37 @@ void Zombie::Draw()
 {
 	glEnable(GL_LINE_SMOOTH);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-
+	float a, b; 
 	glPushMatrix();
 		GLfloat Matrix[16];
 		MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
 		glLoadMatrixf(Matrix);
-
+		glEnable(GL_TEXTURE_2D);
+		this->texture[0] = SOIL_load_OGL_texture("../images/zombie.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 		glBindTexture(GL_TEXTURE_2D, this->texture[0]);
 		glBegin(GL_QUADS);	
-			glColor3f(color.x, color.y, color.z);
-			glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.50f, -0.60f, 0.f); 
-			glTexCoord2f(1.0f, 0.0f); glVertex3f(0.50f, -0.60f, 0.f); 
-			glTexCoord2f(0.0f, 0.0f); glVertex3f(0.50f, 0.75f, 0.f); 
-			glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.50f, 0.75f, 0.f); 
+			glColor3f(1, 1, 1);
+			glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.50f, -0.60f, 0.f); 
+			glTexCoord2f(0.0f, 1.0f); glVertex3f(0.50f, -0.60f, 0.f); 
+			glTexCoord2f(1.0f, 1.0f); glVertex3f(0.50f, 0.75f, 0.f); 
+			glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.50f, 0.75f, 0.f); 
 		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_LINES);
+			glColor3f(color.x, color.y, color.z);
+			a = 1.0f * (float)cos(359 * PI / 180.0f);
+			b = 1.0f * (float)sin(359 * PI / 180.0f);
+			for (int j = 0; j < 360; j++)
+			{
+				glVertex2f(a, b);
+				a = 1.0f * (float)cos(j * PI / 180.0f);
+				b = 1.0f * (float)sin(j * PI / 180.0f);
+				glVertex2f(a, b);
+			}
+		glEnd();
+
+
+
 	glPopMatrix();
 	glDisable(GL_LINE_SMOOTH);
 }
