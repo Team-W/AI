@@ -135,6 +135,13 @@ string NumberWithSpaces(int n, int m)
 
 void Scene::Draw(void)
 {
+	player->Draw();
+	bbo->Draw();
+	for(unsigned int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Draw();
+	}
+	
 	string rail_info = (player->current_weapon == Player::WEAPON_TYPE::RAIL ? "-> " : "   ");
 	rail_info += "Railgun     [" + NumberWithSpaces(player->rail_lvl, 1) +  "] [" + NumberWithSpaces(player->rail_ammo, 4) + "]";
 
@@ -179,13 +186,6 @@ void Scene::Draw(void)
 	glColor3f(0.5f, 0.5f, 0.5f);
 	glRasterPos2f(0.30f, 0.92f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
-
-	player->Draw();
-	bbo->Draw();
-	for(unsigned int i = 0; i < objects.size(); i++)
-	{
-		objects[i]->Draw();
-	}
 }
 
 void Scene::PlayerRotate(glm::vec2 heading)
