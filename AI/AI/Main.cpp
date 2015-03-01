@@ -1,13 +1,16 @@
 #include "Headers.h"
 #include "Scene.h"
 
-Scene scene;
+Scene scene;	
 
 void RenderScene(void)
 {
 	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+
+	glRasterPos2i(0, 0);
+	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)"kurwa");
 
 	glPushMatrix();
 		scene.Draw();
@@ -71,6 +74,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(700, 700);
 	glMatrixMode(GL_MODELVIEW);
 	glutCreateWindow("Basic AI");
+	
+	glEnable(GL_TEXTURE_2D);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

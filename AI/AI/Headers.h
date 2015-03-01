@@ -33,10 +33,13 @@
 
 // Graphic Libraries
 #include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
 #include < GL/freeglut.h>
+
+#include <SOIL.h>
 
 // Misc
 using namespace std;

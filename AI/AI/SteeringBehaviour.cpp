@@ -275,7 +275,7 @@ glm::vec2 SteeringBehaviour::CalculateHide(void)
 	float distance;
 	bool b = false;
 
-	for(int i=0; i<scene->obstacles.size(); ++i)
+	for(unsigned int i=0; i<scene->obstacles.size(); ++i)
 	{
 		direction = scene->player->GetObjectPosition() - owner->GetObjectPosition();
 		Normalize(direction);
@@ -299,7 +299,7 @@ glm::vec2 SteeringBehaviour::CalculateHide(void)
 	glm::vec2 best_spot;
 	int best_index = -1;
 
-	for(int i=0; i<scene->obstacles.size(); ++i)
+	for(unsigned int i=0; i<scene->obstacles.size(); ++i)
 	{
 		glm::vec2 hide_spot = CalculateHidingSpot(scene->player->GetObjectPosition(), scene->obstacles[i]->GetObjectPosition(), scene->obstacles[i]->GetCollisionRadius());
 
