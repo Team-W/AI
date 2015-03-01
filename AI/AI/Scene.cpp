@@ -18,9 +18,9 @@ Scene::Scene(void)
 	AddObstacle(new Obstacle(this, 12.0, -6.0, 5.00));
 	AddObstacle(new Obstacle(this, -16.0, 15.0, 6.00));
 
-	for (unsigned int i = 0; i < 10; ++i) AddZombie(new Zombie(this));
+	for (unsigned int i = 0; i < ZOMBIE_AMOUNT; ++i) AddZombie(new Zombie(this));
 
-	for (unsigned int i = 0; i < 5; ++i) AddPowerUp(new PowerUp(this));
+	for (unsigned int i = 0; i < POWERUP_AMOUNT; ++i) AddPowerUp(new PowerUp(this));
 
 	PrintPlayerData();
 
