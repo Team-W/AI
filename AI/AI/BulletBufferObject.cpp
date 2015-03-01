@@ -27,8 +27,6 @@ BulletBufferObject::~BulletBufferObject()
 
 void BulletBufferObject::AddBullet(const glm::vec2 &position, const glm::vec2 &heading)
 {
-	cout << "Added: " << position << heading << endl;
-
 	bullet_position[current_index] = position;
 	bullet_velocity[current_index] = heading;
 	bullet_angle[current_index] = GetAngle(glm::vec2(0, 1), heading);

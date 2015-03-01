@@ -42,10 +42,7 @@ void Scene::Init(GLuint *texture){
 
 void Scene::PrintResult()
 {
-	system("cls");
-	cout << "---------- RESULT ----------" << endl;
-	cout << "Score: " << player->score << endl << endl;
-	cout << "Type [R] to restart game" << endl << endl;
+
 }
 
 void Scene::PrintPlayerData()
@@ -142,10 +139,16 @@ void Scene::Draw(void)
 		objects[i]->Draw();
 	}
 	
-	if (!game){
+	if (!game)
+	{
 		string game_info = "GAME OVER";
 		glColor3f(1.0f, 0.2f, 0.2f);
-		glRasterPos2f(-0.25f, 0.0f);
+		glRasterPos2f(-0.25f, 0.05f);
+		glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)game_info.c_str());
+
+		game_info = "Press [r] to restart";
+		glColor3f(1.0f, 0.2f, 0.2f);
+		glRasterPos2f(-0.30f, -0.05f);
 		glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)game_info.c_str());
 	}
 
