@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 
 	texture[0] = SOIL_load_OGL_texture("../images/cat.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	texture[1] = SOIL_load_OGL_texture("../images/zombie.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-	//texture[2] = SOIL_load_OGL_texture("../images/obstacle.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[2] = SOIL_load_OGL_texture("../images/obstacle.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 
 	scene.Init(texture);
 
