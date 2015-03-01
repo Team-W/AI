@@ -22,6 +22,8 @@ class Scene
 		Scene(void);
 		~Scene(void);
 
+		void Init(GLuint *texture);
+
 		void Update(double delta_time);
 		void Draw(void);
 		void Restart(void);
@@ -51,7 +53,7 @@ class Scene
 		bool game;
 
 		int score;
-
+		GLuint *texture;
 		// TEST OBJECTS
 		Zombie *test_zombie;
 		// ~TEST OBJECTS

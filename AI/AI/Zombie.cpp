@@ -1,6 +1,6 @@
 #include "Zombie.h"
 
-Zombie::Zombie(Scene *s)
+Zombie::Zombie(Scene *s, GLuint texture)
 {
 	this->scene = s;
 	this->steering_behaviour = new SteeringBehaviour(this, scene);
@@ -11,7 +11,7 @@ Zombie::Zombie(Scene *s)
 	this->aggressive = false;
 	this->dead = false;
 	this->respawn_timer = ZOMBIE_RESPAWN_TIMER;
-
+	this->texture = texture;
 	srand((int)time(NULL));
 	RandomPosition();
 }
@@ -137,8 +137,7 @@ void Zombie::Draw()
 		MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
 		glLoadMatrixf(Matrix);
 		glEnable(GL_TEXTURE_2D);
-		this->texture[0] = SOIL_load_OGL_texture("../images/zombie.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-		glBindTexture(GL_TEXTURE_2D, this->texture[0]);
+		glBindTexture(GL_TEXTURE_2D, this->texture);
 		glBegin(GL_QUADS);	
 			glColor3f(1, 1, 1);
 			glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.50f, -0.60f, 0.f); 

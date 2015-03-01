@@ -143,7 +143,7 @@ void PowerUp::Update(double delta_time)
 	if(spawned) return;
 
 	if(spawn_timer > 0)
-		(float)spawn_timer -= delta_time;
+		spawn_timer -= delta_time;
 	else
 		Respawn();
 }

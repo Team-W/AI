@@ -1,7 +1,8 @@
 #include "Headers.h"
 #include "Scene.h"
 
-Scene scene;	
+GLuint texture[3];
+Scene scene;
 
 void RenderScene(void)
 {
@@ -72,6 +73,12 @@ int main(int argc, char **argv)
 	glutInitWindowSize(700, 700);
 	glMatrixMode(GL_MODELVIEW);
 	glutCreateWindow("Basic AI");
+
+
+	texture[0] = SOIL_load_OGL_texture("../images/cat.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[1] = SOIL_load_OGL_texture("../images/zombie.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+
+	scene.Init(texture);
 
 	glutDisplayFunc(RenderScene);
 	glutIdleFunc(Idle);

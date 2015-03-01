@@ -1,7 +1,7 @@
 #include "Player.h"
 
 
-Player::Player(Scene *s, float x, float y)
+Player::Player(Scene *s, GLuint texture, float x, float y)
 {
 	this->scene = s;
 	this->object_position = glm::vec2(x, y);
@@ -16,7 +16,7 @@ Player::Player(Scene *s, float x, float y)
 	this->mouse->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
 	this->shooting_pos = object_position;
 	this->shooting_target = object_position;
-
+	this->texture = texture;
 	current_weapon = MACHINE;
 
 	Reset();
@@ -194,7 +194,7 @@ void Player::Update(double delta_time)
 	this->rail->UpdateLine(shooting_pos, shooting_target, color);
 
 	if(immortality_duration > 0)
-		immortality_duration -= delta_time;
+		(float)immortality_duration -= (float)delta_time;
 }
 
 void Player::RailPhysics(){
@@ -242,8 +242,7 @@ void Player::Draw()
 	MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
 	glLoadMatrixf(Matrix);
 	glEnable(GL_TEXTURE_2D);
-	this->texture[0] = SOIL_load_OGL_texture("../images/cat.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-	glBindTexture(GL_TEXTURE_2D, this->texture[0]);
+	glBindTexture(GL_TEXTURE_2D, this->texture);
 	
 	glBegin(GL_QUADS);
 		glColor3f(1, 1, 1);

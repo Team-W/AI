@@ -18,7 +18,7 @@ public:
 		MACHINE
 	} current_weapon;
 
-	Player(Scene *s, float x, float y);
+	Player(Scene *s, GLuint texture, float x, float y);
 	~Player();
 
 	void Update(double delta_time);

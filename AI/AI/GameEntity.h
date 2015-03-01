@@ -28,7 +28,7 @@ class GameEntity
         const int object_id;
 		Scene *scene;
 
-		GLuint texture[1];
+		GLuint texture;
 		glm::mat4 model_matrix;
 		glm::vec2 object_scale;
 		glm::vec2 object_position;
