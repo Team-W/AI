@@ -153,7 +153,7 @@ void Scene::Draw(void)
 		glRasterPos2f(-0.25f, 0.05f);
 		glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)game_info.c_str());
 
-		game_info = "Press [r] to restart";
+		game_info = "Press [R] to restart";
 		glColor3f(1.0f, 0.2f, 0.2f);
 		glRasterPos2f(-0.30f, -0.05f);
 		glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)game_info.c_str());
@@ -180,7 +180,7 @@ void Scene::Draw(void)
 	glRasterPos2f(0.35f, -0.98f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)machine_info.c_str());
 
-	string lifes_info = "Lifes: " + NumberWithSpaces(player->lifes, 3);
+	string lifes_info = "Lives: " + NumberWithSpaces(player->lifes+1, 3);
 	glColor3f(1.0f, 0.1f, 0.1f);
 	glRasterPos2f(-0.99f, -0.90f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)lifes_info.c_str());
@@ -200,12 +200,12 @@ void Scene::Draw(void)
 	glRasterPos2f(-0.99f, 0.96f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
 
-	info = "Press [q] to switch weapon";
+	info = "Press [Q] to switch weapon";
 	glColor3f(0.5f, 0.5f, 0.5f);
 	glRasterPos2f(0.30f, 0.96f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
 
-	info = "Press [e] to upgrade weapon";
+	info = "Press [E] to upgrade weapon";
 	glColor3f(0.5f, 0.5f, 0.5f);
 	glRasterPos2f(0.30f, 0.92f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
