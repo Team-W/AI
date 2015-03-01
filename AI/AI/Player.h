@@ -21,6 +21,9 @@ public:
 	void Move(glm::vec2 move, double delta_time);
 	void Rotate(glm::vec2 heading); // heading = mouse pos
 	void Reset();
+	void Respawn();
+	void RandomPosition();
+	void RandomPoint();
 
 	
 
@@ -33,9 +36,12 @@ private:
 	double speed;
 	bool CDrail;
 
-	bool immortal;
+	float immortality_duration;
 	int score;
 	int rail_ammo;
+	int machine_ammo;
+	int lifes;
+	int cash;
 
 	friend class Scene;
 	friend class PowerUp;
@@ -44,7 +50,10 @@ private:
 inline void Player::Reset()
 {
 	object_position = glm::vec2(0, 0);
-	immortal = false;
+	immortality_duration = 0.0f;
 	score = 0;
 	rail_ammo = 10;
+	machine_ammo = 0;
+	lifes = 3;
+	cash = 0;
 }

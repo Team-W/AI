@@ -6,11 +6,13 @@
 #include "Zombie.h"
 #include "Obstacle.h"
 #include "Player.h"
+#include "PowerUp.h"
 
 class GameEntity;
 class Zombie;
 class Player;
 class Obstacle;
+class PowerUp;
 
 class Scene
 {
@@ -25,12 +27,14 @@ class Scene
 		void AddObject(GameEntity *entity);
 		void AddZombie(Zombie *entity);
 		void AddObstacle(Obstacle *entity);
+		void AddPowerUp(PowerUp *powerup);
 		
 		void PlayerRotate(glm::vec2 heading);
 		void PlayerMove(glm::vec2 move, double delta_time);
 		void PlayerShoot(glm::vec2 aim);
 			
 		void PrintResult();
+		void PrintPlayerData();
 
 		bool CheckVictoryCondition(void);
 
@@ -52,11 +56,13 @@ class Scene
 
 		vector<Zombie*> zombies;
 		vector<Obstacle*> obstacles;
+		vector<PowerUp*> powerups;
 		vector<GameEntity*> objects;
 
 		friend class Player;
 		friend class Zombie;
 		friend class SteeringBehaviour;
+		friend class PowerUp;
 		friend ostream& operator<<(ostream &o, const Scene &scene);
 };
 

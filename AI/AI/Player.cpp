@@ -34,8 +34,6 @@ void Player::Move(glm::vec2 move, double delta_time)
 	bool collision = false;
 	move *= delta_time;
 
-	
-
 	for(unsigned int i=0; i<scene->obstacles.size(); ++i)
 	{
 		object = scene->obstacles[i];
@@ -95,6 +93,52 @@ void Player::Move(glm::vec2 move, double delta_time)
 	object_heading = mouse->getPosition() - object_position;
 	Normalize(object_heading);
 
+	PowerUp *powerup = 0;
+	for(unsigned int i = 0; i<scene->powerups.size(); ++i)
+	{
+		powerup = scene->powerups[i];
+
+		if(!powerup->spawned)
+			continue;
+
+		if(GetDistance(object_position, powerup->GetObjectPosition()) < 1.5f)
+		{
+			//cout << "You got " << powerup->debug_string << "!" << endl;
+
+			switch(powerup->type)
+			{
+				case PowerUp::LIFE:
+				{
+					lifes += powerup->value;
+					break;
+				}
+				case PowerUp::IMMORTALITY:
+				{
+					immortality_duration += powerup->value;
+					break;
+				}
+				case PowerUp::MACHINE_AMMO:
+				{
+					machine_ammo += powerup->value;
+					break;
+				}
+				case PowerUp::RAIL_AMMO:
+				{
+					rail_ammo += powerup->value;
+					break;
+				}
+				case PowerUp::CASH:
+				{
+					cash += powerup->value;
+					break;
+				}
+			}
+
+			powerup->Despawn();
+			scene->PrintPlayerData();
+		}
+	}
+
 }
 
 void Player::Rotate(glm::vec2 heading)
@@ -113,6 +157,8 @@ void Player::Shoot(glm::vec2 fire)
 		color = glm::vec3(1, 1, 1);
 		CDrail = true;
 		RailPhysics();
+		--rail_ammo;
+		scene->PrintPlayerData();
 	}
 	
 }
@@ -136,6 +182,9 @@ void Player::Update(double delta_time)
 	}
 
 	this->rail->UpdateLine(shooting_pos, shooting_target, color);
+
+	if(immortality_duration > 0)
+		immortality_duration -= delta_time;
 }
 
 void Player::RailPhysics(){
@@ -164,6 +213,7 @@ void Player::RailPhysics(){
 		target += this->GetObjectPosition();
 		if (GetDistance(zombie->GetObjectPosition(), target) < zombie->GetCollisionRadius() && GetDistance(zombie->GetObjectPosition(), this->GetObjectPosition())<distance){
 			zombie->gotHit();
+			cash += CASH_PER_ZOMBIE;
 			++score;
 		}
 	}
@@ -213,7 +263,63 @@ void Player::Draw()
 			glVertex2f(a, b);
 		}
 	glEnd();
-	glPopMatrix();
+
 	glDisable(GL_LINE_SMOOTH);
+
+	if(immortality_duration > 0)
+	{
+		glBegin(GL_LINES);
+			glColor3f(0.4f, 0.4f, 1.0f);
+
+			a = 1.3f * (float)cos(359 * PI / 180.0f);
+			b = 1.3f * (float)sin(359 * PI / 180.0f);
+			for(int j = 0; j < 360; j++)
+			{
+				glVertex2f(a, b);
+				a = 1.3f * (float)cos(j * PI / 180.0f);
+				b = 1.3f * (float)sin(j * PI / 180.0f);
+				glVertex2f(a, b);
+			}
+		glEnd();
+	}
+	
+	glPopMatrix();
+	
+}
+
+void Player::Respawn()
+{
+	RandomPoint();
+	--lifes;
+	scene->PrintPlayerData();
+}
+
+void Player::RandomPosition()
+{
+	RandomPoint();
+
+	unsigned int count = 0;
+	GameEntity *object = 0;
+
+	while(count < scene->objects.size())
+	{
+		object = scene->objects[count];
+
+		if(object->GetCollisionRadius() + 7 < GetDistance(object->GetObjectPosition(), this->object_position))
+		{
+			count = 0;
+			RandomPoint();
+			continue;
+		}
+
+		++count;
+	}
+}
+
+void Player::RandomPoint()
+{
+	int sign1 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
+	int sign2 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
+	this->object_position = glm::vec2(sign1 * (float)(rand() % 320) / 10, sign2 * (float)(rand() % 320) / 10);
 
 }

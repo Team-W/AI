@@ -12,8 +12,15 @@
 
 #define MIN_DETECTION_BOX_LENGTH 3.0f
 #define PLAYER_SPEED 100.0f
+#define CASH_PER_ZOMBIE 2
 #define RAIL_TIMER 0.033f
 
+#define POWERUP_RESPAWN_TIME 3.0f
+#define POWERUP_LIFE_VALUE 1
+#define POWERUP_IMMORTALITY_VALUE 1
+#define POWERUP_MACHINE_AMMO_VALUE 20
+#define POWERUP_RAIL_AMMO_VALUE 5
+#define POWERUP_CASH_VALUE 10
 
 // Standard Libraries
 #include <iostream>
@@ -21,6 +28,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <vector>
+#include <string>
 
 // Graphic Libraries
 #include <GL/glut.h>

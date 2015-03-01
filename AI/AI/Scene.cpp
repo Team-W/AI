@@ -18,6 +18,10 @@ Scene::Scene(void)
 
 	for (unsigned int i = 0; i < 10; ++i) AddZombie(new Zombie(this));
 
+	for (unsigned int i = 0; i < 5; ++i) AddPowerUp(new PowerUp(this));
+
+	PrintPlayerData();
+
 }
 
 Scene::~Scene(void)
@@ -32,9 +36,24 @@ Scene::~Scene(void)
 
 void Scene::PrintResult()
 {
+	system("cls");
 	cout << "---------- RESULT ----------" << endl;
 	cout << "Score: " << player->score << endl << endl;
 	cout << "Type [R] to restart game" << endl << endl;
+}
+
+void Scene::PrintPlayerData()
+{
+	//system("cls");
+
+	cout << "---------- PLAYER ----------" << "\n";
+	cout << "Lifes: " << player->lifes << "\n";
+	cout << "Score: " << player->score << "\n";
+	cout << "Cash:  " << player->cash << "\n";
+	cout << "Railgun ammo: " << player->rail_ammo << "\n";
+	cout << "Machine ammo: " << player->machine_ammo << "\n";
+
+	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
 void RenderBitmapString(float x, float y, char *string)
@@ -104,12 +123,22 @@ void Scene::Update(double delta_time)
 
 bool Scene::CheckVictoryCondition(void)
 {
+	if(player->immortality_duration > 0)
+		return game;
+
 	for (unsigned int i = 0; i<zombies.size(); ++i)
 	{
 		if (GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) < 2)
 		{
-			this->game = false;
-			PrintResult();
+			if(player->lifes > 0)
+			{
+				player->Respawn();
+			}
+			else
+			{
+				this->game = false;
+				PrintResult();
+			}
 		}
 	}
 
@@ -126,6 +155,10 @@ void Scene::Restart(void){
 	}
 	this->debug = false;
 	player->Reset();
+	for(unsigned int i = 0; i < powerups.size(); i++)
+	{
+		powerups[i]->Respawn();
+	}
 }
 
 void Scene::Draw(void)
@@ -165,6 +198,12 @@ void Scene::AddZombie(Zombie *entity)
 void Scene::AddObstacle(Obstacle *entity)
 {
 	obstacles.push_back(entity);
+	objects.push_back(entity);
+}
+
+void Scene::AddPowerUp(PowerUp *entity)
+{
+	powerups.push_back(entity);
 	objects.push_back(entity);
 }
 

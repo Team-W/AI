@@ -150,9 +150,11 @@ void Zombie::Draw()
 	glDisable(GL_LINE_SMOOTH);
 }
 
-void Zombie::gotHit(){
+void Zombie::gotHit()
+{
 	this->dead = true;
 	object_position = glm::vec2(2000, 2000);
+	scene->PrintPlayerData();
 }
 
 void Zombie::Group()
