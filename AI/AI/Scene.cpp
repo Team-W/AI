@@ -142,6 +142,14 @@ void Scene::Draw(void)
 		objects[i]->Draw();
 	}
 	
+	if (!game){
+		string game_info = "GAME OVER";
+		glColor3f(1.0f, 0.2f, 0.2f);
+		glRasterPos2f(-0.25f, 0.0f);
+		glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)game_info.c_str());
+	}
+
+
 	string rail_info = (player->current_weapon == Player::WEAPON_TYPE::RAIL ? "-> " : "   ");
 	rail_info += "Railgun     [" + NumberWithSpaces(player->rail_lvl, 1) +  "] [" + NumberWithSpaces(player->rail_ammo, 4) + "]";
 
@@ -179,7 +187,7 @@ void Scene::Draw(void)
 
 	string info = "Press [ESC] to quit";
 	glColor3f(0.5f, 0.5f, 0.5f);
-	glRasterPos2f(-0.95f, 0.96f);
+	glRasterPos2f(-0.99f, 0.96f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
 
 	info = "Press [q] to switch weapon";
