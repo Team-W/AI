@@ -38,6 +38,7 @@ class Scene
 		void PrintResult();
 		void PrintPlayerData();
 		void DisplayData();
+		string GetPlayerData();
 
 		bool CheckVictoryCondition(void);
 

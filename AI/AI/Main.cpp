@@ -5,12 +5,15 @@ Scene scene;
 
 void RenderScene(void)
 {
-	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
-	glRasterPos2i(0, 0);
-	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)"kurwa");
+	// building display
+	glRasterPos2i(-1, -1);
+
+	string s = scene.GetPlayerData();
+
+	//glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)s[0]);
 
 	glPushMatrix();
 		scene.Draw();

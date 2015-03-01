@@ -31,8 +31,7 @@ public:
 	void Respawn();
 	void RandomPosition();
 	void RandomPoint();
-
-	
+	string GetPlayerData();
 
 private:
 	GraphicDebug *mouse;
@@ -65,4 +64,13 @@ inline void Player::Reset()
 	machine_ammo = 2000;
 	lifes = 3000;
 	cash = 0;
+}
+
+inline string Player::GetPlayerData()
+{
+	stringstream ss;
+
+	ss << "Lifes: " << lifes << "    Curent weapon: " << (current_weapon == RAIL ? "railgun" : "machine gun") << "   Railgun[" << rail_ammo << "] Machine gun[" << machine_ammo << "]";
+
+	return ss.str();
 }
