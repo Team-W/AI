@@ -4,6 +4,8 @@ Scene::Scene(void)
 {
 	view_matrix = glm::lookAt(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 0.f, -1.f), glm::vec3(0.f, 1.f, 0.f));
 	memset(&KeyStates, 0, sizeof(KeyStates));
+	bbo = new BulletBufferObject(this, 50);
+
 	// Init Player
 	this->player = new Player(this, 0.0f, 0.0f);
 	this->debug = false;
@@ -52,8 +54,10 @@ void Scene::PrintPlayerData()
 	cout << "Cash:  " << player->cash << "\n";
 	cout << "Railgun ammo: " << player->rail_ammo << "\n";
 	cout << "Machine ammo: " << player->machine_ammo << "\n";
+	cout << "Current weapon: " << (player->current_weapon == Player::WEAPON_TYPE::RAIL ? "Railgun" : "Machine gun") << "\n\n";
+	cout << "Press [q] to switch weapon." << "\n";
 
-	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
+	cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n";
 }
 
 void RenderBitmapString(float x, float y, char *string)
@@ -103,8 +107,10 @@ void PrintText(char* string, int x, int y) {
 
 void Scene::Update(double delta_time)
 {
+	DisplayData();
 	if (this->game){
 		CheckVictoryCondition();
+		bbo->Update(delta_time);
 		for (unsigned int i = 0; i < objects.size(); i++)
 		{
 			objects[i]->Update(delta_time);
@@ -159,11 +165,13 @@ void Scene::Restart(void){
 	{
 		powerups[i]->Respawn();
 	}
+	PrintPlayerData();
 }
 
 void Scene::Draw(void)
 {
 	player->Draw();
+	bbo->Draw();
 	for(unsigned int i = 0; i < objects.size(); i++)
 	{
 		objects[i]->Draw();
@@ -184,6 +192,16 @@ void Scene::PlayerShoot(glm::vec2 aim)
 void Scene::KeyState(unsigned char key, bool tf)
 {
 	KeyStates[key] = tf;
+
+	if(key == 'q' && tf)
+	{
+		if(player->current_weapon == Player::WEAPON_TYPE::RAIL)
+			player->current_weapon = Player::WEAPON_TYPE::MACHINE;
+		else
+			player->current_weapon = Player::WEAPON_TYPE::RAIL;
+
+		PrintPlayerData();
+	}
 }
 
 void Scene::AddObject(GameEntity *entity)
@@ -213,4 +231,22 @@ ostream& operator<<(ostream &o, const Scene &gw)
 
 	o << "--------------------------------------" << endl;
 	return o;
+}
+
+void Scene::DisplayData()
+{
+	string str;
+	stringstream ss;
+
+	ss << "Lifes: " << player->lifes << endl;
+	str = "";
+	ss >> str;
+
+	//glRasterPos2i(0, 0);
+	//glColor3f(1, 0, 0);
+	//glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)"chuj");
+
+
+
+
 }

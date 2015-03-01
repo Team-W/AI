@@ -7,12 +7,14 @@
 #include "Obstacle.h"
 #include "Player.h"
 #include "PowerUp.h"
+#include "BulletBufferObject.h"
 
 class GameEntity;
 class Zombie;
 class Player;
 class Obstacle;
 class PowerUp;
+class BulletBufferObject;
 
 class Scene
 {
@@ -35,6 +37,7 @@ class Scene
 			
 		void PrintResult();
 		void PrintPlayerData();
+		void DisplayData();
 
 		bool CheckVictoryCondition(void);
 
@@ -59,10 +62,13 @@ class Scene
 		vector<PowerUp*> powerups;
 		vector<GameEntity*> objects;
 
+		BulletBufferObject *bbo;
+
 		friend class Player;
 		friend class Zombie;
 		friend class SteeringBehaviour;
 		friend class PowerUp;
+		friend class BulletBufferObject;
 		friend ostream& operator<<(ostream &o, const Scene &scene);
 };
 

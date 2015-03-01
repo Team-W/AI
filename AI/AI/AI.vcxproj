@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BulletBufferObject.h" />
     <ClInclude Include="GameEntity.h" />
     <ClInclude Include="GraphicDebug.h" />
     <ClInclude Include="Headers.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="Zombie.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BulletBufferObject.cpp" />
     <ClCompile Include="GameEntity.cpp" />
     <ClCompile Include="GraphicDebug.cpp" />
     <ClCompile Include="Main.cpp" />

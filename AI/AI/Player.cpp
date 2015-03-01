@@ -11,10 +11,13 @@ Player::Player(Scene *s, float x, float y)
 	this->mouse->InitPoint(glm::vec2(0, 0), 0.8, glm::vec3(0.9, 0.9, 0.9));
 	this->color = glm::vec3(0, 0, 0);
 	this->CDrail = false;
+	this->CDmachine = false;
 	this->rail = new GraphicDebug();
 	this->mouse->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
 	this->shooting_pos = object_position;
 	this->shooting_target = object_position;
+
+	current_weapon = MACHINE;
 
 	Reset();
 }
@@ -152,14 +155,22 @@ void Player::Rotate(glm::vec2 heading)
 
 void Player::Shoot(glm::vec2 fire)
 {
-	if (!CDrail && rail_ammo){
+	if (current_weapon == RAIL && !CDrail && rail_ammo)
+	{
 		color = glm::vec3(1, 1, 1);
 		CDrail = true;
 		RailPhysics();
 		--rail_ammo;
 		scene->PrintPlayerData();
 	}
-	
+
+	if(current_weapon == MACHINE && !CDmachine && machine_ammo)
+	{
+		scene->bbo->AddBullet(object_position, object_heading);
+		//CDmachine = true;
+		--machine_ammo;
+		scene->PrintPlayerData();
+	}
 }
 
 void Player::Update(double delta_time)

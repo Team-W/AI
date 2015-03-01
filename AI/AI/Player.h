@@ -11,6 +11,13 @@ class Player :
 	public GameEntity
 {
 public:
+
+	enum WEAPON_TYPE
+	{
+		RAIL,
+		MACHINE
+	} current_weapon;
+
 	Player(Scene *s, float x, float y);
 	~Player();
 
@@ -35,6 +42,7 @@ private:
 	glm::vec2 shooting_target;
 	double speed;
 	bool CDrail;
+	bool CDmachine;
 
 	float immortality_duration;
 	int score;
@@ -45,6 +53,7 @@ private:
 
 	friend class Scene;
 	friend class PowerUp;
+	friend class BulletBufferObject;
 };
 
 inline void Player::Reset()
@@ -52,8 +61,8 @@ inline void Player::Reset()
 	object_position = glm::vec2(0, 0);
 	immortality_duration = 0.0f;
 	score = 0;
-	rail_ammo = 10;
-	machine_ammo = 0;
-	lifes = 3;
+	rail_ammo = 1000;
+	machine_ammo = 2000;
+	lifes = 3000;
 	cash = 0;
 }

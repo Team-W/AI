@@ -29,12 +29,14 @@
 #include <cstdlib>
 #include <vector>
 #include <string>
+#include <sstream>
 
 // Graphic Libraries
 #include <GL/glut.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/constants.hpp>
+#include < GL/freeglut.h>
 
 // Misc
 using namespace std;
