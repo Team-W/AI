@@ -35,16 +35,20 @@ void Obstacle::Draw()
 	MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
 	glLoadMatrixf(Matrix);
 
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, this->texture);
-	glBegin(GL_QUADS);
-		glColor3f(1, 1, 1);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(-object_radius, -object_radius, 0.f);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(object_radius, -object_radius, 0.f);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(object_radius, object_radius, 0.f);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(-object_radius, object_radius, 0.f);
+	glBegin(GL_TRIANGLE_FAN);
+	glColor3f(color.x, color.y, color.z);
+
+	a = (float)object_radius * (float)cos(359 * PI / 180.0f);
+	b = (float)object_radius * (float)sin(359 * PI / 180.0f);
+	for (int j = 0; j < 360; j++)
+	{
+		glVertex2f(a, b);
+		a = (float)object_radius * (float)cos(j * PI / 180.0f);
+		b = (float)object_radius * (float)sin(j * PI / 180.0f);
+		glVertex2f(a, b);
+	}
+
 	glEnd();
-	glDisable(GL_TEXTURE_2D);
 	glPopMatrix();
 }
 
