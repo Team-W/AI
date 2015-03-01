@@ -177,7 +177,12 @@ void Scene::Draw(void)
 	glRasterPos2f(-0.99f, -0.98f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)cash_info.c_str());
 
-	string info = "Press [q] to switch weapon";
+	string info = "Press [ESC] to quit";
+	glColor3f(0.5f, 0.5f, 0.5f);
+	glRasterPos2f(-0.95f, 0.96f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
+
+	info = "Press [q] to switch weapon";
 	glColor3f(0.5f, 0.5f, 0.5f);
 	glRasterPos2f(0.30f, 0.96f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)info.c_str());
