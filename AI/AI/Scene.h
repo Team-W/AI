@@ -58,6 +58,7 @@ class Scene
 		Zombie *test_zombie;
 		// ~TEST OBJECTS
 		
+		GraphicDebug *mouse;
 		Player *player;
 
 		vector<Zombie*> zombies;

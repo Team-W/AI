@@ -13,7 +13,7 @@ Player::Player(Scene *s, GLuint texture, float x, float y)
 	this->CDrail = false;
 	this->CDmachine = false;
 	this->rail = new GraphicDebug();
-	this->mouse->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
+	this->rail->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
 	this->shooting_pos = object_position;
 	this->shooting_target = object_position;
 	this->texture = texture;
@@ -240,11 +240,9 @@ void Player::RailPhysics(){
 }
 void Player::Draw()
 {
-	mouse->DrawPoint();
+	//mouse->DrawPoint();
 	rail->DrawLine();
 	float a, b;
-	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
 	glPushMatrix();
 	GLfloat Matrix[16];
@@ -255,28 +253,12 @@ void Player::Draw()
 	
 	glBegin(GL_QUADS);
 		glColor3f(1, 1, 1);
-		glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.50f, -0.60f, 0.f);
-		glTexCoord2f(0.0f, 1.0f); glVertex3f(0.50f, -0.60f, 0.f);
-		glTexCoord2f(1.0f, 1.0f); glVertex3f(0.50f, 0.75f, 0.f);
-		glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.50f, 0.75f, 0.f);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-1.0f, -1.0f, 0.f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(1.0f, -1.0f, 0.f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(1.0f, 1.0f, 0.f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-1.0f, 1.0f, 0.f);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
-
-	glBegin(GL_LINES);
-		glColor3f(0.5f, 0.5f, 0.0f);
-
-		a = 1.0f * (float)cos(359 * PI / 180.0f);
-		b = 1.0f * (float)sin(359 * PI / 180.0f);
-		for (int j = 0; j < 360; j++)
-		{
-			glVertex2f(a, b);
-			a = 1.0f * (float)cos(j * PI / 180.0f);
-			b = 1.0f * (float)sin(j * PI / 180.0f);
-			glVertex2f(a, b);
-		}
-	glEnd();
-
-	glDisable(GL_LINE_SMOOTH);
 
 	if(immortality_duration > 0)
 	{
@@ -301,31 +283,30 @@ void Player::Draw()
 
 void Player::Respawn()
 {
-	RandomPoint();
+	RandomPosition();
 	--lifes;
 	scene->PrintPlayerData();
 }
 
-void Player::RandomPosition()
+bool Player::CheckValidPosition(const glm::vec2 &position)
 {
-	RandomPoint();
-
-	unsigned int count = 0;
 	GameEntity *object = 0;
 
-	while(count < scene->objects.size())
+	for(unsigned int i = 0; i < scene->objects.size(); ++i)
 	{
-		object = scene->objects[count];
+		object = scene->objects[i];
 
-		if(object->GetCollisionRadius() + 7 < GetDistance(object->GetObjectPosition(), this->object_position))
+		if(object->GetCollisionRadius() + 7 > GetDistance(object->GetObjectPosition(), this->object_position))
 		{
-			count = 0;
-			RandomPoint();
-			continue;
+			return false;
 		}
-
-		++count;
 	}
+	return true;
+}
+
+void Player::RandomPosition()
+{
+	do { RandomPoint(); } while(!CheckValidPosition(object_position));
 }
 
 void Player::RandomPoint()
@@ -333,7 +314,6 @@ void Player::RandomPoint()
 	int sign1 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
 	int sign2 = (((float)rand()/RAND_MAX - 0.5)>0) ? 1:-1;
 	this->object_position = glm::vec2(sign1 * (float)(rand() % 320) / 10, sign2 * (float)(rand() % 320) / 10);
-
 }
 
 void Player::UpgradeWeapon(Player::WEAPON_TYPE type)

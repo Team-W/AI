@@ -33,6 +33,7 @@ public:
 	void RandomPoint();
 	string GetPlayerData();
 	void UpgradeWeapon(Player::WEAPON_TYPE type);
+	bool CheckValidPosition(const glm::vec2 &position);
 
 private:
 	GraphicDebug *mouse;

@@ -93,6 +93,15 @@ void GraphicDebug::DrawPoint()
 		glVertex2f(a, b);
 	}
 
+	glVertex2f(0.7f, 0.7f);
+	glVertex2f(0.2f, 0.2f);
+	glVertex2f(-0.7f, 0.7f);
+	glVertex2f(-0.2f, 0.2f);
+	glVertex2f(0.7f, -0.7f);
+	glVertex2f(0.2f, -0.2f);
+	glVertex2f(-0.7f, -0.7f);
+	glVertex2f(-0.2f, -0.2f);
+
 	glEnd();
 	glPopMatrix();
 }
