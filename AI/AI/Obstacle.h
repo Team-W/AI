@@ -11,7 +11,7 @@ class Scene;
 class Obstacle: public GameEntity
 {
     public:
-        Obstacle(Scene *s, double x, double y, double rad);
+		Obstacle(Scene *s, GLuint texture, double x, double y, double rad);
         ~Obstacle(void);
 
         void Update(double delta_time);
