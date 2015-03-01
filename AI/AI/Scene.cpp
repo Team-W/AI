@@ -8,6 +8,8 @@ Scene::Scene(void)
 	this->debug = false;
 	this->game = true;
 	this->score = 0;
+	this->mouse = new GraphicDebug();
+	this->mouse->InitPoint(glm::vec2(0, 0), 0.8, glm::vec3(0.9, 0.9, 0.9));
 }
 
 Scene::~Scene(void)
@@ -142,6 +144,8 @@ void Scene::Draw(void)
 		objects[i]->Draw();
 	}
 	
+	this->mouse->DrawPoint();
+
 	if (!game){
 		string game_info = "GAME OVER";
 		glColor3f(1.0f, 0.2f, 0.2f);
@@ -204,6 +208,7 @@ void Scene::Draw(void)
 void Scene::PlayerRotate(glm::vec2 heading)
 {
 	player->Rotate(heading);
+	this->mouse->UpdatePoint(heading, 0.5, glm::vec3(0.9, 0.9, 0.9));
 	
 }
 

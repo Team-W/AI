@@ -13,7 +13,7 @@ Player::Player(Scene *s, GLuint texture, float x, float y)
 	this->CDrail = false;
 	this->CDmachine = false;
 	this->rail = new GraphicDebug();
-	this->mouse->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
+	this->rail->InitLine(glm::vec2(0, 0), glm::vec2(1,1), color);
 	this->shooting_pos = object_position;
 	this->shooting_target = object_position;
 	this->texture = texture;
@@ -240,7 +240,7 @@ void Player::RailPhysics(){
 }
 void Player::Draw()
 {
-	mouse->DrawPoint();
+	//mouse->DrawPoint();
 	rail->DrawLine();
 	float a, b;
 
