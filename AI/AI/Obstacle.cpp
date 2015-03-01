@@ -1,5 +1,6 @@
 #include "Obstacle.h"
 
+//Obstacle::Obstacle(Scene *s,GLuint texture, double x, double y, double r): object_radius(r)
 Obstacle::Obstacle(Scene *s, double x, double y, double r): object_radius(r)
 {
 	this->scene = s;
@@ -10,6 +11,7 @@ Obstacle::Obstacle(Scene *s, double x, double y, double r): object_radius(r)
 	model_matrix = glm::mat4(1.0f);
 	model_matrix = glm::scale(model_matrix, glm::vec3(object_scale, 1.0f));
 	model_matrix = glm::translate(model_matrix, glm::vec3(object_position, 0.0f));
+	//this->texture = texture;
 }
 
 Obstacle::~Obstacle(void)
@@ -33,6 +35,19 @@ void Obstacle::Draw()
 	GLfloat Matrix[16];
 	MatrixToArray(Matrix, model_matrix, scene->GetViewMatrix());
 	glLoadMatrixf(Matrix);
+
+	/*glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, this->texture);
+	glBegin(GL_QUADS);
+		glColor3f(1, 1, 1);
+		glTexCoord2f(0.0f, 0.0f); glVertex3f(-object_radius, -object_radius, 0.f);
+		glTexCoord2f(0.0f, 1.0f); glVertex3f(object_radius, -object_radius, 0.f);
+		glTexCoord2f(1.0f, 1.0f); glVertex3f(object_radius, object_radius, 0.f);
+		glTexCoord2f(1.0f, 0.0f); glVertex3f(-object_radius, object_radius, 0.f);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);*/
+
+
 	glBegin(GL_TRIANGLE_FAN);
 	glColor3f(color.x, color.y, color.z);
 

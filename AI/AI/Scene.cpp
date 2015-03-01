@@ -31,6 +31,11 @@ void Scene::Init(GLuint *texture){
 	AddObstacle(new Obstacle(this, 12.0, -6.0, 5.00));
 	AddObstacle(new Obstacle(this, -16.0, 15.0, 6.00));
 
+	/*AddObstacle(new Obstacle(this, this->texture[2], 15.0, 15.0, 7.00));
+	AddObstacle(new Obstacle(this, this->texture[2], -12.0, -17.0, 9.00));
+	AddObstacle(new Obstacle(this, this->texture[2], 12.0, -6.0, 5.00));
+	AddObstacle(new Obstacle(this, this->texture[2], -16.0, 15.0, 6.00));*/
+
 	for (unsigned int i = 0; i < ZOMBIE_AMOUNT; ++i) AddZombie(new Zombie(this, this->texture[1]));
 
 	for (unsigned int i = 0; i < POWERUP_AMOUNT; ++i) AddPowerUp(new PowerUp(this));
@@ -212,7 +217,7 @@ void Scene::DisplayData()
 
 	//glRasterPos2i(0, 0);
 	//glColor3f(1, 0, 0);
-	//glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)"chuj");
+	//glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char*)"Dzialaj");
 
 
 
