@@ -87,6 +87,10 @@ bool Scene::CheckVictoryCondition(void)
 	{
 		if (GetDistance(player->GetObjectPosition(), zombies[i]->GetObjectPosition()) < 2)
 		{
+			
+			//TO DO
+			//ADD Zombie (multiple zombie) damage and timer (so they do not insta kill)
+			
 			if(player->lifes > 0)
 			{
 				player->Respawn();
