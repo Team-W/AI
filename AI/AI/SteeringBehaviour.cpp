@@ -288,6 +288,12 @@ glm::vec2 SteeringBehaviour::CalculateHide(void)
 			b = true;
 			break;
 		}
+		
+		//TO DO!!!!!!!!!!!!!!!!
+		/* if(Player direction towards the other side){
+			b = true;
+			break;
+		}*/
 	}
 
 	if(b == true)
