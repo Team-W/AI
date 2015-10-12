@@ -67,7 +67,7 @@ inline void Player::Reset()
 	score = 0;
 	rail_ammo = PLAYER_STARTING_RAIL_AMMO;
 	machine_ammo = PLAYER_STARTING_MACHINE_AMMO;
-	lifes = PLAYER_STARTING_LIFES;
+	lifes = PLAYER_STARTING_LIFES; //ADD Player HP
 	cash = 0;
 	rail_lvl = 1;
 	machine_lvl = 1;
