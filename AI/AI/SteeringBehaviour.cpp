@@ -273,7 +273,8 @@ glm::vec2 SteeringBehaviour::CalculateHide(void)
 {
 	glm::vec2 direction;
 	float distance;
-	bool b = false;
+
+	//if () return glm::vec2(0, 0);
 
 	for(unsigned int i=0; i<scene->obstacles.size(); ++i)
 	{
@@ -282,23 +283,18 @@ glm::vec2 SteeringBehaviour::CalculateHide(void)
 
 		distance = GetDistance(owner->GetObjectPosition(), scene->obstacles[i]->GetObjectPosition());
 		SetLength(direction, distance);
-
-		if(GetDistance(direction + owner->GetObjectPosition(), scene->obstacles[i]->GetObjectPosition()) < scene->obstacles[i]->GetCollisionRadius())
-		{
-			b = true;
-			break;
-		}
+		
+		if (	GetDistance(owner->GetObjectPosition(), scene->player->GetObjectPosition() + scene->player->GetObjectHeading()) 
+			>	GetDistance(owner->GetObjectPosition(), scene->player->GetObjectPosition()))
+			return glm::vec2(0, 0);
+		if (GetDistance(direction + owner->GetObjectPosition(), scene->obstacles[i]->GetObjectPosition()) < scene->obstacles[i]->GetCollisionRadius())
+			return glm::vec2(0, 0);
 		
 		//TO DO!!!!!!!!!!!!!!!!
 		/* if(Player direction towards the other side){
 			b = true;
 			break;
 		}*/
-	}
-
-	if(b == true)
-	{
-		return glm::vec2(0, 0);
 	}
 
 	double best_dist = 999999.0;

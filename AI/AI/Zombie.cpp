@@ -2,6 +2,7 @@
 
 Zombie::Zombie(Scene *s, GLuint texture)
 {
+	
 	this->scene = s;
 	this->steering_behaviour = new SteeringBehaviour(this, scene);
 	this->collision_radius = 1.0f;
@@ -10,8 +11,11 @@ Zombie::Zombie(Scene *s, GLuint texture)
 	this->object_scale = glm::vec2(0.03f, 0.03f);
 	this->aggressive = false;
 	this->dead = false;
+	this->attacked = false;
 	this->respawn_timer = ZOMBIE_RESPAWN_TIMER;
 	this->texture = texture;
+	this->damage = ZOMBIE_POWER + (rand() % 7 - 3);
+	this->attack_timer = ZOMBIE_ATTACK_TIMER;
 	srand((int)time(NULL));
 	RandomPosition();
 }
@@ -25,6 +29,7 @@ Zombie::~Zombie(void)
 void Zombie::Update(double delta_time)
 {
 	Respawn(delta_time);
+	Retaliate(delta_time);
 	Group();
 
 	if(aggressive)
@@ -91,6 +96,24 @@ void Zombie::Respawn(double delta_time){
 
 	respawn_timer = ZOMBIE_RESPAWN_TIMER;
 	RandomPosition();
+}
+
+int Zombie::Attack(){
+	if (attacked) return 0;
+	attacked = true;
+	return damage;
+}
+
+void Zombie::Retaliate(double delta_time){
+	if (!attacked)return;
+
+	if (attack_timer > 0){
+		attack_timer -= delta_time;
+		return;
+	}
+
+	attack_timer = ZOMBIE_ATTACK_TIMER;
+	attacked = false;
 }
 
 void Zombie::RandomPosition(){

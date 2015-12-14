@@ -28,6 +28,7 @@ public:
 	void Move(glm::vec2 move, double delta_time);
 	void Rotate(glm::vec2 heading); // heading = mouse pos
 	void Reset();
+	void TakeDamage(int damage);
 	void Respawn();
 	void RandomPosition();
 	void RandomPoint();
@@ -50,6 +51,7 @@ private:
 	int score;
 	int rail_ammo;
 	int machine_ammo;
+	int health_points;
 	int lifes;
 	int cash;
 	int rail_lvl;
@@ -67,7 +69,8 @@ inline void Player::Reset()
 	score = 0;
 	rail_ammo = PLAYER_STARTING_RAIL_AMMO;
 	machine_ammo = PLAYER_STARTING_MACHINE_AMMO;
-	lifes = PLAYER_STARTING_LIFES; //ADD Player HP
+	lifes = PLAYER_STARTING_LIFES;
+	health_points = PLAYER_HEALTH;
 	cash = 0;
 	rail_lvl = 1;
 	machine_lvl = 1;

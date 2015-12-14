@@ -281,9 +281,17 @@ void Player::Draw()
 	
 }
 
+void Player::TakeDamage(int damage){
+	health_points -= damage;
+	scene->PrintPlayerData();
+}
+
 void Player::Respawn()
 {
 	RandomPosition();
+	health_points = PLAYER_HEALTH;
+	machine_ammo += PLAYER_STARTING_MACHINE_AMMO / 3;
+	rail_ammo += PLAYER_STARTING_RAIL_AMMO / 3;
 	--lifes;
 	scene->PrintPlayerData();
 }

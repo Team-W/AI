@@ -90,16 +90,21 @@ bool Scene::CheckVictoryCondition(void)
 			
 			//TO DO
 			//ADD Zombie (multiple zombie) damage and timer (so they do not insta kill)
-			
-			if(player->lifes > 0)
-			{
-				player->Respawn();
+			if (player->health_points - zombies[i]->damage <= 0){
+				if (player->lifes > 0)
+				{
+					player->Respawn();
+				}
+				else
+				{
+					this->game = false;
+					PrintResult();
+					break;
+				}
 			}
-			else
-			{
-				this->game = false;
-				PrintResult();
-			}
+
+			player->TakeDamage(zombies[i]->Attack());
+
 		}
 	}
 
@@ -184,7 +189,12 @@ void Scene::Draw(void)
 	glRasterPos2f(0.35f, -0.98f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)machine_info.c_str());
 
-	string lifes_info = "Lives: " + NumberWithSpaces(player->lifes+1, 3);
+	string health_info = "Health: " + NumberWithSpaces(player->health_points, 2);
+	glColor3f(0.7f, 0.1f, 0.1f);
+	glRasterPos2f(-0.99f, -0.86f);
+	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)health_info.c_str());
+
+	string lifes_info = "Lives: " + NumberWithSpaces(player->lifes + 1, 3);
 	glColor3f(1.0f, 0.1f, 0.1f);
 	glRasterPos2f(-0.99f, -0.90f);
 	glutBitmapString(GLUT_BITMAP_9_BY_15, (const unsigned char*)lifes_info.c_str());

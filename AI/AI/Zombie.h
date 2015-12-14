@@ -24,16 +24,21 @@ class Zombie: public GameEntity
 		void gotHit();
 		void Draw();
 		void Group();
-		void Respawn(double delta_time);
-
+		void Respawn(double delta_time);	
+		void Retaliate(double delta_time);
+		int Attack();
 
     private:
         SteeringBehaviour *steering_behaviour;
 
 		bool aggressive;
+		bool attacked;
 		bool dead;
 
 		double respawn_timer;
+		double attack_timer;
+
+		int damage;
 
 		glm::vec3 color;
 		glm::vec2 target_position;
